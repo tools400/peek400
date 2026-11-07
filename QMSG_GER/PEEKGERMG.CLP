@@ -8623,7 +8623,7 @@ SQL Programmierhandbuch oder die Nachrichtendatei QSYS/QSQLMSG.'      +
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
-     /* Bitte mit dem Cursor auf ein Feld zeigen und die Anforderun */
+     /* Cursor auf ein Feld stellen und die Anforderung wiederhole */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8211) MSGF(&LIB/&OBJ)
@@ -8633,8 +8633,7 @@ SQL Programmierhandbuch oder die Nachrichtendatei QSYS/QSQLMSG.'      +
                 MSGID(USR8211) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Bitte mit dem Cursor auf ein Feld zeigen und die Anforderung wiederho-
-len.'                                                                 +
+'Cursor auf ein Feld stellen und die Anforderung wiederholen.'        +
                 ) +
                 SECLVL( +
 'Ursache . . . . :   Der Cursor steht nicht in einem Feld oder das Fel-
@@ -8931,7 +8930,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8225                    */
-     /* Datensatz wurde zwischenzeitlich von einem anderem Job geän */
+     /* Datensatz wurde zwischenzeitlich von einem anderen Job geän */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8225) MSGF(&LIB/&OBJ)
@@ -8941,7 +8940,7 @@ den kann, aus welcher physischen Teildatei der Satz kommt.'           +
                 MSGID(USR8225) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datensatz wurde zwischenzeitlich von einem anderem Job geändert.&N&NT-
+'Datensatz wurde zwischenzeitlich von einem anderen Job geändert.&N&NT-
 rotzdem ändern?'                                                      +
                 ) +
                 SEV(0) +
@@ -9111,7 +9110,7 @@ ge von Datensätzen ist dies nicht möglich.'                           +
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8232                    */
-     /* Datensatz wurde zwischenzeitlich von einem anderem Job geän */
+     /* Datensatz wurde zwischenzeitlich von einem anderen Job geän */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8232) MSGF(&LIB/&OBJ)
@@ -9121,7 +9120,7 @@ ge von Datensätzen ist dies nicht möglich.'                           +
                 MSGID(USR8232) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Datensatz wurde zwischenzeitlich von einem anderem Job geändert.&N&NT-
+'Datensatz wurde zwischenzeitlich von einem anderen Job geändert.&N&NT-
 rotzdem sperren?'                                                     +
                 ) +
                 SEV(0) +
@@ -9427,6 +9426,28 @@ en.'                                                                  +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8246                    */
+     /* Datensatz konnte nicht gespeichert werden (Status &1).      */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8246) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8246) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Datensatz konnte nicht gespeichert werden (Status &1).'              +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 5) +
                 ) +
                 ALROPT(*NO) +
                 CCSID(&CCSID) +

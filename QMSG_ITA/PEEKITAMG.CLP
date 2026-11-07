@@ -8623,7 +8623,7 @@ QSQLMSG.'                                                             +
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
-     /* Posizionare il cursore su un campo e ripetere la richiesta  */
+     /* Posizionare il cursore su un campo e ripetere la richiesta. */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8211) MSGF(&LIB/&OBJ)
@@ -8633,8 +8633,7 @@ QSQLMSG.'                                                             +
                 MSGID(USR8211) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Posizionare il cursore su un campo e ripetere la richiesta (vedi Help-
- 2° liv.)'                                                            +
+'Posizionare il cursore su un campo e ripetere la richiesta.'         +
                 ) +
                 SECLVL( +
 'Spiegazione . . :   Il cursore non è posizionato su un campo oppure i-
@@ -9423,6 +9422,28 @@ emere F8.'                                                            +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8246                    */
+     /* Impossibile salvare il record (stato &1).                   */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8246) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8246) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Impossibile salvare il record (stato &1).'                           +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 5) +
                 ) +
                 ALROPT(*NO) +
                 CCSID(&CCSID) +

@@ -402,8 +402,13 @@ p_wrtCopy1('');
 //-------------------------------------------*
 //  Abschließen Copy-Book 2:                 *
 //  Inhalt:   c_fldHexEd                     *
+//  Cursor nicht auf einem Feld: USR8211     *
 //-------------------------------------------*
 
+p_wrtCopy2('  other;');
+p_wrtCopy2('    pgmMsgID = ''USR8211'';');
+p_wrtCopy2('    pgmMsgDta = '' '';');
+p_wrtCopy2('    p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
 p_wrtCopy2('  endsl;');
 p_wrtCopy2('');
 p_wrtCopy2('endsr;');
@@ -412,8 +417,13 @@ p_wrtCopy2('');
 //-------------------------------------------*
 //  Abschließen Copy-Book 6:                 *
 //  Inhalt:   c_fldStrEd                     *
+//  Cursor nicht auf einem Feld: USR8211     *
 //-------------------------------------------*
 
+p_wrtCopy6('  other;');
+p_wrtCopy6('    pgmMsgID = ''USR8211'';');
+p_wrtCopy6('    pgmMsgDta = '' '';');
+p_wrtCopy6('    p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
 p_wrtCopy6('  endsl;');
 p_wrtCopy6('');
 p_wrtCopy6('endsr;');
@@ -465,12 +475,13 @@ p_wrtCopy1('');
 //-------------------------------------------*
 
 //  Ausgeben COPY-Strecke: chkValues
-//  Prüft vor dem Speichern die Werte der Ganzzahlen und der BOOLEAN-
-//  Felder. Ein ungültiger Wert zeigt die Seite des Feldes an, setzt
-//  den Cursor auf das Feld und meldet USR8244/USR8245 in der
-//  Nachrichtenzeile des Fensters.
+//  Prüft vor dem Speichern die Werte der Ganzzahlen, der BOOLEAN-
+//  Felder und der Datums-, Zeit- und Zeitstempelfelder (über PEEK36,
+//  im Format des Feldes). Ein ungültiger Wert zeigt die Seite des
+//  Feldes an, setzt den Cursor auf das Feld und meldet USR8244,
+//  USR8245 oder USR8242 in der Nachrichtenzeile des Fensters.
 p_wrtCopy1('//' + REM_LINE);
-p_wrtCopy1('//  Prüfen der Wertebereiche (Ganzzahlen, BOOLEAN)');
+p_wrtCopy1('//  Prüfen der Werte (Ganzzahlen, BOOLEAN, Datum, Zeit)');
 p_wrtCopy1('//' + REM_LINE);
 p_wrtCopy1('');
 p_wrtCopy1('begsr chkValues;');
@@ -526,6 +537,42 @@ dow (f_readFld <> bEOF);
   if (fldl0100.f1nalw = '1');
     p_wrtCopy1('      not %nullind(' + %trimr(fldl0100.f1vfld) + ') and');
   endif;
+
+  //  Datum, Zeit, Zeitstempel: Ein leeres Feld belegt updateFile mit
+  //  dem kleinsten Wert vor (ISO), daher nur gefüllte Felder prüfen.
+  //  // DATE
+  //  if ((EDT00016 = '1') and
+  //      not (LNG00016 = '1') and
+  //      not %nullind(P_00000016) and
+  //      FLD00016 <> ' ');
+  //    pgmMsgID = ' ';
+  //    PEEK36(FLD00016: 'L': '*ISO': '-': pgmMsgID: pgmMsgDta);
+  //    if (pgmMsgID <> ' ');
+  //      pgmMsgDta = 'DATE';
+  //      ...
+  //    endif;
+  //  endif;
+  if (fldl0100.f1DTyp = 'L' or fldl0100.f1DTyp = 'T' or
+      fldl0100.f1DTyp = 'Z');
+    p_wrtCopy1('      FLD' + a#fldCount + ' <> '' '');');
+    p_wrtCopy1('    pgmMsgID = '' '';');
+    p_wrtCopy1('    PEEK36(FLD' + a#fldCount + ': ''' + fldl0100.f1DTyp +
+               ''': ''' + fldl0100.f1dtfm + ''': ''' +
+               fldl0100.f1dtsp + ''': pgmMsgID: pgmMsgDta);');
+    p_wrtCopy1('    if (pgmMsgID <> '' '');');
+    p_wrtCopy1('      pgmMsgDta = ''' + %trimr(fldl0100.f1FNme) + ''';');
+    p_wrtCopy1('      p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
+    p_wrtCopy1('      scnNbr = ' + %char(chkPos(fieldCount).scn) + ';');
+    p_wrtCopy1('      csrRow = ' + %char(chkPos(fieldCount).row) + ';');
+    p_wrtCopy1('      csrCol = ' + %char(chkPos(fieldCount).col) + ';');
+    p_wrtCopy1('      isError = bTrue;');
+    p_wrtCopy1('      leavesr;');
+    p_wrtCopy1('    endif;');
+    p_wrtCopy1('  endif;');
+    p_wrtCopy1('');
+    iter;
+  endif;
+
   if (rangeMax <> '');
     p_wrtCopy1('      (FLD' + a#fldCount + ' < ' + rangeMin + ' or');
     p_wrtCopy1('       FLD' + a#fldCount + ' > ' + rangeMax + '));');
@@ -843,9 +890,11 @@ begsr wrtField;
     //  größten Wertes; den Wertebereich prüft chkValues.
     exsr getRange;
 
-    //  Seite und Zeile für chkValues merken: Ganzzahlen und BOOLEAN,
-    //  nur Eingabefelder.
-    if ((rangeMax <> '' or fldl0100.f1DTyp = '8') and
+    //  Seite und Zeile für chkValues merken: Ganzzahlen, BOOLEAN,
+    //  Datum, Zeit und Zeitstempel, nur Eingabefelder.
+    if ((rangeMax <> '' or fldl0100.f1DTyp = '8' or
+         fldl0100.f1DTyp = 'L' or fldl0100.f1DTyp = 'T' or
+         fldl0100.f1DTyp = 'Z') and
         fldl0100.f1use <> 'I' and
         fieldCount <= %elem(chkPos));
       chkPos(fieldCount).scn = scn#;
@@ -1207,12 +1256,17 @@ begsr wrtCopy1;
   endif;
 
   //    yOutBuffer = FLD00001;
-  if (f_isCharFld(fldl0100) = bTrue and
-     f_isVarLen(fldl0100) = bTrue);
-    exprOpen = 'yOutBuffer = %trimR(';
-    exprClose = ')';
+  //    yOutBufferUcs2 = FLD0002101 + ...;   (GRAPHIC: PEEK32 prüft UCS-2)
+  if (fldl0100.f1DTyp = 'G');
+    exprOpen = 'yOutBufferUcs2 = ';
   else;
     exprOpen = 'yOutBuffer = ';
+  endif;
+  if (f_isCharFld(fldl0100) = bTrue and
+     f_isVarLen(fldl0100) = bTrue);
+    exprOpen = exprOpen + '%trimR(';
+    exprClose = ')';
+  else;
     exprClose = '';
   endif;
 
@@ -1374,6 +1428,30 @@ begsr wrtCopy2;
     //      endif;
     p_wrtCopy2('    if ((EDT' + a#fldCount + ' = ''1'') and');
     p_wrtCopy2('        not (LNG' + a#fldCount + ' = ''1''));');
+
+    //  Ganzzahlen vor dem Übertragen in das Dateifeld prüfen: Das
+    //  Bildschirmfeld fasst größere Werte (Überlauf in f_P_...).
+    //        if (FLD00009 < -32768 or FLD00009 > 32767);
+    //          pgmMsgID = 'USR8244';
+    //          ...
+    //          leavesr;
+    //        endif;
+    exsr getRange;
+    if (rangeMax <> '');
+      p_wrtCopy2('      if (FLD' + a#fldCount + ' < ' + rangeMin + ' or');
+      p_wrtCopy2('          FLD' + a#fldCount + ' > ' + rangeMax + ');');
+      p_wrtCopy2('        pgmMsgID = ''USR8244'';');
+      p_wrtCopy2('        pgmMsgDta = ''' + %trimr(fldl0100.f1FNme) +
+                 ''';');
+      p_wrtCopy2('        %subst(pgmMsgDta: 11: 20) = ''' + rangeMin +
+                 ''';');
+      p_wrtCopy2('        %subst(pgmMsgDta: 31: 20) = ''' + rangeMax +
+                 ''';');
+      p_wrtCopy2('        p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
+      p_wrtCopy2('        leavesr;');
+      p_wrtCopy2('      endif;');
+    endif;
+
     p_wrtCopy2('      exsr f_' + %trim(fldl0100.f1vfld) + ';');
     p_wrtCopy2('    endif;');
 
@@ -1394,11 +1472,56 @@ begsr wrtCopy2;
     //  Den NULL-Anzeiger vor s_P_... zurücksetzen: s_P_... überträgt
     //  den Wert eines NULL-Feldes nicht auf den Bildschirm.
     p_wrtCopy2('    if (yMsgID = ''USR8112'');');
-    if (fldl0100.f1nalw = '1');
-      p_wrtCopy2('      %nullind(' + %trimr(fldl0100.f1vfld) +
-                 ') = *OFF;');
+    if (fldl0100.f1DTyp = 'P' or fldl0100.f1DTyp = 'S');
+      //  Gepackte und gezonte Felder: Ungültige Ziffern aus dem
+      //  Hex-Editor ergeben in s_P_... einen Dezimaldatenfehler. Dann
+      //  den alten Inhalt und NULL-Anzeiger zurückschreiben und USR8138
+      //  melden. Die abgefangene Systemnachricht (MCH1202) bleibt in der
+      //  Nachrichtenwarteschlange des Programms und stünde in der
+      //  Nachrichtenzeile vor USR8138: vorher entfernen.
+      //      isNullOld = %nullind(P_00000012);
+      //      %nullind(P_00000012) = *OFF;
+      //      monitor;
+      //        exsr s_P_00000012;
+      //      on-error;
+      //        yFldInhalt = yFldInhaltOld;
+      //        exsr toBuffer;
+      //        %nullind(P_00000012) = isNullOld;
+      //        exsr s_P_00000012;
+      //        p_rmvPgmMg(psPgmName);
+      //        pgmMsgID = 'USR8138';
+      //        pgmMsgDta = 'PACKED';
+      //        p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);
+      //      endmon;
+      if (fldl0100.f1nalw = '1');
+        p_wrtCopy2('      isNullOld = %nullind(' +
+                   %trimr(fldl0100.f1vfld) + ');');
+        p_wrtCopy2('      %nullind(' + %trimr(fldl0100.f1vfld) +
+                   ') = *OFF;');
+      endif;
+      p_wrtCopy2('      monitor;');
+      p_wrtCopy2('        exsr s_' + %trim(fldl0100.f1vfld) + ';');
+      p_wrtCopy2('      on-error;');
+      p_wrtCopy2('        yFldInhalt = yFldInhaltOld;');
+      p_wrtCopy2('        exsr toBuffer;');
+      if (fldl0100.f1nalw = '1');
+        p_wrtCopy2('        %nullind(' + %trimr(fldl0100.f1vfld) +
+                   ') = isNullOld;');
+      endif;
+      p_wrtCopy2('        exsr s_' + %trim(fldl0100.f1vfld) + ';');
+      p_wrtCopy2('        p_rmvPgmMg(psPgmName);');
+      p_wrtCopy2('        pgmMsgID = ''USR8138'';');
+      p_wrtCopy2('        pgmMsgDta = ''' + %trimr(fldl0100.f1FNme) +
+                 ''';');
+      p_wrtCopy2('        p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
+      p_wrtCopy2('      endmon;');
+    else;
+      if (fldl0100.f1nalw = '1');
+        p_wrtCopy2('      %nullind(' + %trimr(fldl0100.f1vfld) +
+                   ') = *OFF;');
+      endif;
+      p_wrtCopy2('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
     endif;
-    p_wrtCopy2('      exsr s_' + %trim(fldl0100.f1vfld) + ';');
     p_wrtCopy2('      EDT' + a#fldCount + ' = ''1'';');
     p_wrtCopy2('    endif;');
 
@@ -1461,7 +1584,7 @@ begsr wrtCopy5;
 
     //  Setzen Fehlerflag: Feld ist nicht NULL-fähig
     p_wrtCopy5('  pgmMsgID = ''USR8191'';');
-    p_wrtCopy5('  pgmMsgDta = FLDL0100.F1FNME;');
+    p_wrtCopy5('  pgmMsgDta = ''' + %trimr(fldl0100.f1FNme) + ''';');
     p_wrtCopy5('  p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);');
 
   endif;
@@ -1511,6 +1634,27 @@ begsr wrtCopy6;
   p_wrtCopy6('      exsr USR8193;');
   p_wrtCopy6('      leavesr;');
   p_wrtCopy6('    endif;');
+
+  //  Felder über 512 Zeichen zeigt der Bildschirm nur zum Teil an,
+  //  chkChar hat nur diesen Teil geprüft: den ganzen Inhalt prüfen.
+  //    F_FIELD = 'LONG_CHAR';
+  //    yOutBuffer = P_00000028;
+  //    yOutBuffLn = %len(P_00000028);
+  //    exsr chkChar;
+  //    if (isVisible = bFalse);
+  //      exsr USR8193;
+  //      leavesr;
+  //    endif;
+  if (f_isToLong(fldl0100) = bTrue and fldl0100.f1DTyp <> 'G');
+    p_wrtCopy6('    F_FIELD = ''' + %trimr(fldl0100.f1FNme) + ''';');
+    p_wrtCopy6('    yOutBuffer = ' + %trimr(fldl0100.f1vfld) + ';');
+    p_wrtCopy6('    yOutBuffLn = %len(' + %trimr(fldl0100.f1vfld) + ');');
+    p_wrtCopy6('    exsr chkChar;');
+    p_wrtCopy6('    if (isVisible = bFalse);');
+    p_wrtCopy6('      exsr USR8193;');
+    p_wrtCopy6('      leavesr;');
+    p_wrtCopy6('    endif;');
+  endif;
 
   //    if (not (LNG00001 = '1'));
   //      exsr f_P_00000001;

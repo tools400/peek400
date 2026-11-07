@@ -47,6 +47,10 @@ dcl-ds set0006 likeds(set0006_t) inz;
 dcl-s x like(int4_t);
 dcl-s pBuffer pointer;
 dcl-s char char(1) based(pChar);
+//  Ein UCS-2-Zeichen als Zeichen und als Codepunkt
+dcl-s pUcs2 pointer;
+dcl-s ucs2Char ucs2(1) based(pUcs2);
+dcl-s ucs2Code uns(5) based(pUcs2);
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -71,8 +75,8 @@ exsr inzsr;
 o_msgID = '';
 o_msgDta = '';
 
-//    Zeichen mit einer DOUBLE BYTE CCSID, wie 1200 oder 13488
-//    können zur Zeit nicht geprüft werden.
+//    Zeichen mit einer DOUBLE BYTE CCSID, wie 1200 oder 13488, stehen
+//    als UCS-2 im Puffer, i_buffLen ist dann die Anzahl der Zeichen.
 if (i_ccsid <> 0);
   exsr check_ucs2;
 else;
@@ -87,7 +91,24 @@ return;
 
 begsr check_ucs2;
 
-//      DBCS Zeichen lassen sich zur Zeit nicht prüfen.
+  //  Nicht darstellbar sind die Steuerzeichen U+0000 bis U+001F und
+  //  U+007F bis U+009F (wie x'00' bis x'3F' bei SBCS).
+  pBuffer = %addr(io_buffer);
+
+  for x = 1 to i_buffLen;
+    if (x > %len(io_buffer.ucs2));
+      leave;
+    endif;
+    pUcs2 = pBuffer + (x-1) * 2;
+    if (ucs2Code < 32 or (ucs2Code >= 127 and ucs2Code <= 159));
+      ucs2Char = %ucs2(set0006.set_cvtc);
+      o_msgID = 'USR8163';
+      usr8163.var1 = set0006.set_cvtc;
+      o_msgDta = usr8163;
+    else;
+    // Zeichen beibehalten
+    endif;
+  endfor;
 
 endsr;
 

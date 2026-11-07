@@ -2,9 +2,9 @@
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23, PEEK27, PEEK31, PEEK33, PEEK36, PEEK38, PEEK54, PEEK55, PEEK62,
-//  PEEK65, PEEK66 und PEEK70, der Serviceprogramme PEEK61 und PEEK71
-//  und der Datei PEEKFMT (iRPGUnit).
+//  PEEK23, PEEK27, PEEK31, PEEK32, PEEK33, PEEK36, PEEK38, PEEK54, PEEK55,
+//  PEEK62, PEEK65, PEEK66 und PEEK70, der Serviceprogramme PEEK61 und
+//  PEEK71 und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -60,6 +60,7 @@ ctl-opt nomain;
 /copy QCOPYLE,PPEEK23
 /copy QCOPYLE,PPEEK27
 /copy QCOPYLE,PPEEK31
+/copy QCOPYLE,PPEEK32
 /copy QCOPYLE,PPEEK33
 /copy QCOPYLE,PPEEK36
 /copy QCOPYLE,PPEEK38
@@ -1845,6 +1846,33 @@ dcl-proc test58_peek70_unknownFunction export;
   numE = 7;
   peek70(qFile: '*FOO': numE: objl0200);
   iEqual(0: numE: 'Anzahl');
+end-proc;
+
+// ==========================================================================
+//  PEEK32: GRAPHIC-Felder (CCSID ungleich 0) stehen als UCS-2 im Puffer.
+//  Steuerzeichen (U+0000 bis U+001F, U+007F bis U+009F) sind nicht
+//  darstellbar. Bisher prüfte PEEK32 nur SBCS-Zeichen.
+// ==========================================================================
+
+dcl-proc test59_peek32_ucs2ControlChar export;
+  dcl-ds buffer likeds(rcdBuffer_t) inz;
+  dcl-s msgID like(msgId_t);
+  dcl-s msgDta like(msgDta_t);
+
+  %subst(buffer.ucs2: 1: 3) = u'00410007009F';
+  peek32(buffer: 3: 13488: msgID: msgDta);
+  aEqual('USR8163': msgID: 'msgID bei U+0007 und U+009F');
+end-proc;
+
+dcl-proc test60_peek32_ucs2Text export;
+  dcl-ds buffer likeds(rcdBuffer_t) inz;
+  dcl-s msgID like(msgId_t);
+  dcl-s msgDta like(msgDta_t);
+
+  //  A, Leerzeichen, Ä, geschütztes Leerzeichen, chinesisches Zeichen
+  %subst(buffer.ucs2: 1: 5) = u'0041002000C400A04E2D';
+  peek32(buffer: 5: 1200: msgID: msgDta);
+  aEqual('': msgID: 'msgID bei darstellbaren Zeichen');
 end-proc;
 
 // ==========================================================================

@@ -97,7 +97,7 @@ dcl-s lvl varchar(20) inz;
 dcl-s line varchar(200) inz;
 dcl-s fldNme varchar(20) inz;
 dcl-s exprOpen varchar(40) inz;
-dcl-s exprClose varchar(4) inz;
+dcl-s exprClose varchar(40) inz;
 dcl-s scnNbr like(int4_t) inz;
 dcl-s p int(10) inz;
 dcl-s q int(10) inz;
@@ -987,16 +987,21 @@ begsr sub021;
 
     //  Felder variabler Länge nur bei einer Änderung übernehmen: Das
     //  Bildschirmfeld hat feste Länge, %trimR entfernt sonst auch die
-    //  nachgestellten Leerzeichen eines unveränderten Wertes.
+    //  nachgestellten Leerzeichen eines unveränderten Wertes. GRAPHIC-
+    //  Felder über mehrere Zeilen: FLD0002201 + FLD0002202 + ...
     //    if (%trimR(FLD00005) <> %trimR(V_00000005));
     //      V_00000005 = %trimR(FLD00005);
     //    endif;
     if (f_isCharFld(fldl0100) = bTrue and
-        f_isVarLen(fldl0100) = bTrue and totFields = 1);
-      p_wrtCode('  if (%trimR(FLD' + a#fldCount + ') <> %trimR(' +
-                %trim(fldl0100.f1vfld) + '));');
-      p_wrtCode('    ' + %trim(fldl0100.f1vfld) +
-                ' = %trimR(FLD' + a#fldCount + ');');
+        f_isVarLen(fldl0100) = bTrue);
+      lvl = '  ';
+      exprOpen = 'if (%trimR(';
+      exprClose = ') <> %trimR(' + %trim(fldl0100.f1vfld) + '));';
+      exsr wrtFldExpr;
+      lvl = '    ';
+      exprOpen = %trim(fldl0100.f1vfld) + ' = %trimR(';
+      exprClose = ');';
+      exsr wrtFldExpr;
       p_wrtCode('  endif;');
       p_wrtCode('endsr;');
       p_wrtCode('');
@@ -1052,6 +1057,37 @@ begsr sub021;
   enddo;
 
   close peekFld;
+
+endsr;
+
+//============================================================*
+//    wrtFldExpr    Ausgeben lvl + exprOpen + Bildschirmfeld  *
+//                  (+ Folgefelder) + exprClose               *
+//============================================================*
+
+begsr wrtFldExpr;
+
+  for curField = 1 to totFields;
+
+    fldNme = 'FLD' + a#fldCount;
+    if (totFields > 1);
+      fldNme = fldNme + %editc(curField: 'X');
+    endif;
+
+    if (curField = 1);
+      line = lvl + exprOpen + fldNme;
+    else;
+      line = lvl + '  ' + fldNme;
+    endif;
+
+    if (curField < totFields);
+      line = line + ' +';
+    else;
+      line = line + exprClose;
+    endif;
+
+    p_wrtCode(line);
+  endfor;
 
 endsr;
 

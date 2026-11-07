@@ -84,6 +84,7 @@ dcl-s len int(10) inz;
 /include LIBRARY_NAME/QCOPYLE,PPEEK21
 /include LIBRARY_NAME/QCOPYLE,PPEEK23
 /include LIBRARY_NAME/QCOPYLE,PPEEK32
+/include LIBRARY_NAME/QCOPYLE,PPEEK36
 /include LIBRARY_NAME/QCOPYLE,PPEEK45
 /include LIBRARY_NAME/QCOPYLE,PPEEK53
 /include LIBRARY_NAME/QCOPYLE,PPEEK58
@@ -171,6 +172,7 @@ end-ds;
 dcl-s PEEK21_NAME like(r_pgmCallN) inz;
 dcl-s PEEK23_NAME like(r_pgmCallN) inz;
 dcl-s PEEK32_NAME like(r_pgmCallN) inz;
+dcl-s PEEK36_NAME like(r_pgmCallN) inz;
 dcl-s PEEK45_NAME like(r_pgmCallN) inz;
 dcl-s PEEK59_NAME like(r_pgmCallN) inz;
 dcl-s PEEK64_NAME like(r_pgmCallN) inz;
@@ -189,6 +191,9 @@ dcl-s yPgmCmd like(r_pgmCmd) inz;
 dcl-s yPgmCmdDt like(r_pgmCmdDt) inz;
 
 dcl-s yOutBuffer like(r_rcdBuf) inz;
+//  GRAPHIC-Felder prüft PEEK32 als UCS-2 (yOutBuffLn in Zeichen)
+dcl-s pOutBuffer pointer inz(%addr(yOutBuffer));
+dcl-s yOutBufferUcs2 ucs2(16383) based(pOutBuffer);
 dcl-s yOutBuffLn like(r_int4) inz;
 dcl-s yCcsid like(r_int4) inz;
 dcl-s yMsgID like(r_msgID) inz;
@@ -207,6 +212,11 @@ dcl-s yLength like(r_int4) inz;
 dcl-s pFldInhalt pointer inz(%addr(yFldInhalt));
 dcl-s yFldInhaltUcs2 ucs2(16383) based(pFldInhalt);
 dcl-s fldCurLen like(r_int4) inz;
+//  Feldinhalt und Länge vor dem Aufruf eines Editors, NULL-Anzeiger des
+//  Feldes vor dem Übernehmen des Editor-Ergebnisses
+dcl-s yFldInhaltOld like(r_rcdBuf) inz;
+dcl-s yLengthOld like(r_int4) inz;
+dcl-s isNullOld ind inz;
 
 dcl-s sfBot like(r_int4) inz;
 
@@ -221,6 +231,10 @@ dcl-s isAlwLower like(r_bool) inz(X_ALWL_X);
 dcl-s isVisible like(r_bool) inz(bFalse);
 dcl-s isCvtChar like(r_bool) inz(bFalse);
 dcl-s isRcdLocked like(r_bool) inz(bFalse);
+//  Satz seit dem Before-Image von einem anderen Job geändert (lockRecord)
+dcl-s isRcdChanged like(r_bool) inz(bFalse);
+//  Status eines fehlgeschlagenen UPDATE/WRITE
+dcl-s ioStatus zoned(5) inz;
 
 dcl-s scnNbr like(r_int4) inz;
 dcl-c nbrFKeys 3;
@@ -237,9 +251,16 @@ dcl-s pgmMsgDta like(r_msgDta) inz;
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
-//  NULL-Indikatoren (F8) während des erneuten Lesens zum Sperren
-//  (Index = Feldnummer, max. 8000 Felder je Satzformat)
-dcl-s nullSave ind dim(8000) inz;
+//  NULL-Indikatoren, gesichert von saveNull, zurückgeschrieben von
+//  rstNull (Index = Feldnummer, max. 8000 Felder je Satzformat)
+dcl-ds nullSaveDs inz;
+  nullSave ind dim(8000);
+end-ds;
+//  ... des Before-Images, des zuletzt gelesenen Satzes und des
+//      Arbeitsstands während des erneuten Lesens
+dcl-ds b4NullDs likeds(nullSaveDs) inz;
+dcl-ds dbNullDs likeds(nullSaveDs) inz;
+dcl-ds wrkNullDs likeds(nullSaveDs) inz;
 
 //  ... Feldefinitionen zur Bildschirmsteuerung
 //@DEF1
@@ -250,6 +271,12 @@ dcl-s nullSave ind dim(8000) inz;
 //  Before-Image für Prüfung auf Datensatzänderung
 //  bei optimistischer Satzsperre
 dcl-ds b4Image likeds(RCD_DS) inz;
+//  Satz, wie er zuletzt aus der Datei gelesen wurde (Vergleich mit dem
+//  Before-Image, Before-Image für EXIT04)
+dcl-ds dbImage likeds(RCD_DS) inz;
+//  Arbeitsstand des Satzpuffers während des erneuten Lesens: Änderungen
+//  aus den Editoren (F9/F10) stehen nur im Satzpuffer
+dcl-ds wrkImage likeds(RCD_DS) inz;
 
 //  Datenpuffer für Hex-Editor ...
 //  ... umbenennen der Feldnamen (Länge: X_RNM1_X)
@@ -718,8 +745,12 @@ begsr c_refresh;
   exsr readRecord;
   exsr dataToScn;
 
-  // - Merken aktuelles Image
+  // - Merken aktuelles Image (mit den NULL-Indikatoren)
   b4Image = RCD_DS;
+  dbImage = RCD_DS;
+  exsr saveNull;
+  b4NullDs = nullSaveDs;
+  dbNullDs = nullSaveDs;
 
 endsr;
 
@@ -800,32 +831,38 @@ begsr c_tgRcdLock;
     exsr unlockRecord;
   else;
 
+    //  ... sperren Datensatz für UPDATE (behält die Eingaben und die
+    //      Änderungen aus den Editoren)
+    exsr lockRecord;
+    if ((isFound = bFalse) or (isError = bTrue));
+      leavesr;
+    endif;
+
     //  ... vergleichen Before-Images auf Abweichungen
-    //      (NULL-Indikatoren aus F8 beim Lesen nicht verlieren)
-    exsr saveNull;
-    exsr readRecord;
-    exsr rstNull;
-    if (b4Image <> RCD_DS);
-      //      ... freigeben Datensatz, bei unterschiedlichen Images
-      //          und fragen Benutzer, wie es weiter gehen soll (dennoch aktualisieren?)
+    if (isRcdChanged = bTrue);
+      //      ... fragen Benutzer, wie es weiter gehen soll (dennoch
+      //          sperren?), bei Abbruch Datensatz wieder freigeben
       yMsgID     = '';
       yMsgDta    = '';
       callp(e) PEEK59(i_dsp80: '*QUESTION': 'USR8232': ''
                      : 'YC': yMsgID: yMsgDta);
       if (%error());
+        exsr unlockRecord;
         isError = bTrue;
         leavesr;
       endif;
       //      ... abbrechen der Operation, wenn vom Benutzer gewünscht
       if (yMsgID = 'USR8190' and yMsgDta <> '*YES');
+        exsr unlockRecord;
         p_sndPgmMg(yMsgID : yMsgDta : psPgmName);
         isError = bTrue;
         leavesr;
       endif;
+      //      ... der Benutzer übernimmt den Stand des anderen Jobs als
+      //          neues Before-Image
+      b4Image = dbImage;
+      b4NullDs = dbNullDs;
     endif;
-
-    //      ... sperren Datensatz für UPDATE
-    exsr lockRecord;
   endif;
 
 endsr;
@@ -846,7 +883,7 @@ endsr;
 
 begsr updateFile;
 
-  //  Prüfen der Wertebereiche (Ganzzahlen, BOOLEAN) ...
+  //  Prüfen der Werte (Ganzzahlen, BOOLEAN, Datum, Zeit) ...
   exsr chkValues;
   if (isError = bTrue);
     leavesr;
@@ -860,7 +897,7 @@ begsr updateFile;
       leavesr;
     endif;
     //  ... vergleichen Before-Images auf Abweichungen
-    if (b4Image <> RCD_DS);
+    if (isRcdChanged = bTrue);
       //      ... freigeben Datensatz, bei unterschiedlichen Images
       //          und fragen Benutzer, wie es weiter gehen soll (dennoch aktualisieren?)
       exsr unlockRecord;
@@ -878,6 +915,10 @@ begsr updateFile;
         isError = bTrue;
         leavesr;
       endif;
+      //      ... der Benutzer übernimmt den Stand des anderen Jobs als
+      //          neues Before-Image
+      b4Image = dbImage;
+      b4NullDs = dbNullDs;
 
       //      ... sperren Datensatz für UPDATE
       if (isRcdLocked = bFalse);
@@ -920,15 +961,22 @@ begsr updateFile;
 
   if (isError = bTrue);
     //  Update/write fehlgeschlagen ...
+    ioStatus = %status(FILE00);
     if (*in95);
       rolbk;
     else;
       unlock FILE00;
     endif;
-    exsr saveNull;
-    exsr ReadRecord;
-    exsr rstNull;
-    // exsr DataToScn;
+    //  Den Satz nicht neu lesen: Der Satzpuffer enthält die Eingaben und
+    //  die Änderungen aus den Editoren. Die Sperre ist aufgehoben, die
+    //  nächste Freigabe liest den Satz mit Sperre und prüft, ob ein
+    //  anderer Job ihn geändert hat.
+    if (i_function = '*CHANGE');
+      isRcdLocked = bFalse;
+    endif;
+    pgmMsgID  = 'USR8246';
+    pgmMsgDta = %editc(ioStatus: 'X');
+    p_sndPgmMg(pgmMsgID : pgmMsgDta : psPgmName);
     //  Setzen Fehler-Flag ...
     isError = bTrue;
   else;
@@ -947,7 +995,8 @@ begsr updateFile;
     if (i_function = '*ADD');
       yBImage = *NULL;
     else;
-      yBImage = %addr(b4Image);
+      //  ... der Satz, wie er vor dem UPDATE in der Datei stand
+      yBImage = %addr(dbImage);
     endif;
     yAImage = %addr(RCD_DS);
     EXIT04(i_file: i_library: i_member
@@ -966,13 +1015,31 @@ endsr;
 begsr lockRecord;
 
   //  Lesen Datensatz mit Satzsperre für nachfolgenden UPDATE ...
-  //  CHAIN überschreibt auch die NULL-Indikatoren. Die mit F8
-  //  gesetzten Indikatoren sichern und danach zurückschreiben,
-  //  die Feldinhalte überträgt FSCN anschließend vom Bildschirm.
+  //  CHAIN überschreibt den Satzpuffer und die NULL-Indikatoren. Den
+  //  gelesenen Satz für den Vergleich mit dem Before-Image in dbImage
+  //  und dbNullDs merken und danach den Arbeitsstand zurückschreiben:
+  //  Änderungen aus den Editoren (F9/F10) stehen nur im Satzpuffer, FSCN
+  //  überträgt anschließend nur die Bildschirmfelder.
+  wrkImage = RCD_DS;
   exsr saveNull;
+  wrkNullDs = nullSaveDs;
   chain(e) i_rcdNbr FFILE00;
   isFound = %found(FILE00);
   isError = %error();
+  if ((isError = bFalse) and (isFound = bTrue));
+    dbImage = RCD_DS;
+    exsr saveNull;
+    dbNullDs = nullSaveDs;
+    if ((b4Image <> dbImage) or (b4NullDs <> dbNullDs));
+      isRcdChanged = bTrue;
+    else;
+      isRcdChanged = bFalse;
+    endif;
+  else;
+    isRcdChanged = bFalse;
+  endif;
+  RCD_DS = wrkImage;
+  nullSaveDs = wrkNullDs;
   exsr rstNull;
   //  ... Fehler aufgetreten
   if (isError = bTrue);
@@ -982,11 +1049,13 @@ begsr lockRecord;
     // p_movPgmMg(psPgmName);
     // exsr exitPgm;
   endif;
-  //  ... Satz nicht gefunden
-  if (isFound = bFalse);
+  //  ... Satz nicht gefunden (z.B. von einem anderen Job gelöscht):
+  //      Fehler, damit das Fenster mit der Nachricht stehen bleibt
+  if ((isError = bFalse) and (isFound = bFalse));
     pgmMsgID  = 'USR8120';
     pgmMsgDta = ' ';
     p_sndPgmMg(pgmMsgID : pgmMsgDta : psPgmName);
+    isError = bTrue;
     // p_movPgmMg(psPgmName);
     // exsr exitPgm;
   endif;
@@ -1241,6 +1310,7 @@ begsr InzSr;
   PEEK21_NAME = f_pgmCallN('PEEK21');
   PEEK23_NAME = f_pgmCallN('PEEK23');
   PEEK32_NAME = f_pgmCallN('PEEK32');
+  PEEK36_NAME = f_pgmCallN('PEEK36');
   PEEK45_NAME = f_pgmCallN('PEEK45');
   PEEK59_NAME = f_pgmCallN('PEEK59');
   PEEK64_NAME = f_pgmCallN('PEEK64');
@@ -1314,6 +1384,11 @@ begsr fromBuffer;
       endif;
     endif;
 
+    //  Inhalt vor dem Editor merken: zum Erkennen eines unveränderten
+    //  Feldes variabler Länge und zum Zurückschreiben ungültiger Werte
+    yFldInhaltOld = yFldInhalt;
+    yLengthOld = yLength;
+
     if (Editor = cEDITOR_STRING);
       PEEK64(i_dsp80: io_headerType: i_copyright
             : yFldName: yFldInhalt: yLength
@@ -1329,7 +1404,13 @@ begsr fromBuffer;
     endif;
 
     if (yMsgID = 'USR8112'); // = ENTER
-      exsr ToBuffer;
+      //  Ein unverändertes Feld variabler Länge nicht zurückschreiben:
+      //  p_fldToBuf setzt die Länge ohne die nachgestellten Leerzeichen.
+      if (FLDL0100.F1VFMI = '1' and
+          isFldUnchanged());
+      else;
+        exsr ToBuffer;
+      endif;
     endif;
   endif;
 
@@ -1427,6 +1508,10 @@ begsr c_tgNullInd;
 
   select;
   //@NULL
+  other;
+    pgmMsgID  = 'USR8211';
+    pgmMsgDta = ' ';
+    p_sndPgmMg(pgmMsgID: pgmMsgDta: psPgmName);
   endsl;
 
 endsr;
@@ -1458,6 +1543,37 @@ endsr;
 //  Screen --> File                                   *
 //====================================================*
 //@TOF
+
+//============================================================*
+//  isFldUnchanged  Feldinhalt nach dem Editor unverändert?   *
+//                  Vergleicht yFldInhalt mit dem Inhalt vor  *
+//                  dem Editor in der ursprünglichen Länge.   *
+//============================================================*
+
+dcl-proc isFldUnchanged;
+  dcl-pi *n ind;
+  end-pi;
+
+  dcl-s byteLen int(10) inz;
+
+  if (FLDL0100.F1UCS2 = '1');
+    byteLen = yLengthOld * 2;
+  else;
+    byteLen = yLengthOld;
+  endif;
+
+  if (byteLen > %len(yFldInhalt));
+    byteLen = %len(yFldInhalt);
+  endif;
+
+  if (byteLen <= 0);
+    return *on;
+  endif;
+
+  return (%subst(yFldInhalt: 1: byteLen) =
+          %subst(yFldInhaltOld: 1: byteLen));
+
+end-proc;
 
 //============================================================*
 //  Program error handler                                     *

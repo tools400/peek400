@@ -8613,7 +8613,7 @@ t this error code in the SQL programming manual or in the message file-
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
-     /* Please put the cursor into a field and start your request a */
+     /* Place the cursor on a field and repeat the request.         */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8211) MSGF(&LIB/&OBJ)
@@ -8623,7 +8623,7 @@ t this error code in the SQL programming manual or in the message file-
                 MSGID(USR8211) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Please put the cursor into a field and start your request again.'    +
+'Place the cursor on a field and repeat the request.'                 +
                 ) +
                 SECLVL( +
 'Reason  . . . . :   The cursor is out of a field or the field is not -
@@ -9405,6 +9405,28 @@ out does not match the record format level ID of the specified file.&N-
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8246                    */
+     /* Record could not be saved (status &1).                      */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8246) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8246) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'Record could not be saved (status &1).'                              +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 5) +
                 ) +
                 ALROPT(*NO) +
                 CCSID(&CCSID) +

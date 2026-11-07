@@ -8617,7 +8617,7 @@ chier de messages QSYS/QSQLMSG.'''                                    +
 
      /*-------------------------------------------------------------*/
      /*   Cmd-ADDMSGD für Message-ID :   USR8211                    */
-     /* Veuillez placer le curseur dans un champ et relancer votre  */
+     /* Placez le curseur sur un champ et relancez la requête.      */
      /*-------------------------------------------------------------*/
 
              RMVMSGD MSGID(USR8211) MSGF(&LIB/&OBJ)
@@ -8627,7 +8627,7 @@ chier de messages QSYS/QSQLMSG.'''                                    +
                 MSGID(USR8211) +
                 MSGF(&LIB/&OBJ) +
                 MSG( +
-'Veuillez placer le curseur dans un champ et relancer votre requête.' +
+'Placez le curseur sur un champ et relancez la requête.'              +
                 ) +
                 SECLVL( +
 'Cause  . . . . :   Le curseur se trouve hors d''un champ ou le champ -
@@ -9417,6 +9417,28 @@ s.'                                                                   +
                 SEV(0) +
                 FMT( +
                     (*CHAR 10) +
+                ) +
+                ALROPT(*NO) +
+                CCSID(&CCSID) +
+                /*  -EOF-  */
+
+     /*-------------------------------------------------------------*/
+     /*   Cmd-ADDMSGD für Message-ID :   USR8246                    */
+     /* L'enregistrement n'a pas pu être sauvegardé (statut &1).    */
+     /*-------------------------------------------------------------*/
+
+             RMVMSGD MSGID(USR8246) MSGF(&LIB/&OBJ)
+             MONMSG  MSGID(CPF2419)     /* MsgID nicht gefunden */
+
+             ADDMSGD +
+                MSGID(USR8246) +
+                MSGF(&LIB/&OBJ) +
+                MSG( +
+'L''enregistrement n''a pas pu être sauvegardé (statut &1).'          +
+                ) +
+                SEV(0) +
+                FMT( +
+                    (*CHAR 5) +
                 ) +
                 ALROPT(*NO) +
                 CCSID(&CCSID) +
