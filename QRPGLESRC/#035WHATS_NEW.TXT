@@ -984,19 +984,37 @@
          Programm mit /include einbindet. Eigene Änderungen an der Vorlage
          müssen in die neue Vorlage übernommen werden.
        - Alle Datums- und Zeitformate werden unterstützt. Leere Datums- und
-         Zeitfelder werden im Format des Feldes vorbelegt.
+         Zeitfelder werden im Format des Feldes vorbelegt. Ungültige Werte
+         meldet vor dem Speichern die Nachricht USR8242.
        - Mit F8 gesetzte NULL-Werte gehen beim Sperren vor dem Speichern
-         nicht mehr verloren. Unveränderte VARCHAR-Werte behalten ihre
-         nachgestellten Leerzeichen.
+         nicht mehr verloren. Unveränderte VARCHAR- und VARGRAPHIC-Werte
+         behalten ihre nachgestellten Leerzeichen, auch nach dem Hex- oder
+         Text-Editor.
        - Hex-Editor (F9) und Text-Editor (F10): Änderungen an NULL-Feldern
-         gehen nicht mehr verloren. Felder variabler Länge zeigen hinter
-         der aktuellen Länge keine alten Daten mehr an. Der Hex-Editor
-         setzt CHAR-Felder mit CCSID nicht mehr doppelt um.
+         und an Feldern, die nicht vom Bildschirm übernommen werden (z.B.
+         über 512 Zeichen), gehen nicht mehr verloren, auch nicht beim
+         Sperren vor dem Speichern, mit F13 oder nach einem fehlgeschla-
+         genen Speichern. Felder variabler Länge zeigen hinter der aktuellen
+         Länge keine alten Daten mehr an. Der Hex-Editor setzt CHAR-Felder
+         mit CCSID nicht mehr doppelt um, ungültige gepackte oder gezonte
+         Werte meldet er mit USR8138 statt eines Abbruchs. Der Text-Editor
+         prüft Felder über 512 Zeichen vollständig auf nicht darstellbare
+         Zeichen. GRAPHIC-Felder mit Steuerzeichen werden ausgeblendet wie
+         andere Felder mit nicht darstellbaren Zeichen.
        - Ganzzahlen (SMALLINT, INTEGER, BIGINT) werden mit ihrem ganzen
          Wertebereich angezeigt und geändert. Bisher brachen Werte mit
          mehr Stellen als das Binärfeld (z.B. -32768 bei SMALLINT) das
          Programm mit MCH1210 ab. Werte außerhalb des Wertebereichs meldet
-         die neue Nachricht USR8244.
+         die neue Nachricht USR8244, auch beim Aufruf des Hex-Editors.
+       - Satzsperre und Speichern: Bricht der Benutzer die Rückfrage nach
+         einer Änderung durch einen anderen Job ab, wird der Satz wieder
+         freigegeben. Auch geänderte NULL-Werte werden erkannt. Ist der
+         Satz gesperrt oder inzwischen gelöscht, bleibt das Fenster mit
+         der Nachricht stehen. Ein fehlgeschlagenes Speichern meldet die
+         neue Nachricht USR8246 mit dem Status. EXIT04 erhält als Before-
+         Image den Satz, der überschrieben wurde.
+       - F8, F9 und F10 außerhalb eines Feldes melden USR8211, USR8191
+         nennt das richtige Feld.
        - BOOLEAN-Felder nehmen nur 0 (falsch) und 1 (wahr) an. Andere
          Eingaben meldet die neue Nachricht USR8245, bisher wurden sie als
          "wahr" gespeichert. Bei beiden Nachrichten steht der Cursor auf
