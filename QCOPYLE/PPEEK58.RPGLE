@@ -462,4 +462,16 @@ dcl-pr f_mapCmdToMsg like(msgId_t);
   i_command char(256) const;
   i_section like(section_t) options(*nopass) const;
 end-pr;
+//-------------------------------------------------------------------*
+//  Datum im externen Format eines Feldes (DATFMT, DATSEP).
+dcl-pr f_extDate varchar(10);
+  i_fldl0100 likeds(fldl0100_t) const;
+  i_date     date(*iso) value;
+end-pr;
+//-------------------------------------------------------------------*
+//  Zeit im externen Format eines Feldes (TIMFMT, TIMSEP).
+dcl-pr f_extTime varchar(8);
+  i_fldl0100 likeds(fldl0100_t) const;
+  i_time     time(*iso) value;
+end-pr;
 

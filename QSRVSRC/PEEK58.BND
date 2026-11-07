@@ -93,5 +93,8 @@
 
         EXPORT SYMBOL(f_startsWith)
 
+        EXPORT SYMBOL(f_extDate)
+        EXPORT SYMBOL(f_extTime)
+
       ENDPGMEXP
 

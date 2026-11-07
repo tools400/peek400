@@ -270,7 +270,7 @@ begsr intern;
   // ... Aufbereiten Datums-, Zeit- und
   //     Zeitstempelfelder
   select;
-  // ... Time (im Format des Feldes, QCOPYLE,DATTIMFMT)
+  // ... Time (im Format des Feldes, PEEK58)
   when (fldl0100.f1DTyp = 'T');
     if (f2Desc = 'D');
       dftVal = f_extTime(fldl0100: T'23.59.59');
@@ -279,7 +279,7 @@ begsr intern;
     endif;
     dftValLen = %len(%trimr(dftVal));
     exsr chkValue;
-  // ... Date (im Format des Feldes, QCOPYLE,DATTIMFMT)
+  // ... Date (im Format des Feldes, PEEK58)
   when (fldl0100.f1DTyp = 'L');
     if (f2Desc = 'D');
       dftVal = f_extDate(fldl0100: D'9999-12-31');
@@ -452,9 +452,4 @@ dcl-proc errorHandler;
   o_action = cee_percolate;
 
 end-proc;
-
-//============================================================*
-//  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
-//============================================================*
-/copy QCOPYLE,DATTIMFMT
 

@@ -3468,3 +3468,122 @@ dcl-proc f_mapCmdToMsg export;
 
 end-proc;
 
+//===================================================================*
+//  Funktion:  f_extDate                                  (Body)     *
+//  Datum im externen Format eines Feldes, so wie es im Satzpuffer   *
+//  steht: im Format DATFMT und mit dem Trennzeichen DATSEP des      *
+//  Feldes (FLDL0100.F1DTFM, FLDL0100.F1DTSP). Formate mit           *
+//  2-stelligem Jahr (*MDY, *DMY, *YMD, *JUL) umfassen nur 1940 bis  *
+//  2039, kleinere und größere Werte werden auf diesen Bereich       *
+//  begrenzt (*LOVAL, *HIVAL).                                       *
+//===================================================================*
+
+dcl-proc f_extDate export;
+  dcl-pi *n varchar(10);
+    i_fldl0100 likeds(fldl0100_t) const;
+    i_date     date(*iso) value;
+  end-pi;
+
+  //  Funktionswert
+  dcl-s text varchar(10);
+
+  //  Arbeitsfelder
+  dcl-s dftSep char(1);
+  // ------------------------------------------------------------------------
+
+  if (i_fldl0100.f1dtfm = '*MDY' or i_fldl0100.f1dtfm = '*DMY' or
+      i_fldl0100.f1dtfm = '*YMD' or i_fldl0100.f1dtfm = '*JUL');
+    if (i_date < D'1940-01-01');
+      i_date = D'1940-01-01';
+    elseif (i_date > D'2039-12-31');
+      i_date = D'2039-12-31';
+    endif;
+  endif;
+
+  select;
+  when (i_fldl0100.f1dtfm = '*EUR');
+    text = %char(i_date: *eur);
+    dftSep = '.';
+  when (i_fldl0100.f1dtfm = '*USA');
+    text = %char(i_date: *usa);
+    dftSep = '/';
+  when (i_fldl0100.f1dtfm = '*JIS');
+    text = %char(i_date: *jis);
+    dftSep = '-';
+  when (i_fldl0100.f1dtfm = '*MDY');
+    text = %char(i_date: *mdy);
+    dftSep = '/';
+  when (i_fldl0100.f1dtfm = '*DMY');
+    text = %char(i_date: *dmy);
+    dftSep = '/';
+  when (i_fldl0100.f1dtfm = '*YMD');
+    text = %char(i_date: *ymd);
+    dftSep = '/';
+  when (i_fldl0100.f1dtfm = '*JUL');
+    text = %char(i_date: *jul);
+    dftSep = '/';
+  other;
+    text = %char(i_date: *iso);
+    dftSep = '-';
+  endsl;
+
+  if (i_fldl0100.f1dtsp <> ' ' and i_fldl0100.f1dtsp <> dftSep);
+    text = %xlate(dftSep: i_fldl0100.f1dtsp: text);
+  endif;
+
+  return text;
+
+end-proc;
+
+//===================================================================*
+//  Funktion:  f_extTime                                  (Body)     *
+//  Zeit im externen Format eines Feldes, so wie sie im Satzpuffer   *
+//  steht: im Format TIMFMT und mit dem Trennzeichen TIMSEP des      *
+//  Feldes (FLDL0100.F1DTFM, FLDL0100.F1DTSP).                       *
+//===================================================================*
+
+dcl-proc f_extTime export;
+  dcl-pi *n varchar(8);
+    i_fldl0100 likeds(fldl0100_t) const;
+    i_time     time(*iso) value;
+  end-pi;
+
+  //  Funktionswert
+  dcl-s text varchar(8);
+
+  //  Arbeitsfelder
+  dcl-s dftSep char(1);
+  // ------------------------------------------------------------------------
+
+  //  *HIVAL ist 24.00.00. Im Format *USA wäre das '12:00 AM' und damit
+  //  wieder Mitternacht am Tagesanfang; größter *USA-Wert ist 11:59 PM.
+  if (i_fldl0100.f1dtfm = '*USA' and i_time > T'23.59.59');
+    i_time = T'23.59.59';
+  endif;
+
+  select;
+  when (i_fldl0100.f1dtfm = '*HMS');
+    text = %char(i_time: *hms);
+    dftSep = ':';
+  when (i_fldl0100.f1dtfm = '*EUR');
+    text = %char(i_time: *eur);
+    dftSep = '.';
+  when (i_fldl0100.f1dtfm = '*USA');
+    text = %char(i_time: *usa);
+    dftSep = ':';
+  when (i_fldl0100.f1dtfm = '*JIS');
+    text = %char(i_time: *jis);
+    dftSep = ':';
+  other;
+    text = %char(i_time: *iso);
+    dftSep = '.';
+  endsl;
+
+  if (i_fldl0100.f1dtsp <> ' ' and i_fldl0100.f1dtsp <> dftSep);
+    text = %xlate(dftSep: i_fldl0100.f1dtsp: text);
+  endif;
+
+  return text;
+
+end-proc;
+

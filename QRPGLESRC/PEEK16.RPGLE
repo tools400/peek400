@@ -672,7 +672,7 @@ begsr sub011;
     p_wrtCode('if (FLD' + a#fldCount + ' = '' '');');
 
     //  Initialisieren mit dem kleinsten Wert im Format des Feldes
-    //  (alle Formate, z.B. '01/01/40' für *MDY; QCOPYLE,DATTIMFMT)
+    //  (alle Formate, z.B. '01/01/40' für *MDY; PEEK58)
     line = '  FLD' + a#fldCount + ' = ';
     select;
     //  ... Zeitfeld
@@ -1241,7 +1241,3 @@ dcl-proc errorHandler;
 
 end-proc;
 
-//============================================================*
-//  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
-//============================================================*
-/copy QCOPYLE,DATTIMFMT

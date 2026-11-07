@@ -939,7 +939,7 @@ endsr;
 begsr dateToBuffer;
 
   //  Übertragen Datum gemäß Format und Trennzeichen des Feldes
-  //  (alle Formate, bisher nur *EUR und *ISO; QCOPYLE,DATTIMFMT)
+  //  (alle Formate, bisher nur *EUR und *ISO; PEEK58)
   o_buffer = f_extDate(fldl0100: r_dateISO);
 
 endsr;
@@ -981,7 +981,7 @@ endsr;
 begsr timeToBuffer;
 
   //  Übertragen Zeit gemäß Format und Trennzeichen des Feldes
-  //  (alle Formate, bisher ohne *USA und *JIS; QCOPYLE,DATTIMFMT)
+  //  (alle Formate, bisher ohne *USA und *JIS; PEEK58)
   o_buffer = f_extTime(fldl0100: r_timeISO);
 
 endsr;
@@ -1456,9 +1456,4 @@ dcl-proc errorHandler;
   o_action = cee_percolate;
 
 end-proc;
-
-//============================================================*
-//  Datum und Zeit im Format des Feldes (f_extDate, f_extTime)*
-//============================================================*
-/copy QCOPYLE,DATTIMFMT
 

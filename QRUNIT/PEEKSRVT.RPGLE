@@ -481,8 +481,8 @@ end-proc;
 
 // ==========================================================================
 //  SQL_count(): Cursor auch nach einem FETCH-Fehler schließen.
-//  Letzter Test, weil ein offener Cursor alle folgenden Aufrufe von
-//  SQL_count() scheitern ließe.
+//  Letzter Test mit SQL_count(), weil ein offener Cursor alle folgenden
+//  Aufrufe von SQL_count() scheitern ließe.
 // ==========================================================================
 
 dcl-proc test28_sqlCount_afterFetchError export;
@@ -493,6 +493,45 @@ dcl-proc test28_sqlCount_afterFetchError export;
   assert(prepare(bFalse: TST_FILE: TST_FMT: '': '')
          : 'PREPARE nach dem Fehler in SQL_count: ' + g_lastMsg);
   iEqual(3: SQL_count(): 'SQL_count nach dem Fehler in SQL_count');
+end-proc;
+
+// ==========================================================================
+//  f_extDate(), f_extTime(): Datum und Zeit im externen Format eines
+//  Feldes, mit dem Trennzeichen des Feldes oder dem des Formats.
+// ==========================================================================
+
+dcl-proc test29_fExtDate_isoFormat export;
+  aEqual('2026-11-07': f_extDate(dateTimeFld('*ISO': ' '): D'2026-11-07'));
+end-proc;
+
+dcl-proc test30_fExtDate_dmySeparator export;
+  aEqual('07.11.26': f_extDate(dateTimeFld('*DMY': '.'): D'2026-11-07'));
+end-proc;
+
+dcl-proc test31_fExtDate_julianFormat export;
+  aEqual('26/311': f_extDate(dateTimeFld('*JUL': ' '): D'2026-11-07'));
+end-proc;
+
+dcl-proc test32_fExtDate_mdyLoval export;
+  aEqual('01/01/40': f_extDate(dateTimeFld('*MDY': '/'): D'0001-01-01'));
+end-proc;
+
+dcl-proc test33_fExtDate_mdyHival export;
+  aEqual('12/31/39': f_extDate(dateTimeFld('*MDY': '/'): D'9999-12-31'));
+end-proc;
+
+dcl-proc test34_fExtTime_isoFormat export;
+  aEqual('13.45.30': f_extTime(dateTimeFld('*ISO': ' '): T'13.45.30'));
+end-proc;
+
+dcl-proc test35_fExtTime_hmsSeparator export;
+  aEqual('13.45.30': f_extTime(dateTimeFld('*HMS': '.'): T'13.45.30'));
+end-proc;
+
+dcl-proc test36_fExtTime_usaHival export;
+  dcl-s time time(*iso) inz(*hival);
+
+  aEqual('11:59 PM': f_extTime(dateTimeFld('*USA': ':'): time));
 end-proc;
 
 // ==========================================================================
@@ -627,4 +666,20 @@ dcl-proc fillArgArea;
     i_a char(10) const;
     i_b char(16) value;
   end-pi;
+end-proc;
+
+//  Returns the field description of a date or time field with the given
+//  format and separator.
+dcl-proc dateTimeFld;
+  dcl-pi *n likeds(fldl0100_t);
+    i_fmt like(fldl0100_t.f1dtfm) const;
+    i_sep like(fldl0100_t.f1dtsp) const;
+  end-pi;
+
+  dcl-ds fld likeds(fldl0100_t) inz;
+
+  fld.f1dtfm = i_fmt;
+  fld.f1dtsp = i_sep;
+
+  return fld;
 end-proc;
