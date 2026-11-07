@@ -1,37 +1,47 @@
+/* =================================================================== */
+/* >>PRE-COMPILER<<                                                    */
+/*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */
+/*                           OBJLIB(&LI) DEVLIB(&LI) +                 */
+/*                           SBMJOB(*NO) BNDDIR(PEEK) +                */
+/*                           INSTALL(*NO);                             */
+/*   >>EXECUTE<<                                                       */
+/* >>END-PRE-COMPILER<<                                                */
+/* =================================================================== */
+
 STRPGMEXP PGMLVL(*CURRENT) SIGNATURE('PEEK_3.4.4_2013.07.02')
-  EXPORT SYMBOL("P_CRTUSRSG")                                         /* RADD */
-  EXPORT SYMBOL("F_GETUSRSG")                                         /* RADD */
-  EXPORT SYMBOL("P_UPDUSRSG")                                         /* RADD */
-  EXPORT SYMBOL("F_CHAINUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_UPDATUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_DELETUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_WRITEUSR")                                         /* RADD */
-  EXPORT SYMBOL("P_SETLLUSR")                                         /* RADD */
-  EXPORT SYMBOL("P_SETGTUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_READEUSR")                                         /* RADD */
-  EXPORT SYMBOL("P_SETLLDFT")                                         /* RADD */
-  EXPORT SYMBOL("F_READEDFT")                                         /* RADD */
-  EXPORT SYMBOL("P_SETUSR")                                           /* RADD */
-  EXPORT SYMBOL("F_GETUSR")                                           /* RADD */
-ENDPGMEXP                                                             /* RADD */
-                                                                      /* RADD */
-STRPGMEXP PGMLVL(*PRV    )                                            /* RADD */
-  EXPORT SYMBOL("P_CRTUSRSG")                                         /* RADD */
-  EXPORT SYMBOL("F_GETUSRSG")                                         /* RADD */
-  EXPORT SYMBOL("P_UPDUSRSG")                                         /* RADD */
-  EXPORT SYMBOL("F_CHAINUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_UPDATUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_DELETUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_WRITEUSR")                                         /* RADD */
-  EXPORT SYMBOL("P_SETLLUSR")                                         /* RADD */
-  EXPORT SYMBOL("P_SETGTUSR")                                         /* RADD */
-  EXPORT SYMBOL("F_READEUSR")                                         /* RADD */
-  EXPORT SYMBOL("P_SETLLDFT")                                         /* RADD */
-  EXPORT SYMBOL("F_READEDFT")                                         /* RADD */
-  EXPORT SYMBOL("P_SETUSR")                                           /* RADD */
-ENDPGMEXP                                                             /* RADD */
-                                                                      /* RADD */
-STRPGMEXP PGMLVL(*PRV)                                                /* RADD */
+  EXPORT SYMBOL("P_CRTUSRSG")
+  EXPORT SYMBOL("F_GETUSRSG")
+  EXPORT SYMBOL("P_UPDUSRSG")
+  EXPORT SYMBOL("F_CHAINUSR")
+  EXPORT SYMBOL("F_UPDATUSR")
+  EXPORT SYMBOL("F_DELETUSR")
+  EXPORT SYMBOL("F_WRITEUSR")
+  EXPORT SYMBOL("P_SETLLUSR")
+  EXPORT SYMBOL("P_SETGTUSR")
+  EXPORT SYMBOL("F_READEUSR")
+  EXPORT SYMBOL("P_SETLLDFT")
+  EXPORT SYMBOL("F_READEDFT")
+  EXPORT SYMBOL("P_SETUSR")
+  EXPORT SYMBOL("F_GETUSR")
+ENDPGMEXP
+
+STRPGMEXP PGMLVL(*PRV    )
+  EXPORT SYMBOL("P_CRTUSRSG")
+  EXPORT SYMBOL("F_GETUSRSG")
+  EXPORT SYMBOL("P_UPDUSRSG")
+  EXPORT SYMBOL("F_CHAINUSR")
+  EXPORT SYMBOL("F_UPDATUSR")
+  EXPORT SYMBOL("F_DELETUSR")
+  EXPORT SYMBOL("F_WRITEUSR")
+  EXPORT SYMBOL("P_SETLLUSR")
+  EXPORT SYMBOL("P_SETGTUSR")
+  EXPORT SYMBOL("F_READEUSR")
+  EXPORT SYMBOL("P_SETLLDFT")
+  EXPORT SYMBOL("F_READEDFT")
+  EXPORT SYMBOL("P_SETUSR")
+ENDPGMEXP
+
+STRPGMEXP PGMLVL(*PRV)
   EXPORT SYMBOL("P_CRTUSRSG")
   EXPORT SYMBOL("F_GETUSRSG")
   EXPORT SYMBOL("P_UPDUSRSG")

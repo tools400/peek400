@@ -1,18 +1,27 @@
+/* =================================================================== */
+/* >>PRE-COMPILER<<                                                    */
+/*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */
+/*                           OBJLIB(&LI) DEVLIB(&LI) +                 */
+/*                           SBMJOB(*NO) BNDDIR(PEEK) +                */
+/*                           INSTALL(*NO);                             */
+/*   >>EXECUTE<<                                                       */
+/* >>END-PRE-COMPILER<<                                                */
+/* =================================================================== */
 
-STRPGMEXP  PGMLVL(*CURRENT) SIGNATURE('CharacterTranslationServices') /* RADD */
-                                                                      /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_toJobCcsid')                       /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_toFieldCcsid')                     /* RADD */
+STRPGMEXP  PGMLVL(*CURRENT) SIGNATURE('CharacterTranslationServices')
 
-  EXPORT SYMBOL('PEEK71_Transcoder_new')                              /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_delete')                           /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_getFromCcsid')                     /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_getToCcsid')                       /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_xlateString')                      /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_xlateBuffer')                      /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_xlateRaw')                         /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_isNull')                           /* RADD */
-  EXPORT SYMBOL('PEEK71_Transcoder_null')                             /* RADD */
+  EXPORT SYMBOL('PEEK71_Transcoder_toJobCcsid')
+  EXPORT SYMBOL('PEEK71_Transcoder_toFieldCcsid')
+
+  EXPORT SYMBOL('PEEK71_Transcoder_new')
+  EXPORT SYMBOL('PEEK71_Transcoder_delete')
+  EXPORT SYMBOL('PEEK71_Transcoder_getFromCcsid')
+  EXPORT SYMBOL('PEEK71_Transcoder_getToCcsid')
+  EXPORT SYMBOL('PEEK71_Transcoder_xlateString')
+  EXPORT SYMBOL('PEEK71_Transcoder_xlateBuffer')
+  EXPORT SYMBOL('PEEK71_Transcoder_xlateRaw')
+  EXPORT SYMBOL('PEEK71_Transcoder_isNull')
+  EXPORT SYMBOL('PEEK71_Transcoder_null')
   EXPORT SYMBOL('PEEK71_Transcoder_reset')
 
 ENDPGMEXP

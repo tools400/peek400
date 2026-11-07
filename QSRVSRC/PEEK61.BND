@@ -1,6 +1,15 @@
-                                                                      /* RADD */
-      STRPGMEXP PGMLVL(*CURRENT)                                      /* RADD */
-        EXPORT SYMBOL(P_INZPROGRESSMETER)                             /* RADD */
-        EXPORT SYMBOL(P_SHOWPROGRESSMETER)                            /* RADD */
-      ENDPGMEXP                                                       /* RADD */
-                                                                      /* RADD */
+/* =================================================================== */
+/* >>PRE-COMPILER<<                                                    */
+/*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */
+/*                           OBJLIB(&LI) DEVLIB(&LI) +                 */
+/*                           SBMJOB(*NO) BNDDIR(PEEK) +                */
+/*                           INSTALL(*NO);                             */
+/*   >>EXECUTE<<                                                       */
+/* >>END-PRE-COMPILER<<                                                */
+/* =================================================================== */
+
+      STRPGMEXP PGMLVL(*CURRENT)
+        EXPORT SYMBOL(P_INZPROGRESSMETER)
+        EXPORT SYMBOL(P_SHOWPROGRESSMETER)
+      ENDPGMEXP
+
