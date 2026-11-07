@@ -12,9 +12,17 @@
               PEEK<vvv>P geht nicht ins Release. Den Text des Releases nimmt das Skript aus dem
               Abschnitt "Version <Version>" von QRPGLESRC/#035WHATS_NEW.TXT.
 
+    help      Zeigt diese Hilfe, ebenso ein Aufruf ohne Parameter.
+
     Ohne -ReleaseDir landen alle Dateien in temp/ im Repository. Git ignoriert das Verzeichnis,
     und RDi blendet es aus, damit die Sicherungsdateien weder ins Repository noch auf das IBM i
     gelangen.
+
+.PARAMETER Task
+    download, publish oder help.
+
+.PARAMETER Version
+    Version von Peek/400, z.B. 4.0.8. Pflicht bei download und publish.
 
 .EXAMPLE
     .\.github\release.ps1 download -Version 4.0.8
@@ -23,14 +31,18 @@
     .\.github\release.ps1 publish -Version 4.0.8 -WhatIf
 
     Probelauf: prüft alles und zeigt Text und Dateien des Releases, ändert aber nichts.
+
+.EXAMPLE
+    .\.github\release.ps1 help
+
+    Zeigt diese Hilfe. In der Eingabeaufforderung: .github\release help oder .github\release /?
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
-    [Parameter(Mandatory, Position = 0)]
-    [ValidateSet('download', 'publish')]
+    [Parameter(Position = 0)]
+    [ValidateSet('download', 'publish', 'help')]
     [string] $Task,
 
-    [Parameter(Mandatory)]
     [ValidatePattern('^\d+\.\d+\.\d+$')]
     [string] $Version,
 
@@ -49,13 +61,21 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$ScriptCall = '.\.github\release.ps1'                     # für Hinweise in Meldungen
+if (-not $Task -or $Task -eq 'help') {
+    Get-Help -Name $PSCommandPath -Detailed
+    return
+}
+if (-not $Version) {
+    throw "Für '$Task' fehlt -Version, z.B.: $ScriptCall $Task -Version 4.1.0. Hilfe: $ScriptCall help"
+}
+
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 if (-not $ReleaseDir) {
     $ReleaseDir = Join-Path $RepoRoot 'temp'
 }
 # Relativ zum aktuellen Verzeichnis des Aufrufers, bevor das Skript ins Repository wechselt.
 $ReleaseDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReleaseDir)
-$ScriptCall = '.\.github\release.ps1'                     # für Hinweise in Meldungen
 $Tag = "v$Version"
 $SavfName = 'PEEK' + ($Version -replace '\.', '')          # 4.0.8 -> PEEK408
 $SavfFile = Join-Path $ReleaseDir "$SavfName.SAVF"          # Produkt, geht ins Release
