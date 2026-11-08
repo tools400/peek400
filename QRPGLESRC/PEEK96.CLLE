@@ -262,6 +262,9 @@
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK32   ) +
                           TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
+                          TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK36   ) +
+                          TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
+             CPYF       FROMFILE(&DEVLIB/QCOPYLE) +
                           TOFILE(&NEWLIB/QCOPYLE) FROMMBR(PPEEK45   ) +
                           TOMBR(*FROMMBR ) MBROPT(*REPLACE) CRTFILE(*NO)
              CPYF       FROMFILE(&DEVLIB/QCOPYLE) +

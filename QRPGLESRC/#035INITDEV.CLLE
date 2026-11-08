@@ -197,6 +197,7 @@
              CLRPFM     FILE(&DEVLIB/EXIT04LOG)
 
              CLRPFM     FILE(&DEVLIB/PEEKENV)
+             MONMSG     MSGID(CPF3133) /* File contains no members */
              CLRPFM     FILE(&DEVLIB/PEEKFLD)
              CLRPFM     FILE(&DEVLIB/PEEKFMT)
              CLRPFM     FILE(&DEVLIB/PEEKWRK)

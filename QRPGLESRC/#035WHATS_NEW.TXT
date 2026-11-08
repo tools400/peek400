@@ -1105,3 +1105,8 @@
        - Das veraltete Beispiel TESTPEEK_P eines generierten Update-
          Programms und die Testprogramme TEST002, TEST003 und TEST0031 bis
          TEST0033 wurden entfernt.
+
+  Version 4.1.1
+  =============
+  *  PEEK96
+       - Fehlenden Quellenteildatei PPEEK36 zur Distributionsbibliothek hinzugefügt.
