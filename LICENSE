@@ -1,3 +1,10 @@
+Peek/400 is licensed under the Common Public License Version 1.0 below. The installer of the
+required service program BASICS1, QXML/BASICS1.XML, contains the CRC-32 code of zlib. It keeps the
+zlib license, Copyright (C) 1995-2003 Jean-loup Gailly and Mark Adler, see the notice of ZLIB.H in
+that file.
+
+---
+
 Common Public License Version 1.0
 
 THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS COMMON PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM CONSTITUTES RECIPIENT'S ACCEPTANCE OF THIS AGREEMENT.
