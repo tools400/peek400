@@ -270,6 +270,23 @@ ADDBNDDIRE:
                 ENDDO
 /* ----------------- */
 /* Erstellen         */
+/* CRTDB ...         */
+/* ----------------- */
+                IF         COND(&MBR *EQ 'CRTDB'            +
+                           ) THEN(DO)
+                   CHGVAR     VAR(&CMD) VALUE(&CMD          +
+                                        *BCAT  'MODE('      +
+                                        *TCAT  '*ALL'       +
+                                        *TCAT  ')'          +
+                                        *BCAT  'ALLOW('     +
+                                        *TCAT  '*ALL'       +
+                                        *TCAT  ')'          +
+                                        *BCAT  'ALWLMTUSR(' +
+                                        *TCAT  '*NO'        +
+                                        *TCAT  ')'          )
+                ENDDO
+/* ----------------- */
+/* Erstellen         */
 /* PEEKINIT ...      */
 /* ----------------- */
                 IF         COND(&MBR *EQ 'PEEKINIT'         +
