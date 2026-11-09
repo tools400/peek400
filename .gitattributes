@@ -2,5 +2,12 @@
 *.doc binary
 *.pdf binary
 
-# Batch-Dateien brauchen CRLF, auch bei einem Checkout ohne core.autocrlf.
-*.cmd text eol=crlf
+# Batch-Dateien brauchen CRLF, auch bei einem Checkout ohne core.autocrlf. Nur die unter
+# .github: die CL-Befehle in qcmdsrc haben dieselbe Endung.
+/.github/*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# make und TOBi lesen diese Dateien auf dem IBM i: LF, auch bei core.autocrlf.
+Rules.mk text eol=lf
+*.json text eol=lf
+*.sh text eol=lf

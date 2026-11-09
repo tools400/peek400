@@ -4,3 +4,10 @@
 
 # Arbeitsverzeichnis von .github/release.ps1: Downloads und Dateien des Releases.
 /temp/
+
+# Ausgaben von TOBi (makei build) und Umgebungsvariablen der IDE (PEEKLIB, DBGVIEW).
+.logs/
+.evfevent/
+.deps/
+.Rules.mk.build
+.env
