@@ -1110,3 +1110,47 @@
   =============
   *  PEEK96
        - Fehlenden Quellenteildatei PPEEK36 zur Distributionsbibliothek hinzugefügt.
+
+  Version 4.1.2
+  =============
+  *  Datensätze und Spalten pinnen
+       - Ein mit der Auswahl P gepinnter Satz wird auch dann oben angezeigt,
+         wenn Spalten gepinnt sind. Bisher landete er in einem unsicht-
+         baren Pin-Platz.
+       - Suchen und pinnen (F16, Suchart P) pinnt den gefundenen Satz
+         richtig. Bei logischen Dateien über mehrere Teildateien ist es wie
+         die Auswahl P nicht möglich (USR8218). Bisher geriet Peek/400 dort
+         in eine Endlosschleife und brach mit RNQ1255 ab.
+       - Startet Peek/400 mit einer Datei ohne Teildatei und lädt dabei
+         eine Arbeitsumgebung, werden gepinnte Sätze und Spalten beim
+         nächsten Dateiwechsel wieder gelöscht.
+       - Lässt sich die Datei eines gepinnten Satzes nicht mehr öffnen,
+         wird der Pin entfernt, statt das Programm abzubrechen.
+
+  *  Blättern und Markierungen
+       - Ein Feld nach links (Auswahl L) überspringt gepinnte und ausge-
+         blendete Spalten. Ein Feld nach rechts (Auswahl R) und eine Seite
+         nach rechts (F20) blättern auch bei gepinnten Spalten innerhalb
+         eines breiten Feldes weiter.
+       - F20 bricht nicht mehr ab, wenn alle Felder ausgeblendet sind.
+       - Nächste und vorherige Markierung (Auswahl X und Y) überspringen
+         gepinnte Spalten.
+
+  *  Suchen und SQL-Auswahl
+       - Suchkriterien: Der letzte Satz eines Suchdurchgangs wird mit
+         verglichen. Bisher wurde z.B. bei 1000 zu durchsuchenden Sätzen
+         der 1000. Satz nie geprüft.
+       - SQL-Auswahl mit leerem WHERE und ORDER BY: Die Datei bleibt
+         geöffnet und behält ihre Sortierung. Bisher wechselte Peek/400 in
+         die Satzfolge und bei logischen Dateien auf die physische Datei.
+       - SQL-Auswahl bei logischen Dateien mit mehreren Satzformaten: F12
+         lässt das Satzformat unverändert. Bisher war die Liste danach leer.
+       - Lässt sich die Anzahl Sätze der Teildatei nicht ermitteln, zählt
+         die SQL-Auswahl nicht mehr alle Sätze, sondern beachtet die
+         Grenze *SQLLMTCNT.
+
+  *  Weitere Korrekturen
+       - Arbeitsumgebungen sichern und laden auch die Eingabe der
+         Schlüsselfelder in Kleinbuchstaben (Auswahl K).
+       - Die Auswahl 9 (Kopieren in externe Datei) meldet ohne Änderungs-
+         recht USR0007 wie die Auswahlen 2, 3 und 4. Bisher geschah nichts.
