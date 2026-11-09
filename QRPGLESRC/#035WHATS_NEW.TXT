@@ -1136,6 +1136,9 @@
          nach rechts (F20) blättern auch bei gepinnten Spalten innerhalb
          eines breiten Feldes weiter.
        - F20 bricht nicht mehr ab, wenn alle Felder ausgeblendet sind.
+       - Ist das letzte Feld ausgeblendet, bleibt die Anzeige nach F20 an
+         ihrer Position. Bisher sprang sie zurück an den Anfang und
+         meldete "Anfang des Datensatzes angezeigt.".
        - Nächste und vorherige Markierung (Auswahl X und Y) überspringen
          gepinnte Spalten.
 

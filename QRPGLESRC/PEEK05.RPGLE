@@ -6788,25 +6788,23 @@ begsr getFrstFld;
 
     for x = 1 to cp;
 
+      //  ... Feldsatz zuerst lesen: chkVisible prüft f_hidden des
+      //      gelesenen Satzes (sonst gilt der zuletzt gelesene Satz,
+      //      z.B. ein ausgeblendetes letztes Feld)
+      clear f_key;
+      f_key.f_field = col_field(x);
+      chain(n) %kds(f_key) fpeekfld;
+      if (not %found(peekFld));
+        // ... kann eigentlich nicht sein
+        iter;
+      endif;
+
       wrk#Field = col_field(x);
       exsr chkVisible;
-      if (isVisible = bFalse);
-        //  ... nicht sichtbar
-        iter;
-      else;
-        //  ... sichtbar
-        //      ... ermitteln der Sequenznummer
-        clear f_key;
-        f_key.f_field = col_field(x);
-        chain(n) %kds(f_key) fpeekfld;
-        if (%found(peekFld));
-          // ... ermittelt
-          ##wndNbr = f_seq;
-          leave;
-        else;
-          // ... kann eigentlich nicht sein
-          iter;
-        endif;
+      if (isVisible = bTrue);
+        //  ... sichtbar: Sequenznummer übernehmen
+        ##wndNbr = f_seq;
+        leave;
       endif;
 
     endfor;
