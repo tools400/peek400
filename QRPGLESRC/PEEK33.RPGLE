@@ -281,6 +281,8 @@ begsr vPos;
       exsr v04r01m00;
     when (set0007.set_vsn < 'V04R01M01');
       exsr v04r01m01;
+    when (set0007.set_vsn < 'V04R01M02');
+      exsr v04r01m02;
     other;
       //  ... kein weiterer Schritt: aktuelle Versions-Nr. speichern
       set0007.set_vsn = i_version;
@@ -986,6 +988,16 @@ endsr;
 begsr v04r01m01;
 
   set0007.set_vsn = 'V04R01M01';
+
+endsr;
+
+//============================================================*
+//    V04R01M02     Aktualisierung auf Version 4.1.2          *
+//============================================================*
+
+begsr v04r01m02;
+
+  set0007.set_vsn = 'V04R01M02';
 
 endsr;
 
