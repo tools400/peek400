@@ -84,8 +84,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/include 'qcopyle/h_spec.rpgleinc'
-/include 'qcopyle/copyright.rpgleinc'
+/include QCOPYLE,H_SPEC
+/include QCOPYLE,COPYRIGHT
 
 /if defined(*CRTBNDRPG)
 ctl-opt dftactgrp(*no) actgrp(*caller);
@@ -95,7 +95,7 @@ dcl-f exit04Log usage(*update: *delete: *output) keyed usropn rename(exit04Log: 
   prefix(log_);
 
 /define internal_prototype
-/include 'qcopyle/pexit04.rpgleinc'
+/include QCOPYLE,PEXIT04
 /undefine internal_prototype
 
 dcl-pr main extproc('main');

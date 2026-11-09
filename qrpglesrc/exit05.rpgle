@@ -73,11 +73,11 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/include 'qcopyle/h_spec.rpgleinc'
-/include 'qcopyle/copyright.rpgleinc'
+/include QCOPYLE,H_SPEC
+/include QCOPYLE,COPYRIGHT
 
 /define internal_prototype
-/include 'qcopyle/pexit05.rpgleinc'
+/include QCOPYLE,PEXIT05
 /undefine internal_prototype
 
 dcl-pr main extproc('main');

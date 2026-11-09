@@ -56,13 +56,13 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/include 'qcopyle/h_spec.rpgleinc'
-/include 'qcopyle/copyright.rpgleinc'
+/include QCOPYLE,H_SPEC
+/include QCOPYLE,COPYRIGHT
 
-/include 'qcopyle/d_vardef.rpgleinc'
+/include QCOPYLE,D_VARDEF
 
 /define internal_prototype
-/include 'qcopyle/pexit02.rpgleinc'
+/include QCOPYLE,PEXIT02
 /undefine internal_prototype
 
 //  main procedure

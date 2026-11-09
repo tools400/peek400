@@ -115,18 +115,18 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/include 'qcopyle/h_spec.rpgleinc'
-/include 'qcopyle/copyright.rpgleinc'
+/include QCOPYLE,H_SPEC
+/include QCOPYLE,COPYRIGHT
 
 dcl-f exit01pf keyed usropn prefix(ex_);
 
-/include 'qcopyle/d_vardef.rpgleinc'
-/include 'qcopyle/usr1000.rpgleinc'
-/include 'qcopyle/ceertx.rpgleinc'
-/include 'qcopyle/sds.rpgleinc'
+/include QCOPYLE,D_VARDEF
+/include QCOPYLE,USR1000
+/include QCOPYLE,CEERTX
+/include QCOPYLE,SDS
 
 /define internal_prototype
-/include 'qcopyle/pexit01.rpgleinc'
+/include QCOPYLE,PEXIT01
 /undefine internal_prototype
 
 //  main prozedure
