@@ -319,7 +319,6 @@ dcl-s yEnvFile like(file_t) inz;
 dcl-s yEnvLib like(lib_t) inz;
 dcl-s yEnvMbr like(mbr_t) inz;
 dcl-s yIsAutoSave like(bool_t) inz(bFalse);
-dcl-s yIsKeyLower like(bool_t) inz;
 dcl-s yOption like(option_t) inz;
 dcl-s yText like(text_t);
 dcl-s ySflOpt char(2);
@@ -2120,8 +2119,14 @@ begsr c_pageRight;
     exsr msgNoFile;
   else;
 
-    wrk#Field = col_field(cp);
-    exsr getSeqNbr;
+    //  Letzte angezeigte Spalte ermitteln
+    //  (keine Spalte angezeigt: ans Ende positionieren)
+    if (cp > 0);
+      wrk#Field = col_field(cp);
+      exsr getSeqNbr;
+    else;
+      isSeqNbrOK = bFalse;
+    endif;
     if (isSeqNbrOK = bTrue);
 
       if (col_error(cp) = bTrue);
@@ -2696,7 +2701,11 @@ begsr c_sql;
     sqlWhere   = ySqlWhere;
     sqlOrder   = ySqlOrder;
   else;
-    accessMode = oldAccMode;
+    //  Nur beim Verlassen des SQL-Modus die vorherige Sortierung
+    //  wiederherstellen
+    if (accessMode = SQL_SEQ);
+      accessMode = oldAccMode;
+    endif;
     sqlWhere   = ' ';
     sqlOrder   = ' ';
   endif;
@@ -3406,11 +3415,11 @@ endsr;
 
 begsr loadEnv;
 
-  isPinToClr = bFalse;
-
   if (##member = '*NONE');
     leavesr;
   endif;
+
+  isPinToClr = bFalse;
 
   clear rtn;
   rtn.file = ##file;
@@ -3470,8 +3479,6 @@ begsr loadEnv;
             : isKeyLower
             :yMsgID: yMsgDta);
     endif;
-
-    isKeyLower = yIsKeyLower;
   endif;
 
   isPinToClr = bTrue;
@@ -3701,6 +3708,7 @@ begsr pinRecord;
   if (isPinned = bFalse);
     //  Datensatz ist noch nicht gepinned ...
     clear pinTabRcdE;
+    x = 1;
     x = %lookup(pinTabRcdE: pinTabRcd: x);
     if (x > 0);
       //  ... Datensatz pinnen
@@ -4136,10 +4144,6 @@ begsr srchUp;
     endif;
 
     srchCount = srchCount + 1;
-    if (srchCount >= srchNbrs);
-      srchMode = '*MAXIMUM';
-      leave;
-    endif;
 
     exsr srchCompare;
     if (isFound = bTrue);
@@ -4157,6 +4161,13 @@ begsr srchUp;
         //  ... sonstige Suchfunktionen
         leave;
       endif;
+    endif;
+
+    //  Höchstzahl der zu durchsuchenden Sätze erreicht ...
+    //  (erst nach dem Vergleich, sonst wird dieser Satz nie geprüft)
+    if (srchCount >= srchNbrs);
+      srchMode = '*MAXIMUM';
+      leave;
     endif;
 
     srchCount2 = srchCount2 + 1;
@@ -6244,7 +6255,7 @@ begsr openFile;
                  : ##library
                  : ##member
                  : ##format
-                 : 'rr+ , arrseq=Y, commit=N +
+                 : 'rr+ , arrseq=Y, commit=N, +
                     nullcap=Y, riofb=Y, +
                     secure=N, ccsid=65535') = bTrue;
 
@@ -7024,7 +7035,8 @@ begsr getMbrAttr;
     $$lmtCnt = '*ERROR';
   endif;
 
-  if (accessMode = SQL_SEQ);
+  //  ... nur, wenn die Anzahl Sätze der Teildatei bekannt ist (*IN79)
+  if (accessMode = SQL_SEQ and *in79 = *on);
     if ($$records > set0016.set_maxRcds);
       $$records = 0;
       *in79 = *off;
@@ -7560,6 +7572,7 @@ begsr getNxtMark;
       leave;
     endif;
 
+    wrk#Field = f_field;
     exsr chkVisible;
     if (isVisible = bFalse);
     // ... Feld ist nicht sichtbar
@@ -7596,6 +7609,7 @@ begsr getPrvMark;
       leave;
     endif;
 
+    wrk#Field = f_field;
     exsr chkVisible;
     if (isVisible = bFalse);
     // ... Feld ist nicht sichtbar
@@ -8216,7 +8230,7 @@ dcl-proc f_chain00;
               : i_lib
               : i_mbr
               : i_rcdFmt
-              : 'rr+ , arrseq=Y, commit=Y +
+              : 'rr+ , arrseq=Y, commit=Y, +
                  nullcap=Y, riofb=Y, +
                  secure=N, ccsid=65535');
     else;
@@ -8225,7 +8239,7 @@ dcl-proc f_chain00;
               : i_lib
               : i_mbr
               : i_rcdFmt
-              : 'rr+ , arrseq=Y, commit=N +
+              : 'rr+ , arrseq=Y, commit=N, +
                  nullcap=Y, riofb=Y, +
                  secure=N, ccsid=65535');
     endif;
@@ -8237,6 +8251,12 @@ dcl-proc f_chain00;
            : yMsgID: yMsgDta);
   yMsgID = '';
   yMsgDta = '';
+
+  //  Datei konnte nicht geöffnet werden:
+  //  wie "Satz nicht gefunden" behandeln (Rückgabewert '1')
+  if (CIO_isOpen(hFile00) = bFalse);
+    return '1';
+  endif;
 
   if (CIO_chainWithRRN(hFile00
                     : i_rrn
@@ -8286,6 +8306,12 @@ dcl-proc f_chain04;
             : i_rcdFmt
             : 'rr , arrseq=Y, +
                nullcap=Y, riofb=Y, ccsid=65535');
+  endif;
+
+  //  Datei konnte nicht geöffnet werden:
+  //  wie "Satz nicht gefunden" behandeln (Rückgabewert '1')
+  if (CIO_isOpen(hFile04) = bFalse);
+    return '1';
   endif;
 
   if (CIO_chainWithRRN(hFile04
