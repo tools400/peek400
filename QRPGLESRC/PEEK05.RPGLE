@@ -483,8 +483,12 @@ dcl-s pinTabCol like(fieldNme_t) dim(12);
 //  Rückgabe des Pin-Dialogs (PEEK50): clrpincol löscht pinTabCol
 dcl-s yPinTabCol like(fieldNme_t) dim(12);
 dcl-s nbrPinCol like(int4_t);
+//  Anzahl der angezeigten gepinnten Spalten (cntPinShown)
+dcl-s nbrPinShown like(int4_t);
 
 dcl-s pinRcd_x like(int4_t);
+//  Schleifenindex von pbPinRcd (pinRcd_x setzt auch chkPinRcd)
+dcl-s pinShow_x like(int4_t);
 dcl-c max_pin_rcd %elem(pinTabRcd);
 dcl-s pinTabRcd like(pinTabR_t) dim(12);
 dcl-s nbrPinRcd like(int4_t);
@@ -1854,7 +1858,15 @@ begsr c_search;
 
       if (*in99 = *off);
         if (yMsgID = 'USR8112'); // Verarbeitung bestätigt.
-          exsr srchStart;
+          //  Suchen & pinnen nur bei Dateien mit einer Basisdatei
+          //  (wie Auswahl P in s_pinRcd)
+          if (ySrchType = '*PINROW' and
+              f_numBased(##file: ##library: ##member) > 1);
+            clear usr8218;
+            p_sndPgmMg('USR8218': usr8218: sds.pgmName);
+          else;
+            exsr srchStart;
+          endif;
         else;
           p_sndPgmMg(yMsgID: yMsgDta: sds.pgmName);
           yMsgID = '';
@@ -1965,10 +1977,10 @@ begsr c_moveL;
         ##strPage = ##strPage - 1;
       else;
         ##strPage = 1;
-        ##wndNbr = ##wndNbr - 1;
+        exsr prvWndNbr;
       endif;
     else;
-      ##wndNbr = ##wndNbr - 1;
+      exsr prvWndNbr;
       if (set0010.set_scroll = '*BOTH'
           or set0010.set_scroll = '*LEFT');
         ##strPage = *hival;
@@ -1995,7 +2007,10 @@ begsr c_moveR;
     exsr msgNoFile;
   else;
 
-    if ((cp = 1) and
+    //  Nur eine verschiebbare Spalte angezeigt, die nicht ganz
+    //  sichtbar ist? (gepinnte Spalten stehen vorn in col_field)
+    exsr cntPinShown;
+    if ((cp - nbrPinShown = 1) and
         (col_error(cp) = bTrue));
       if ((set0010.set_scroll = '*BOTH') or
          (set0010.set_scroll = '*RIGHT'));
@@ -2040,7 +2055,8 @@ begsr c_pageLeft;
 
       //  Ermitteln der Feldnummer des 1. angezeigten
       //  Feldes ...
-      x = nbrPinCol + 1;
+      exsr cntPinShown;
+      x = nbrPinShown + 1;
       wrk#Field = col_field(x);
       exsr getSeqNbr;
       if (isSeqNbrOK = bFalse and l#MinSeq > 0);
@@ -2119,6 +2135,8 @@ begsr c_pageRight;
     exsr msgNoFile;
   else;
 
+    exsr cntPinShown;
+
     //  Letzte angezeigte Spalte ermitteln
     //  (keine Spalte angezeigt: ans Ende positionieren)
     if (cp > 0);
@@ -2130,7 +2148,7 @@ begsr c_pageRight;
     if (isSeqNbrOK = bTrue);
 
       if (col_error(cp) = bTrue);
-        if (cp - nbrPinCol = 1);
+        if (cp - nbrPinShown = 1);
 
           if (set0010.set_scroll = '*BOTH'
               or set0010.set_scroll = '*RIGHT');
@@ -2615,6 +2633,13 @@ begsr c_sql;
     leavesr;
   endif;
 
+  //  Datei für den SQL-Dialog; ##file usw. werden erst nach
+  //  der Bestätigung geändert
+  yFile = ##file;
+  yLibrary = ##library;
+  yMember = ##member;
+  yFormat = ##format;
+
   if (fild0100.atfila <> '*PHY');
 
     select;
@@ -2644,10 +2669,10 @@ begsr c_sql;
                  ##member   :
                  ##format   :
                  ##fmtNbr   :
-                 ##file     :
-                 ##library  :
-                 ##member   :
-                 ##format   );
+                 yFile      :
+                 yLibrary   :
+                 yMember    :
+                 yFormat    );
       else;
         leavesr;
       endif;
@@ -2658,10 +2683,6 @@ begsr c_sql;
 
   // Let the user enter the SQL WHERE and ORDER BY clauses:
   monitor;
-    yFile = ##file;
-    yLibrary = ##library;
-    yMember = ##member;
-    yFormat = ##format;
     ySqlWhere = sqlWhere;
     ySqlOrder = sqlOrder;
     peek48(set0001.set_dsp80: COPYRIGHT
@@ -2683,6 +2704,15 @@ begsr c_sql;
     leavesr;
   endif;
 
+  //  Leere Klauseln außerhalb des SQL-Modus: nichts zu tun. Die
+  //  angezeigte Datei bleibt geöffnet, auch wenn PEEK48 für eine
+  //  logische Datei die Basisdatei zurückgegeben hat.
+  if (accessMode <> SQL_SEQ and
+      ySqlWhere = ' ' and
+      ySqlOrder = ' ');
+    leavesr;
+  endif;
+
   isPinToClr = bFalse;
 
   exsr closeFile;
@@ -2701,11 +2731,9 @@ begsr c_sql;
     sqlWhere   = ySqlWhere;
     sqlOrder   = ySqlOrder;
   else;
-    //  Nur beim Verlassen des SQL-Modus die vorherige Sortierung
-    //  wiederherstellen
-    if (accessMode = SQL_SEQ);
-      accessMode = oldAccMode;
-    endif;
+    //  SQL-Modus verlassen: vorherige Sortierung wiederherstellen
+    //  (außerhalb des SQL-Modus endet die Routine schon oben)
+    accessMode = oldAccMode;
     sqlWhere   = ' ';
     sqlOrder   = ' ';
   endif;
@@ -4151,6 +4179,9 @@ begsr srchUp;
       //  ... suchen & pinnen
       if (srchType = '*PINROW');
         wrk#RcdNbr = file#X.rcdNbr;
+        //  Satzkennung des gefundenen Satzes, nicht die der
+        //  zuletzt angezeigten Zeile
+        exsr setRcdId;
         exsr pinRecord;
         if (isPinOK = bFalse);
           leave;
@@ -4922,8 +4953,10 @@ begsr pbPinRcd;
   //      Nix tun, keine Datei vorhanden
   else;
 
-    for pinRcd_x = 1 to max_pin_rcd;
-      pinTabRcdE = pinTabRcd(pinRcd_x);
+    //  Eigener Schleifenindex: pbFillDataRow_right ruft über
+    //  pbColor chkPinRcd auf, das pinRcd_x überschreibt
+    for pinShow_x = 1 to max_pin_rcd;
+      pinTabRcdE = pinTabRcd(pinShow_x);
       if (pinTabRcdE.rcdNbr = 0);
         leave;
       endif;
@@ -4934,9 +4967,10 @@ begsr pbPinRcd;
                  pinTabRcdE.mbr    :
                  pinTabRcdE.rcdFmt ) = '1');
         //           Eintrag austragen
+        pinRcd_x = pinShow_x;
         exsr rmvPinRcd;
         if (isPinRmv = bTrue);
-          pinRcd_x = pinRcd_x - 1;
+          pinShow_x = pinShow_x - 1;
         endif;
         iter;
       endif;
@@ -5162,18 +5196,9 @@ endsr;
 
 begsr pbFillDataRow_right;
 
-  f_basedPF(file#X.file   :
-           file#X.library:
-           file#X.member :
-           file#X.rcdFmt :
-           file#X.mbrNbr :
-           h_file        :
-           h_lib         :
-           h_mbr         :
-           h_rcdFmt      );
+  exsr setRcdId;
 
   sfpau = *blanks;
-  h_mbrNbr = file#X.mbrNbr;
   recordNbr = file#X.rcdNbr;
 
   //  Prüfen auf Suchfunktion:
@@ -5203,6 +5228,28 @@ begsr pbFillDataRow_right;
   //  ... Subfile-Satz nicht auswählen
   *in84 = '0';
   *in85 = '0';
+
+endsr;
+
+//============================================================*
+//    setRcdId      Satzkennung des aktuellen Satzes setzen   *
+//                  (Basisdatei, Bibliothek, Teildatei,       *
+//                  Format und Teildatei-Nummer)              *
+//============================================================*
+
+begsr setRcdId;
+
+  f_basedPF(file#X.file   :
+           file#X.library:
+           file#X.member :
+           file#X.rcdFmt :
+           file#X.mbrNbr :
+           h_file        :
+           h_lib         :
+           h_mbr         :
+           h_rcdFmt      );
+
+  h_mbrNbr = file#X.mbrNbr;
 
 endsr;
 
@@ -7172,6 +7219,44 @@ begsr getPrvSeq;
 
     wrk#SeqNbr = f_seq;
     leave;
+  endfor;
+
+endsr;
+
+//============================================================*
+//    prvWndNbr     Vorheriges sichtbares Feld als Startfeld  *
+//                  (gepinnte und ausgeblendete Felder        *
+//                  überspringen)                             *
+//============================================================*
+
+begsr prvWndNbr;
+
+  wrk#SeqNbr = ##wndNbr;
+  exsr getPrvSeq;
+  if (wrk#SeqNbr > 0 and wrk#SeqNbr < ##wndNbr);
+    ##wndNbr = wrk#SeqNbr;
+  else;
+    //  ... kein vorheriges Feld: chkSeqRnge meldet den Anfang
+    ##wndNbr = ##wndNbr - 1;
+  endif;
+
+endsr;
+
+//============================================================*
+//    cntPinShown   Anzahl der angezeigten gepinnten Spalten  *
+//                  (sie stehen vorn in col_field)            *
+//============================================================*
+
+begsr cntPinShown;
+
+  nbrPinShown = 0;
+  for x = 1 to cp;
+    pin#Field = col_field(x);
+    exsr chkPinCol;
+    if (isPinned = bFalse);
+      leave;
+    endif;
+    nbrPinShown = nbrPinShown + 1;
   endfor;
 
 endsr;
