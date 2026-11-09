@@ -132,6 +132,7 @@ das Verzeichnis, die Sicherungsdateien landen also nicht im Repository.
 .\.github\release.ps1 download -Version 4.0.8           # PEEK408 und PEEK408P per FTP vom IBM i holen
 .\.github\release.ps1 publish  -Version 4.0.8 -WhatIf   # Probelauf: prüft alles, ändert nichts
 .\.github\release.ps1 publish  -Version 4.0.8           # Tag v4.0.8 anlegen und pushen, Release erstellen
+.\.github\release.ps1 update   -Version 4.0.8           # Handbücher und Text des Releases v4.0.8 aktualisieren
 ```
 
 In der Eingabeaufforderung (`cmd.exe`) lauten die Aufrufe `.github\release download -Version 4.0.8`
@@ -139,6 +140,13 @@ usw. Dann startet `.github\release.cmd` das Skript mit PowerShell.
 
 Ins Release geht nur `PEEK408`, die Entwicklungsbibliothek `PEEK408P` nicht. Weitere Parameter
 zeigt `Get-Help .\.github\release.ps1 -Full`.
+
+`update` ist für Korrekturen nach dem Release: Es ersetzt die Handbücher, die sich gegenüber dem
+Release geändert haben, und den Text, wenn sich der Abschnitt in `#035WHATS_NEW.TXT` geändert hat.
+Die Änderungen müssen committet und gepusht sein. Die Sicherungsdatei bleibt, wie sie ist; ein
+geändertes Produkt braucht eine neue Version. Auch hier zeigt `-WhatIf` vorher, was sich ändern
+würde. Mit `-Confirm` fragt das Skript vor jedem Schritt, so bleibt z.B. ein auf GitHub bearbeiteter
+Text erhalten, wenn nur die Handbücher ersetzt werden sollen.
 
 ## Haftung
 

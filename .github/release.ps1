@@ -12,6 +12,13 @@
               PEEK<vvv>P geht nicht ins Release. Den Text des Releases nimmt das Skript aus dem
               Abschnitt "Version <Version>" von QRPGLESRC/#035WHATS_NEW.TXT.
 
+    update    Bringt das bestehende Release v<Version> auf den Stand des Repositorys: Ersetzt die
+              Handbücher, die sich gegenüber dem Release geändert haben, und den Text, wenn sich
+              der Abschnitt "Version <Version>" von QRPGLESRC/#035WHATS_NEW.TXT geändert hat.
+              Die Handbücher und #035WHATS_NEW.TXT müssen committet und auf GitHub sein. Die
+              Sicherungsdatei bleibt, wie sie ist; ein geändertes Produkt braucht eine neue
+              Version.
+
     help      Zeigt diese Hilfe, ebenso ein Aufruf ohne Parameter.
 
     Ohne -ReleaseDir landen alle Dateien in temp/ im Repository. Git ignoriert das Verzeichnis,
@@ -19,10 +26,10 @@
     gelangen.
 
 .PARAMETER Task
-    download, publish oder help.
+    download, publish, update oder help.
 
 .PARAMETER Version
-    Version von Peek/400, z.B. 4.0.8. Pflicht bei download und publish.
+    Version von Peek/400, z.B. 4.0.8. Pflicht bei download, publish und update.
 
 .EXAMPLE
     .\.github\release.ps1 download -Version 4.0.8
@@ -33,6 +40,12 @@
     Probelauf: prüft alles und zeigt Text und Dateien des Releases, ändert aber nichts.
 
 .EXAMPLE
+    .\.github\release.ps1 update -Version 4.1.1 -WhatIf
+
+    Zeigt, welche Handbücher und ob der Text des Releases v4.1.1 ersetzt würden, ändert aber
+    nichts.
+
+.EXAMPLE
     .\.github\release.ps1 help
 
     Zeigt diese Hilfe. In der Eingabeaufforderung: .github\release help oder .github\release /?
@@ -40,7 +53,7 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('download', 'publish', 'help')]
+    [ValidateSet('download', 'publish', 'update', 'help')]
     [string] $Task,
 
     [ValidatePattern('^\d+\.\d+\.\d+$')]
@@ -84,7 +97,8 @@ $SavfFiles = [ordered]@{
     $SavfName    = $SavfFile
     $DevSavfName = Join-Path $ReleaseDir "$DevSavfName.SAVF"
 }
-$WhatsNewFile = Join-Path $RepoRoot 'QRPGLESRC\#035WHATS_NEW.TXT'
+$WhatsNewPath = 'QRPGLESRC\#035WHATS_NEW.TXT'
+$WhatsNewFile = Join-Path $RepoRoot $WhatsNewPath
 
 # Handbücher im Repository -> Namen im Release
 $Manuals = [ordered]@{
@@ -236,12 +250,15 @@ function Get-ReleaseNotes {
     ) -join "`n"
 }
 
-function Invoke-Publish {
+function Assert-PushedHead {
+    # Prüft die Anmeldung bei GitHub und dass HEAD auf GitHub ist. Die Dateien -Path (ohne
+    # Angabe: der ganze Arbeitsbaum) dürfen keine nicht committeten Änderungen enthalten.
+    # Gibt den Remote und den Commit von HEAD zurück.
+    param([string[]] $Path = @())
     $null = Invoke-Tool gh @('auth', 'status')
     $remote = Get-GitHubRemote
 
-    # Arbeitsbaum sauber und HEAD auf GitHub
-    $dirty = @(Invoke-Tool git @('status', '--porcelain', '--untracked-files=no'))
+    $dirty = @(Invoke-Tool git (@('status', '--porcelain', '--untracked-files=no', '--') + $Path))
     if ($dirty.Count -gt 0) {
         throw "Der Arbeitsbaum enthält nicht committete Änderungen:`n$($dirty -join "`n")"
     }
@@ -255,6 +272,49 @@ function Invoke-Publish {
     if ($LASTEXITCODE -ne 0) {
         throw "HEAD ($head) ist nicht in $remote/master enthalten. Zuerst: git push $remote master"
     }
+    [pscustomobject] @{ Remote = $remote; Head = $head }
+}
+
+function Copy-Manual {
+    # Kopiert Handbücher unter ihrem Namen im Release nach -ReleaseDir und gibt die Pfade zurück.
+    # -Confirm:$false: Bei -Confirm fragt das Skript nur vor den Schritten auf GitHub.
+    param([string[]] $Manual)
+    $null = New-Item -ItemType Directory -Path $ReleaseDir -Force -Confirm:$false
+    foreach ($source in $Manual) {
+        $target = Join-Path $ReleaseDir $Manuals[$source]
+        Copy-Item -LiteralPath (Join-Path $RepoRoot $source) -Destination $target -Force -Confirm:$false
+        $target
+    }
+}
+
+function Get-FileDigest {
+    # SHA-256-Prüfsumme einer Datei in der Form, in der GitHub sie zu den Dateien eines Releases
+    # angibt. Nicht mit Get-FileHash, weil das unter -WhatIf nichts liefert.
+    param([string] $Path)
+    $sha256 = [Security.Cryptography.SHA256]::Create()
+    $stream = [IO.File]::OpenRead($Path)
+    try {
+        'sha256:' + [BitConverter]::ToString($sha256.ComputeHash($stream)).Replace('-', '').ToLowerInvariant()
+    }
+    finally {
+        $stream.Dispose()
+        $sha256.Dispose()
+    }
+}
+
+function Write-ReleaseNotesFile {
+    # Schreibt den Text des Releases nach -ReleaseDir und gibt den Pfad zurück.
+    param([string] $Notes)
+    $notesFile = Join-Path $ReleaseDir 'RELEASE_NOTES.md'
+    [IO.File]::WriteAllText($notesFile, $Notes, (New-Object Text.UTF8Encoding $false))
+    $notesFile
+}
+
+function Invoke-Publish {
+    # Arbeitsbaum sauber und HEAD auf GitHub
+    $state = Assert-PushedHead
+    $remote = $state.Remote
+    $head = $state.Head
 
     # Tag: neu anlegen, oder ein früherer, abgebrochener Lauf hat es schon für HEAD angelegt.
     $localTag = Invoke-Tool git @('rev-parse', '--verify', '--quiet', "refs/tags/$Tag") -AllowFailure
@@ -314,14 +374,76 @@ function Invoke-Publish {
         Invoke-Tool git @('push', $remote, "refs/tags/$Tag") | Out-Null
     }
     if ($PSCmdlet.ShouldProcess("github.com/$Repo", "Release $Tag erstellen")) {
-        foreach ($manual in $Manuals.Keys) {
-            Copy-Item -LiteralPath (Join-Path $RepoRoot $manual) -Destination (Join-Path $ReleaseDir $Manuals[$manual]) -Force
-        }
-        $notesFile = Join-Path $ReleaseDir 'RELEASE_NOTES.md'
-        [IO.File]::WriteAllText($notesFile, $notes, (New-Object Text.UTF8Encoding $false))
+        $null = Copy-Manual @($Manuals.Keys)
+        $notesFile = Write-ReleaseNotesFile $notes
         $url = Invoke-Tool gh (@('release', 'create', $Tag, '--repo', $Repo, '--title', "Peek/400 $Version",
                 '--notes-file', $notesFile, '--verify-tag') + $assets)
         Write-Host "Release erstellt: $url"
+    }
+}
+
+function Invoke-Update {
+    # Nur die Dateien, aus denen das Release entsteht, müssen committet sein.
+    $sources = @(@($Manuals.Keys) + $WhatsNewPath | ForEach-Object { $_ -replace '\\', '/' })
+    $state = Assert-PushedHead -Path $sources
+
+    # Den Text liefert gh als Base64, weil PowerShell die Ausgabe sonst mit der Codepage der
+    # Konsole liest und die Umlaute verfälscht. digest ist die SHA-256-Prüfsumme einer Datei.
+    # Der jq-Ausdruck enthält keine Anführungszeichen, weil PowerShell 5.1 sie an Programme
+    # nicht maskiert weitergibt.
+    $json = Invoke-Tool gh @('api', "repos/$Repo/releases/tags/$Tag", '--jq',
+        '{body: (if .body then (.body | @base64) else null end), assets: [.assets[] | {name, digest}]}') -AllowFailure
+    if ($LASTEXITCODE -ne 0) {
+        throw "Das Release $Tag gibt es auf GitHub nicht. Erstellen mit: $ScriptCall publish -Version $Version"
+    }
+    $release = ($json -join "`n") | ConvertFrom-Json
+
+    $changed = @(foreach ($manual in $Manuals.Keys) {
+            $digest = Get-FileDigest (Join-Path $RepoRoot $manual)
+            $asset = @($release.assets | Where-Object { $_.name -eq $Manuals[$manual] })
+            if ($asset.Count -eq 0 -or $asset[0].digest -ne $digest) { $manual }
+        })
+
+    $notes = Get-ReleaseNotes
+    $oldNotes = ''
+    if ($release.body) {
+        $oldNotes = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($release.body))
+    }
+    # Im Browser bearbeiteter Text hat CRLF als Zeilenende.
+    $notesChanged = ($oldNotes -replace "`r`n", "`n").Trim() -cne $notes.Trim()
+
+    Write-Host "Release $Tag für github.com/$Repo"
+    Write-Host "  Commit:  $($state.Head)"
+    Write-Host '  Handbücher:'
+    foreach ($manual in $Manuals.Keys) {
+        $status = if ($changed -contains $manual) { 'geändert' } else { 'unverändert' }
+        Write-Host ('    {0} -> {1}: {2}' -f $manual, $Manuals[$manual], $status)
+    }
+    if ($notesChanged) {
+        Write-Host '  Text: geändert, neu:'
+        $notes -split "`n" | ForEach-Object { Write-Host "    $_" }
+    }
+    else {
+        Write-Host '  Text: unverändert'
+    }
+    Write-Host ''
+
+    if ($changed.Count -eq 0 -and -not $notesChanged) {
+        Write-Host "Das Release $Tag ist auf dem Stand des Repositorys."
+        return
+    }
+    if ($changed.Count -gt 0) {
+        $names = ($changed | ForEach-Object { $Manuals[$_] }) -join ', '
+        if ($PSCmdlet.ShouldProcess("Release $Tag", "Handbücher $names ersetzen")) {
+            $files = @(Copy-Manual $changed)
+            Invoke-Tool gh (@('release', 'upload', $Tag, '--repo', $Repo, '--clobber') + $files) | Out-Null
+            Write-Host "Handbücher ersetzt: $names"
+        }
+    }
+    if ($notesChanged -and $PSCmdlet.ShouldProcess("Release $Tag", 'Text ersetzen')) {
+        $notesFile = Write-ReleaseNotesFile $notes
+        Invoke-Tool gh @('release', 'edit', $Tag, '--repo', $Repo, '--notes-file', $notesFile) | Out-Null
+        Write-Host 'Text ersetzt.'
     }
 }
 
@@ -330,6 +452,7 @@ try {
     switch ($Task) {
         'download' { Invoke-Download }
         'publish' { Invoke-Publish }
+        'update' { Invoke-Update }
     }
 }
 finally {
