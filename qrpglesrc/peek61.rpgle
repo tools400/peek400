@@ -35,6 +35,7 @@ ctl-opt decedit('0,') datedit(*dmy.);
 ctl-opt datfmt(*iso) timfmt(*iso);
 ctl-opt expropts(*resdecpos);
 ctl-opt extbinint(*yes);
+ctl-opt truncnbr(*no) cvtopt(*varchar: *vargraphic);
 //**************************************************************************************
 
 /copy 'qcopyle/d_vardef.rpgleinc'
