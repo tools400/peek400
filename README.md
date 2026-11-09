@@ -125,7 +125,7 @@ Das ausführliche Benutzerhandbuch gibt es auf [Deutsch](doc/Peek400g.pdf) und
 
 `.github/release.ps1` lädt die Sicherungsdateien vom IBM i und veröffentlicht die Sicherungsdatei
 des Produkts zusammen mit den Handbüchern als Release auf GitHub. Den Text des Releases nimmt das
-Skript aus `QRPGLESRC/#035WHATS_NEW.TXT`. Seine Dateien legt das Skript in `temp/` ab. Git ignoriert
+Skript aus `doc/whats_new.txt`. Seine Dateien legt das Skript in `temp/` ab. Git ignoriert
 das Verzeichnis, die Sicherungsdateien landen also nicht im Repository.
 
 ```powershell
@@ -142,7 +142,7 @@ Ins Release geht nur `PEEK408`, die Entwicklungsbibliothek `PEEK408P` nicht. Wei
 zeigt `Get-Help .\.github\release.ps1 -Full`.
 
 `update` ist für Korrekturen nach dem Release: Es ersetzt die Handbücher, die sich gegenüber dem
-Release geändert haben, und den Text, wenn sich der Abschnitt in `#035WHATS_NEW.TXT` geändert hat.
+Release geändert haben, und den Text, wenn sich der Abschnitt in `doc/whats_new.txt` geändert hat.
 Die Änderungen müssen committet und gepusht sein. Die Sicherungsdatei bleibt, wie sie ist; ein
 geändertes Produkt braucht eine neue Version. Auch hier zeigt `-WhatIf` vorher, was sich ändern
 würde. Mit `-Confirm` fragt das Skript vor jedem Schritt, so bleibt z.B. ein auf GitHub bearbeiteter

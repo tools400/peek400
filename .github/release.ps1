@@ -10,12 +10,12 @@
     publish   Legt das Tag v<Version> an, pusht es nach GitHub und erstellt das Release mit der
               Sicherungsdatei PEEK<vvv> und den Handbüchern aus doc/. Die Entwicklungsbibliothek
               PEEK<vvv>P geht nicht ins Release. Den Text des Releases nimmt das Skript aus dem
-              Abschnitt "Version <Version>" von QRPGLESRC/#035WHATS_NEW.TXT.
+              Abschnitt "Version <Version>" von doc/whats_new.txt.
 
     update    Bringt das bestehende Release v<Version> auf den Stand des Repositorys: Ersetzt die
               Handbücher, die sich gegenüber dem Release geändert haben, und den Text, wenn sich
-              der Abschnitt "Version <Version>" von QRPGLESRC/#035WHATS_NEW.TXT geändert hat.
-              Die Handbücher und #035WHATS_NEW.TXT müssen committet und auf GitHub sein. Die
+              der Abschnitt "Version <Version>" von doc/whats_new.txt geändert hat.
+              Die Handbücher und whats_new.txt müssen committet und auf GitHub sein. Die
               Sicherungsdatei bleibt, wie sie ist; ein geändertes Produkt braucht eine neue
               Version.
 
@@ -97,7 +97,7 @@ $SavfFiles = [ordered]@{
     $SavfName    = $SavfFile
     $DevSavfName = Join-Path $ReleaseDir "$DevSavfName.SAVF"
 }
-$WhatsNewPath = 'QRPGLESRC\#035WHATS_NEW.TXT'
+$WhatsNewPath = 'doc\whats_new.txt'
 $WhatsNewFile = Join-Path $RepoRoot $WhatsNewPath
 
 # Handbücher im Repository -> Namen im Release
