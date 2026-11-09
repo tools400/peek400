@@ -495,6 +495,20 @@ dcl-s nbrPinRcd like(int4_t);
 
 dcl-ds pinTabRcdE likeds(pinTabR_t);
 
+//  Letzte Satzkennung von setRcdId: f_basedPF ruft PEEK41 auf
+//  und wird nur bei einer geänderten Satzkennung aufgerufen
+dcl-ds rcdIdCache qualified;
+  file    like(file_t);
+  lib     like(lib_t);
+  mbr     like(mbr_t);
+  rcdFmt  like(rcdFmt_t);
+  mbrNbr  like(mbrNbr_t);
+  pFile   like(file_t);
+  pLib    like(lib_t);
+  pMbr    like(mbr_t);
+  pRcdFmt like(rcdFmt_t);
+end-ds;
+
 //  Arbeitsfelder
 dcl-s x like(int4_t);
 dcl-s y like(int4_t);
@@ -1531,9 +1545,6 @@ begsr c_refresh;
     //      ... abrufen der Anzahl Teildateien
     exsr getNbrMbr;
 
-    //      ... abrufen Objektattribute
-    exsr getObjAttr;
-
     //      ... abrufen der Teildateiattribute
     exsr getMbrAttr;
   endif;
@@ -2198,10 +2209,10 @@ endsr;
 
 begsr c_chgScn;
 
-  wrk#ReadDn = sflPage;
   exsr chgScreen;
-  wrk#ReadDn = wrk#ReadDn - sflPage;
 
+  //  pbRefresh liest die angezeigten Sätze mit der neuen
+  //  Seitengröße (sflPage) wieder ein
   exsr pbRefresh;
 
 endsr;
@@ -5244,16 +5255,32 @@ endsr;
 
 begsr setRcdId;
 
-  f_basedPF(file#X.file   :
-           file#X.library:
-           file#X.member :
-           file#X.rcdFmt :
-           file#X.mbrNbr :
-           h_file        :
-           h_lib         :
-           h_mbr         :
-           h_rcdFmt      );
+  //  Basisdatei nur bei geänderter Satzkennung neu ermitteln
+  if (file#X.file    <> rcdIdCache.file or
+      file#X.library <> rcdIdCache.lib or
+      file#X.member  <> rcdIdCache.mbr or
+      file#X.rcdFmt  <> rcdIdCache.rcdFmt or
+      file#X.mbrNbr  <> rcdIdCache.mbrNbr);
+    f_basedPF(file#X.file      :
+             file#X.library   :
+             file#X.member    :
+             file#X.rcdFmt    :
+             file#X.mbrNbr    :
+             rcdIdCache.pFile :
+             rcdIdCache.pLib  :
+             rcdIdCache.pMbr  :
+             rcdIdCache.pRcdFmt);
+    rcdIdCache.file = file#X.file;
+    rcdIdCache.lib = file#X.library;
+    rcdIdCache.mbr = file#X.member;
+    rcdIdCache.rcdFmt = file#X.rcdFmt;
+    rcdIdCache.mbrNbr = file#X.mbrNbr;
+  endif;
 
+  h_file = rcdIdCache.pFile;
+  h_lib = rcdIdCache.pLib;
+  h_mbr = rcdIdCache.pMbr;
+  h_rcdFmt = rcdIdCache.pRcdFmt;
   h_mbrNbr = file#X.mbrNbr;
 
 endsr;
@@ -6478,15 +6505,6 @@ begsr openFile;
       // ... Cursor auf Keyeingabezeile setzen
       exsr c_posCsr;
 
-      // ... Hexmode nicht bei Satzlänge größer 32766
-      if (file#X.rcdLen > RCD_BUFF_LEN and
-          set0001.set_dspMde = '*DSPHEX');
-        clear usr8206;
-        usr8206.var1  = RCD_BUFF_LEN;
-        p_sndPgmMg('USR8206': usr8206: sds.pgmName);
-        exsr s_dspNrm;
-      endif;
-
       // ... Felder, welche nicht erlaubt sind
       clear f_key;
       f_key.f_field = *blanks;
@@ -7271,6 +7289,9 @@ endsr;
 //============================================================*
 
 begsr closeFile;
+
+  //  Satzkennungen der nächsten Datei neu ermitteln (setRcdId)
+  clear rcdIdCache;
 
   if (isOpen = bTrue);
 
@@ -8277,7 +8298,9 @@ dcl-proc f_int;
 end-proc;
 
 //============================================================*
-//    f_chain00                                               *
+//    f_chain00     Satz über hFile00 mit Sperre lesen        *
+//                  Rückgabe: '1' = nicht gefunden oder       *
+//                  Datei nicht geöffnet, '0' = gefunden      *
 //============================================================*
 
 dcl-proc f_chain00;
@@ -8289,7 +8312,7 @@ dcl-proc f_chain00;
     i_rcdFmt char(10) value;
   end-pi;
 
-  dcl-s isFound like(bool_t) inz(bFalse);
+  dcl-s isNotFound like(bool_t) inz(bTrue);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if ((CIO_getFile(hFile00)    <> i_file ) or
@@ -8343,29 +8366,29 @@ dcl-proc f_chain00;
   yMsgDta = '';
 
   //  Datei konnte nicht geöffnet werden:
-  //  wie "Satz nicht gefunden" behandeln (Rückgabewert '1')
+  //  wie "Satz nicht gefunden" behandeln
   if (CIO_isOpen(hFile00) = bFalse);
-    return '1';
+    return isNotFound;
   endif;
 
   if (CIO_chainWithRRN(hFile00
                     : i_rrn
                     : bTrue
                     : io_buff
-                    : io_nullMap) = bFalse);
-    isFound = bTrue;
-  else;
-    isFound = bFalse;
+                    : io_nullMap) = bTrue);
+    isNotFound = bFalse;
   endif;
 
   file#X = CIO_getInfDS(hFile00);
 
-  return isFound;
+  return isNotFound;
 
 end-proc;
 
 //============================================================*
-//    f_chain04                                               *
+//    f_chain04     Satz über hFile04 ohne Sperre lesen       *
+//                  Rückgabe: '1' = nicht gefunden oder       *
+//                  Datei nicht geöffnet, '0' = gefunden      *
 //============================================================*
 
 dcl-proc f_chain04;
@@ -8377,7 +8400,7 @@ dcl-proc f_chain04;
     i_rcdFmt char(10) value;
   end-pi;
 
-  dcl-s isFound like(bool_t) inz(bFalse);
+  dcl-s isNotFound like(bool_t) inz(bTrue);
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if ((CIO_getFile(hFile04)    <> i_file ) or
@@ -8399,24 +8422,22 @@ dcl-proc f_chain04;
   endif;
 
   //  Datei konnte nicht geöffnet werden:
-  //  wie "Satz nicht gefunden" behandeln (Rückgabewert '1')
+  //  wie "Satz nicht gefunden" behandeln
   if (CIO_isOpen(hFile04) = bFalse);
-    return '1';
+    return isNotFound;
   endif;
 
   if (CIO_chainWithRRN(hFile04
                     : i_rrn
                     : bFalse
                     : io_buff
-                    : io_nullMap) = bFalse);
-    isFound = bTrue;
-  else;
-    isFound = bFalse;
+                    : io_nullMap) = bTrue);
+    isNotFound = bFalse;
   endif;
 
   file#X = CIO_getInfDS(hFile04);
 
-  return isFound;
+  return isNotFound;
 
 end-proc;
 
