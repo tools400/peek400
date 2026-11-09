@@ -11,3 +11,5 @@
 Rules.mk text eol=lf
 *.json text eol=lf
 *.sh text eol=lf
+*.bnddir text eol=lf
+*.dtaara text eol=lf

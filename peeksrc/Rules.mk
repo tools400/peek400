@@ -1,12 +1,10 @@
-# Draft of the rules of TOBi for the members of PEEK411P/PEEKSRC, created by the migration
-# of IFS Projects. Check the object types and set the parameters of the installer or of the
-# STRPREPRC headers, because the defaults of TOBi differ from the CL commands, e.g.:
-#   %.MODULE: private DBGVIEW := *LIST
-#   HELLO.PGM: private ACTGRP := *NEW
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis peeksrc. Siehe README, Abschnitt "Bauen".
 
-DSPF.FILE: dspf.dspf
+# Vorlagen der Update-Programme, zur Laufzeit gelesen. PEEK15/16 brauchen die Dateien beim Übersetzen.
+PEEKSRC.FILE: peeksrc/pgm.rpgle peeksrc/dspf.dspf
+	@echo "=== Creating source file [PEEKSRC] in $(OBJLIB)"
+	@$(TOP)/tools/crtsrcf.sh '$(OBJLIB)' PEEKSRC 112 273 'Peek/400 - Template für Programme' $(^) > $(LOGPATH)/peeksrc_PEEKSRC_FILE.splf 2>&1 && $(call logSuccess,$(@)) || $(call logFail,$(@))
 
-PGM.PGM: pgm.rpgle
-
-# No rule created for:
-#   peekusr.file
+QPEEKGEN.FILE:
+	@echo "=== Creating source file [QPEEKGEN] in $(OBJLIB)"
+	@$(TOP)/tools/crtsrcf.sh '$(OBJLIB)' QPEEKGEN 112 273 'Peek/400 - Generated Sources(dummy)' > $(LOGPATH)/peeksrc_QPEEKGEN_FILE.splf 2>&1 && $(call logSuccess,$(@)) || $(call logFail,$(@))

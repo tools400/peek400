@@ -1,14 +1,13 @@
-# Draft of the rules of TOBi for the members of PEEK411P/QMSG_FRA, created by the migration
-# of IFS Projects. Check the object types and set the parameters of the installer or of the
-# STRPREPRC headers, because the defaults of TOBi differ from the CL commands, e.g.:
-#   %.MODULE: private DBGVIEW := *LIST
-#   HELLO.PGM: private ACTGRP := *NEW
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis qmsg_fra. Siehe README, Abschnitt "Bauen".
 
-PEEKFRAPG.PNLGRP: peekfrapg.pnlgrp
+PEEKFRA.MSGF: peekframg.clp
+	@echo "=== Creating message file [PEEKFRA] in $(OBJLIB) with CCSID $(TGTCCSID)"
+	@$(TOP)/tools/crtmsgf.sh '$(<)' '$(OBJLIB)' $(TGTCCSID) > $(LOGPATH)/qmsg_fra_PEEKFRA_MSGF.splf 2>&1 && $(call logSuccess,$(@)) || $(call logFail,$(@))
+
+PEEKFRA.PNLGRP: private TEXT := Peek/400 - File Editor, Francais
+PEEKFRA.PNLGRP: peekfrapg.pnlgrp
 	$(PNLGRPSRC_TO_PNLGRP_RECIPE)
 
-TREEFRAPG.PNLGRP: treefrapg.pnlgrp
+TREEFRA.PNLGRP: private TEXT := Peek/400 - Display Database Relations, Francais
+TREEFRA.PNLGRP: treefrapg.pnlgrp
 	$(PNLGRPSRC_TO_PNLGRP_RECIPE)
-
-# No rule created for:
-#   peekframg.clp

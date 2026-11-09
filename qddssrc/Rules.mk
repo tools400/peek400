@@ -1,26 +1,8 @@
-# Draft of the rules of TOBi for the members of PEEK411P/QDDSSRC, created by the migration
-# of IFS Projects. Check the object types and set the parameters of the installer or of the
-# STRPREPRC headers, because the defaults of TOBi differ from the CL commands, e.g.:
-#   %.MODULE: private DBGVIEW := *LIST
-#   HELLO.PGM: private ACTGRP := *NEW
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis qddssrc. Siehe README, Abschnitt "Bauen".
+
+%.FILE: private RSTDSP := *YES
 
 EXIT01PF.FILE: exit01pf.pf
-
-PEEKENV.FILE: peekenv.pf
-
-PEEKFLD.FILE: peekfld.pf
-
-PEEKFLDL0.FILE: peekfldl0.lf
-
-PEEKFLDL1.FILE: peekfldl1.lf
-
-PEEKFLDL2.FILE: peekfldl2.lf
-
-PEEKFMT.FILE: peekfmt.pf
-
-PEEKUSR.FILE: peekusr.pf
-
-PEEKWRK.FILE: peekwrk.pf
 
 PEEK05FM.FILE: peek05fm.dspf
 
@@ -70,8 +52,35 @@ PEEK68FM.FILE: peek68fm.dspf
 
 PEEK69FM.FILE: peek69fm.dspf
 
-# No rule created for:
-#   exit04log.sql
-#   peekusrdta.sql
-#   testpeek.tbl
-#   testpeek2.tbl
+PEEKENV.FILE: private REUSEDLT := *YES) MAXMBRS(*NOMAX
+PEEKENV.FILE: private MBR := *NONE
+PEEKENV.FILE: peekenv.pf
+
+PEEKFLD.FILE: private REUSEDLT := *YES
+PEEKFLD.FILE: peekfld.pf
+
+PEEKFLDL0.FILE: peekfldl0.lf PEEKFLD.FILE
+
+PEEKFLDL1.FILE: peekfldl1.lf PEEKFLD.FILE
+
+PEEKFLDL2.FILE: peekfldl2.lf PEEKFLD.FILE
+
+PEEKFMT.FILE: private REUSEDLT := *YES
+PEEKFMT.FILE: peekfmt.pf
+
+PEEKUSR.FILE: private REUSEDLT := *YES
+PEEKUSR.FILE: private TEXT := Peek/400 - Template für Benutzervoreinstellungen
+PEEKUSR.FILE: peekusr.pf peekusrdta.sql
+	$(PF_TO_FILE_RECIPE)
+	@echo "=== Loading the default settings into [PEEKUSR] in $(OBJLIB)"
+	@($(TOP)/tools/runcl.sh "RUNSQLSTM SRCSTMF('$(TOP)/qddssrc/peekusrdta.sql') COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) DFTRDBCOL($(OBJLIB))" || ($(TOP)/tools/runcl.sh "DLTF FILE($(OBJLIB)/PEEKUSR)"; false)) > $(LOGPATH)/qddssrc_PEEKUSR_DATA.splf 2>&1 && $(call logSuccess,$(@)) || $(call logFail,$(@))
+
+PEEKWRK.FILE: private REUSEDLT := *YES
+PEEKWRK.FILE: peekwrk.pf
+
+EXIT04LOG.FILE: private TEXT := Peek/400 - Output file of EXIT04 example
+EXIT04LOG.FILE: exit04log.sql
+	@echo "=== Creating table [EXIT04LOG] in $(OBJLIB)"
+	@$(TOP)/tools/runcl.sh "!DLTF FILE($(OBJLIB)/EXIT04LOG)" "RUNSQLSTM SRCSTMF('$(TOP)/qddssrc/exit04log.sql') COMMIT(*NONE) NAMING(*SQL) DATFMT(*ISO) TIMFMT(*ISO) DFTRDBCOL($(OBJLIB))" > $(LOGPATH)/qddssrc_EXIT04LOG_FILE.splf 2>&1 && $(call logSuccess,$(@)) || $(call logFail,$(@))
+
+PEEKPGM.DTAARA: peekpgm.dtaara

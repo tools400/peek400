@@ -1,4 +1,4 @@
-# Rules of TOBi (The Object Builder for i), created by the migration of IFS Projects.
-# The objects are defined in the Rules.mk files of the directories.
+# Regeln von TOBi (makei) für Peek/400. Siehe README, Abschnitt "Bauen".
+# DBGVIEW kommt aus der Umgebungsvariablen DBGVIEW (Entwicklung *LIST, Produkt *NONE).
 
-SUBDIRS = peeksrc qcmdsrc qcopyle qddssrc qmsg_eng qmsg_fra qmsg_ger qmsg_ita qmsg_spa qrpglesrc qrunit qsrvsrc
+SUBDIRS = qcopyle peeksrc qddssrc qmsg_eng qmsg_fra qmsg_ger qmsg_ita qmsg_spa qsrvsrc qrpglesrc qcmdsrc
