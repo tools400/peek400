@@ -378,6 +378,8 @@ dcl-s sflPage like(int4_t) inz;
 dcl-s sflRec080 inz(0) like(sflPage);
 dcl-s sflRec132 inz(0) like(sflPage);
 dcl-s sflNbrRcd inz(0) like(sflPage);
+//  Anzahl gepinnter Zeilen in der Subfile (pbPinRcd)
+dcl-s sflPinRows inz(0) like(sflPage);
 dcl-s sflMaxRowLen like(int4_t) inz;
 dcl-s sflDataLenFree like(int4_t) inz;
 dcl-s sfTop like(int4_t) inz;
@@ -4661,6 +4663,7 @@ begsr pbInit;
   sflRec080 = 0;
 
   sflNbrRcd = 0;
+  sflPinRows = 0;
 
   ##rcdNbr = 0;
   ##key = '';
@@ -4997,6 +5000,7 @@ begsr pbPinRcd;
       sflRec080 = sflRec080 + 1;
 
       exsr pbSflWrite;
+      sflPinRows = sflPinRows + 1;
 
       if (*in88 = bFalse);
         sflNbrRcd = sflRec132;
@@ -5124,8 +5128,12 @@ endsr;
 
 begsr pbRefresh;
 
-  wrk#ReadDn = sflNbrRcd - sflPage;
-  exsr pbReadDown;
+  //  Dateizeiger vor den ersten angezeigten Datensatz setzen:
+  //  so viele Sätze zurücklesen, wie die Subfile ohne ihre
+  //  gepinnten Zeilen enthält (nbrPinRcd kann sich seit dem
+  //  Aufbau geändert haben, z.B. durch Auswahl P oder U)
+  wrk#ReadDn = sflNbrRcd - sflPinRows;
+  exsr pbMoveCsrD;
   exsr pbInit;
   exsr pbPinRcd;
   exsr pbReadUp;
