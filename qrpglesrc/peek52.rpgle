@@ -1,6 +1,6 @@
 **free
       //%METADATA                                                      *
-      // %TEXT Peek/400 - Abfrage "Programm erstellen"                 *
+      // %TEXT Peek/400 - Abfrage 'Programm erstellen'                 *
       //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *

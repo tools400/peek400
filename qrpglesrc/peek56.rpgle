@@ -1,6 +1,6 @@
 **free
       //%METADATA                                                      *
-      // %TEXT Peek/400 - Auswählen "Arbeitsumgebung"                  *
+      // %TEXT Peek/400 - Auswählen 'Arbeitsumgebung'                  *
       //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *

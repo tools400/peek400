@@ -1,6 +1,6 @@
 **free
       //%METADATA                                                      *
-      // %TEXT Peek/400 - Löschen   "Arbeitsumgebung"                  *
+      // %TEXT Peek/400 - Löschen   'Arbeitsumgebung'                  *
       //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
