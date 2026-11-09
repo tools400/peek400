@@ -2823,7 +2823,12 @@ begsr s_copyExt;
   else;
 
     if (auth.isUpdAlw = bFalse);
-    //      Nachricht "Keine Berechtigung" ausgeben.
+      //      Kopieren nicht möglich, da keine Änderungen erlaubt
+      //      (wie bei den Auswahlen 2, 3 und 4)
+      clear usr0007;
+      usr0007.var1 = ##file;
+      usr0007.var2 = ##library;
+      p_sndPgmMg('USR0007': usr0007: sds.pgmName);
     else;
 
       exsr getSflRcd;
