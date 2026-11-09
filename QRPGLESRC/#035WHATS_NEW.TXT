@@ -1126,6 +1126,9 @@
          nächsten Dateiwechsel wieder gelöscht.
        - Lässt sich die Datei eines gepinnten Satzes nicht mehr öffnen,
          wird der Pin entfernt, statt das Programm abzubrechen.
+       - Nach dem Pinnen oder Lösen eines Satzes (Auswahl P und U) bleibt
+         die Liste an ihrer Position. Bisher rückte sie um einen Satz vor
+         bzw. zurück.
 
   *  Blättern und Markierungen
        - Ein Feld nach links (Auswahl L) überspringt gepinnte und ausge-
