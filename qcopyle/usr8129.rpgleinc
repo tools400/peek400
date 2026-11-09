@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Feld '&1' mit Datentyp '&2' nicht zulässig.        *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8129
 //  Feld '&1' mit Datentyp '&2' nicht zulässig.

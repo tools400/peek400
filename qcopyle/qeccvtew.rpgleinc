@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Convert Edit Word (QECCVTEW) API                        *
+      //%EMETADATA                                                     *
 /if not defined(QECCVTEW)
 /define QECCVTEW
 

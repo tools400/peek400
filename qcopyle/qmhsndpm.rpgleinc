@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Send Program Message (QMHSNDPM) API                     *
+      //%EMETADATA                                                     *
 /if not defined(QMHSNDPM)
 /define QMHSNDPM
 

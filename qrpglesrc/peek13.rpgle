@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Teildateibeschreibung              *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -37,20 +40,20 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,QUSRMBRD
-/copy QCOPYLE,MBRD0200
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/qusrmbrd.rpgleinc'
+/copy 'qcopyle/mbrd0200.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK13
+/copy 'qcopyle/ppeek13.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-ds mbrd0200 likeds(mbrd0200_t) inz;
 dcl-ds errCode likeds(errCode_t) inz;

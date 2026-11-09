@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Dateiliste                         *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek70 extpgm('PEEK70');

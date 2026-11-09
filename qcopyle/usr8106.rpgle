@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Abrufen von Netzwerkattributen.                    *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8106
 //  Abrufen von Netzwerkattributen.

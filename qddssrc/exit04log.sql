@@ -1,3 +1,6 @@
+      --%METADATA                                                      *
+      -- %TEXT Peek/400 - Output file of EXIT04 example                *
+      --%EMETADATA                                                     *
  /*===============================================================*
   * >>PRE-COMPILER<<                                              *
   *   >>CRTCMD<<  RUNSQLSTM SRCFILE(&SL/&SF) SRCMBR(&SM);         *

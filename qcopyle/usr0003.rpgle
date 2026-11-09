@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Datei mit Commitment-Kontrolle geöffnet.           *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR0003
 //  Datei mit Commitment-Kontrolle geöffnet.

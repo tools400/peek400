@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Generische Abfrage-Window                    *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,25 +27,25 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek59fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,SDS
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,USR8100
-/copy QCOPYLE,USR8190
+/copy 'qcopyle/usr8100.rpgleinc'
+/copy 'qcopyle/usr8190.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK59
+/copy 'qcopyle/ppeek59.rpgleinc'
 /undefine internal_prototype
 
 //  Peek21
@@ -77,11 +80,11 @@ dcl-pr atoi int(10) extproc('atoi');
   i_string pointer value;
 end-pr;
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s $$fkey like($$fkey01) dim(24);
 

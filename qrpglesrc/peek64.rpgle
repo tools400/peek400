@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Feldeditor                                   *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,8 +27,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek64fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
@@ -35,31 +38,31 @@ dcl-ds workstn likeds(workstn_t);
 
 dcl-ds peek_01_ds likeds(infds_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,SDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,USR8100
-/copy QCOPYLE,USR8123
-/copy QCOPYLE,USR8136
-/copy QCOPYLE,USR8240
-/copy QCOPYLE,USR8241
+/copy 'qcopyle/usr8100.rpgleinc'
+/copy 'qcopyle/usr8123.rpgleinc'
+/copy 'qcopyle/usr8136.rpgleinc'
+/copy 'qcopyle/usr8240.rpgleinc'
+/copy 'qcopyle/usr8241.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK64
+/copy 'qcopyle/ppeek64.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK71
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 

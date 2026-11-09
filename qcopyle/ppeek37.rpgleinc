@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Feldauswahl                                  *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek37 extpgm('PEEK37');

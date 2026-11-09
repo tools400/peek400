@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT File Scope Array:        Qdb_Qdbfb                      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  File Scope Array: Qdb_Qdbfb                                  *

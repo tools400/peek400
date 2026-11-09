@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve Message (QMHRTVM) API                          *
+      //%EMETADATA                                                     *
 /if not defined(QMHRTVM)
 /define QMHRTVM
 

@@ -1,3 +1,6 @@
+      --%METADATA                                                      *
+      -- %TEXT PEEK400 - All field types                               *
+      --%EMETADATA                                                     *
      /* =================================================================== */
      /*   >>PRE-COMPILER<<                                                  */
      /*     >>CRTCMD<<  RUNSQLSTM     SRCFILE(&SL/&SF) SRCMBR(&SM) +        */

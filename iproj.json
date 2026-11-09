@@ -1,0 +1,6 @@
+{
+  "description": "Peek/400",
+  "repository": "https://github.com/tools400/peek400",
+  "buildCommand": "makei build",
+  "compileCommand": "makei compile -f {filename}"
+}

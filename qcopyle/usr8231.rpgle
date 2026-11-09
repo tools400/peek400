@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Eine Änderung der Satzsperre ist nur im Änder      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8231
 //  Eine Änderung der Satzsperre ist nur im Änderungsmodus mögl

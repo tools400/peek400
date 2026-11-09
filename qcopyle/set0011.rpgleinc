@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Default Display Mode                                    *
+      //%EMETADATA                                                     *
 //---------------------------------------------------------------
 // Datenstruktur für Default Display Mode
 // SET0011   *DFTDSPMDE

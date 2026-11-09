@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Drucken Datensatz                            *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,8 +27,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek65p printer(*ext) usage(*output) usropn oflind(*in60);
 
@@ -35,26 +38,26 @@ dcl-ds peek_00_ds likeds(infds_t);
 
 dcl-ds hFile04 likeds(hFile_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,SDS
-/copy QCOPYLE,OBJD0400
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,CEECNDHDLR
-/copy QCOPYLE,USR0005
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/objd0400.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
+/copy 'qcopyle/usr0005.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK65
+/copy 'qcopyle/ppeek65.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK06
-/copy QCOPYLE,PPEEK09
-/copy QCOPYLE,PPEEK32
+/copy 'qcopyle/ppeek06.rpgleinc'
+/copy 'qcopyle/ppeek09.rpgleinc'
+/copy 'qcopyle/ppeek32.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK63
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek63.rpgleinc'
 
 dcl-ds objd0400 likeds(objd0400_t) inz;
 dcl-ds fldl0100 likeds(fldl0100_t) inz;

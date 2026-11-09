@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Abrufen der Schlüsselfelder für Datei &1 in B      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8137
 //  Abrufen der Schlüsselfelder für Datei &1 in Bibliothek &2.

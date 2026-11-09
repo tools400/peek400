@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT INFDS - Workstation                                     *
+      //%EMETADATA                                                     *
 
 //  Work fields for calculating the cursor position
 dcl-ds cursorPosition_t qualified template;

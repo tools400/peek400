@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln der Benutzersprache                *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,22 +28,22 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,SET0004
+/copy 'qcopyle/set0004.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK31
+/copy 'qcopyle/ppeek31.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *

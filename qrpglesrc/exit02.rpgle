@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - EXIT-Programm: Ermitteln Settings Datei      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -53,13 +56,13 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/include QCOPYLE,H_SPEC
-/include QCOPYLE,COPYRIGHT
+/include 'qcopyle/h_spec.rpgleinc'
+/include 'qcopyle/copyright.rpgleinc'
 
-/include QCOPYLE,D_VARDEF
+/include 'qcopyle/d_vardef.rpgleinc'
 
 /define internal_prototype
-/include QCOPYLE,PEXIT02
+/include 'qcopyle/pexit02.rpgleinc'
 /undefine internal_prototype
 
 //  main procedure

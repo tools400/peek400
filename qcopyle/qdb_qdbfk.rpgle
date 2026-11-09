@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Key Specification Array: Qdb_Qdbfk                      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  Key Specification Array: Qdb_Qdbfk                           *

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT ILE Condition Handlers                                  *
+      //%EMETADATA                                                     *
 /if not defined(CEECNDHDLR)
 /define CEECNDHDLR
 

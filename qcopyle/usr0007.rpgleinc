@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Die Datei &2/&1 konnte nur für INPUT geöffnet      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR0007
 //  Die Datei &2/&1 konnte nur für INPUT geöffnet werden. Änder

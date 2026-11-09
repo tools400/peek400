@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Generieren RPG-Programm. Lauf: &1, Feld: &2        *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8189
 //  Generieren RPG-Programm. Lauf: &1, Feld: &2

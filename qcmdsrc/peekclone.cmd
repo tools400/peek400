@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Clone PEEK/400 library                      */
+      /*%EMETADATA                                                    */
              CMD        PROMPT('Clone PEEK/400 library')
 
              PARM       KWD(TOLIB)               +

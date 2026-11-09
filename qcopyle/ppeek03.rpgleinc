@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Übertragen Schlüsself.in DB2/400-Format      *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek03 extpgm('PEEK03');

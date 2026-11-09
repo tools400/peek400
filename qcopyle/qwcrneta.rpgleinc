@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT QWCRNETA                                                *
+      //%EMETADATA                                                     *
 /if not defined(QWCRNETA)
 /define QWCRNETA
 

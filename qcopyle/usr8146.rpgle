@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Kein gültiges Feld für Farbauswahl.                *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8146
 //  Kein gültiges Feld für Farbauswahl.

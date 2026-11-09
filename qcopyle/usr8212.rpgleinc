@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Die SQL-Auswahl kann nur auf physischen Datei      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8212
 //  Die SQL-Auswahl kann nur auf physischen Dateien angewendet

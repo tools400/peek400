@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Definitions for DSM service program QSNAPI              *
+      //%EMETADATA                                                     *
 //*************************************************************************
 //                                                                        *
 // Definitions for DSM service program QSNAPI                             *

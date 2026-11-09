@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Änderung der Farbeinstellung                 *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek24 extpgm('PEEK24');

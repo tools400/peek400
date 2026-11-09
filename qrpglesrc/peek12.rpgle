@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Auswahl Satzformat                           *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,8 +27,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek12fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbSfl: sflRec);
 
@@ -35,20 +38,20 @@ dcl-ds workstn likeds(workstn_t);
 
 dcl-ds peek_01_ds likeds(infds_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,RCDL0200
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,ShortCmd_D
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,SDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/rcdl0200.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/shortcmd_d.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK12
+/copy 'qcopyle/ppeek12.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,USR8100
+/copy 'qcopyle/usr8100.rpgleinc'
 
 dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
 
@@ -73,12 +76,12 @@ dcl-s yMsgDta char(512) inz(*blanks);
 dcl-s yFKeys char(18) dim(32) inz(*blanks);
 dcl-s yNbrOfKeys like(int4_t) inz;
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 dcl-s isExitPgm like(bool_t) inz(bFalse);

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - EXIT-Programm: Benutzerauswahl               *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -70,11 +73,11 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/include QCOPYLE,H_SPEC
-/include QCOPYLE,COPYRIGHT
+/include 'qcopyle/h_spec.rpgleinc'
+/include 'qcopyle/copyright.rpgleinc'
 
 /define internal_prototype
-/include QCOPYLE,PEXIT05
+/include 'qcopyle/pexit05.rpgleinc'
 /undefine internal_prototype
 
 dcl-pr main extproc('main');

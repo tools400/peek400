@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT List Database File Members (QUSLMBR) API                *
+      //%EMETADATA                                                     *
 /if not defined(QUSLMBR)
 /define QUSLMBR
 

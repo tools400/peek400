@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Abrufen von Objektattributen für Objekt &1 in      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8107
 //  Abrufen von Objektattributen für Objekt &1 in Bibliothek &2

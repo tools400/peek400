@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Felder mit mehr als 1024-Zeichen können&1nich      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8123
 //  Felder mit mehr als 1024-Zeichen können&1nicht&2geändert we

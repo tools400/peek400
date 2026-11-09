@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Laden Arbeitsumgebung                        *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,26 +27,26 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peekEnv keyed usropn prefix(en_);
 dcl-f peekFld usage(*update: *delete) keyed usropn prefix(p_);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,FILD0100
-/copy QCOPYLE,SET0015
-/copy QCOPYLE,ENV0001
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/fild0100.rpgleinc'
+/copy 'qcopyle/set0015.rpgleinc'
+/copy 'qcopyle/env0001.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK55
+/copy 'qcopyle/ppeek55.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-pr main;
   i_file       like(gi_file) value;
@@ -180,7 +183,7 @@ dcl-proc main;
 
   dcl-ds set0015 likeds(set0015_t) inz;
 
-/copy QCOPYLE,USR8234
+/copy 'qcopyle/usr8234.rpgleinc'
   //---------------------------------------------------*
 
   dou ('1');

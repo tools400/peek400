@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Konvertieren Datenformat für Kurzbefehl      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,22 +27,22 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_CLib
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_MI
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_clib.rpgleinc'
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_mi.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK66
+/copy 'qcopyle/ppeek66.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s numeric_t packed(31: 10) template;
 dcl-c cDATA_TYPE 'P';
@@ -216,7 +219,7 @@ dcl-proc convertToNumeric;
   dcl-s inBuffer like(io_buffer);
   dcl-s inLength like(io_length);
 
-/copy QCOPYLE,USR8227
+/copy 'qcopyle/usr8227.rpgleinc'
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   monitor;

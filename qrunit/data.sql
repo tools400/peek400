@@ -1,3 +1,6 @@
+      --%METADATA                                                      *
+      -- %TEXT Insert Data SQL Script                                  *
+      --%EMETADATA                                                     *
      /* =================================================================== */
      /*   >>PRE-COMPILER<<                                                  */
      /*     >>CRTCMD<<  RUNSQLSTM     SRCFILE(&SL/&SF) SRCMBR(&SM) +        */

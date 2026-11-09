@@ -1,10 +1,13 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Dateizugriffsroutinen            SrvPgm      *
+      //%EMETADATA                                                     *
 
 //============================================================*
 //      Modul: Peek063                                        *
 //============================================================*
-/include QCOPYLE,D_VARDEF
-/include QCOPYLE,D_INFDS
+/include 'qcopyle/d_vardef.rpgleinc'
+/include 'qcopyle/d_infds.rpgleinc'
 
 dcl-ds hFile_t qualified template;
   fd        pointer;

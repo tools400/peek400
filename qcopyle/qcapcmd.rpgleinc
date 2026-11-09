@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Process Commands (QCAPCMD) API                          *
+      //%EMETADATA                                                     *
 /if not defined(QCAPCMD)
 /define QCAPCMD
 

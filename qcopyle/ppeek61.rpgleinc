@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Progress Meter (Prototypes)                  *
+      //%EMETADATA                                                     *
 /if not defined(PPEEK61)
 /define PPEEK61
 

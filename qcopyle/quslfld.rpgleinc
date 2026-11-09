@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT List Fields (QUSLFLD) API                               *
+      //%EMETADATA                                                     *
 /if not defined(QUSLFLD)
 /define QUSLFLD
 

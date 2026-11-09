@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Feldlänge überschritten. Der Wert ist um &1 Z      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8241
 //  Feldlänge überschritten. Der Wert ist um &1 Zeichen zu groß

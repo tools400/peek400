@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: SPLASH-Screen ausgeschaltet.                       *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8162
 //  SPLASH-Screen ausgeschaltet.

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Ausführen Befehl (Subfile oder F-Taste)                 *
+      //%EMETADATA                                                     *
 // The following statements must be included as a /copy book
 // to avoid infinite loops when executing commands from
 // c_readSfl -> doSlfCmd.

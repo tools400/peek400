@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Generiertes Pekk/400 Update Programm                    *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr updpgm extpgm('UPDPGM');

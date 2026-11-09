@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT List Database Relations (QDBLDBR) API                   *
+      //%EMETADATA                                                     *
 /if not defined(QDBLDBR)
 /define QDBLDBR
 

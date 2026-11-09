@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - EXIT-Programm: Berechtigungsprüfung          *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -112,18 +115,18 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/include QCOPYLE,H_SPEC
-/include QCOPYLE,COPYRIGHT
+/include 'qcopyle/h_spec.rpgleinc'
+/include 'qcopyle/copyright.rpgleinc'
 
 dcl-f exit01pf keyed usropn prefix(ex_);
 
-/include QCOPYLE,D_VARDEF
-/include QCOPYLE,USR1000
-/include QCOPYLE,CEERTX
-/include QCOPYLE,SDS
+/include 'qcopyle/d_vardef.rpgleinc'
+/include 'qcopyle/usr1000.rpgleinc'
+/include 'qcopyle/ceertx.rpgleinc'
+/include 'qcopyle/sds.rpgleinc'
 
 /define internal_prototype
-/include QCOPYLE,PEXIT01
+/include 'qcopyle/pexit01.rpgleinc'
 /undefine internal_prototype
 
 //  main prozedure

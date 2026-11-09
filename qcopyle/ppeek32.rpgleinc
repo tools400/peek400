@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Konvertieren nicht darstellb. Zeichen        *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek32 extpgm('PEEK32');

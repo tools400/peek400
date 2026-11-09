@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Konvertieren intern <==> extern              *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek18 extpgm('PEEK18');

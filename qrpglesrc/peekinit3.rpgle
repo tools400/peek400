@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Initialisieren Peek/400 - PEEKUSR            *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,8 +27,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f PEEKUSR usage(*update: *delete) keyed usropn extfile(g_file) prefix(S_);
 
@@ -33,9 +36,9 @@ dcl-s g_file char(21) inz;
 
 dcl-ds set0004 likeds(set0004_t) inz;
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,SET0004 // Spracheinstellungen
-/copy QCOPYLE,PPEEK53
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/set0004.rpgleinc' // Spracheinstellungen
+/copy 'qcopyle/ppeek53.rpgleinc'
 
 //*******************************************************************
 //                 S T E U E R  -  R O U T I N E                    *

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Zugriff auf Benutzerdaten        SrvPgm      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -26,8 +29,8 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peekusr usage(*update: *delete: *output) keyed usropn prefix(s_) infds(file_00_ds)
   extfile(g_peekUsr);
@@ -63,33 +66,33 @@ end-pr;
 dcl-pr p_initSrvPgm;
 end-pr;
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,SDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
-/copy QCOPYLE,SET0001
-/copy QCOPYLE,SET0002
-/copy QCOPYLE,SET0003
-/copy QCOPYLE,SET0004
-/copy QCOPYLE,SET0005
-/copy QCOPYLE,SET0006
-/copy QCOPYLE,SET0007
-/copy QCOPYLE,SET0008
-/copy QCOPYLE,SET0009
-/copy QCOPYLE,SET0010
-/copy QCOPYLE,SET0011
-/copy QCOPYLE,SET0012
-/copy QCOPYLE,SET0013
-/copy QCOPYLE,SET0014
-/copy QCOPYLE,SET0015
-/copy QCOPYLE,SET0016
+/copy 'qcopyle/set0001.rpgleinc'
+/copy 'qcopyle/set0002.rpgleinc'
+/copy 'qcopyle/set0003.rpgleinc'
+/copy 'qcopyle/set0004.rpgleinc'
+/copy 'qcopyle/set0005.rpgleinc'
+/copy 'qcopyle/set0006.rpgleinc'
+/copy 'qcopyle/set0007.rpgleinc'
+/copy 'qcopyle/set0008.rpgleinc'
+/copy 'qcopyle/set0009.rpgleinc'
+/copy 'qcopyle/set0010.rpgleinc'
+/copy 'qcopyle/set0011.rpgleinc'
+/copy 'qcopyle/set0012.rpgleinc'
+/copy 'qcopyle/set0013.rpgleinc'
+/copy 'qcopyle/set0014.rpgleinc'
+/copy 'qcopyle/set0015.rpgleinc'
+/copy 'qcopyle/set0016.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
-/copy QCOPYLE,PPEEK22
+/copy 'qcopyle/ppeek22.rpgleinc'
 
 dcl-s peek22_name like(pgmCallN_t) inz;
 

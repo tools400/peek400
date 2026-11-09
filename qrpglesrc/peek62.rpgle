@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ändern Satzformat PEEKUSR                    *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,8 +27,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f oldFile disk(32766) usropn infds(file_01_ds) extfile(g_oldFile);
 
@@ -37,21 +40,21 @@ dcl-ds file_02_ds likeds(infds_t);
 dcl-s g_oldFile char(21) inz;
 dcl-s g_peekUsr char(21) inz;
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,USR9995
-/copy QCOPYLE,USR9989
+/copy 'qcopyle/usr9995.rpgleinc'
+/copy 'qcopyle/usr9989.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK62
+/copy 'qcopyle/ppeek62.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s long_t int(10) template;
 dcl-s short_t int(5) template;

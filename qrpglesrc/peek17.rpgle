@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Erfassen der Suchkriterien                   *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -26,8 +29,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek17fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
@@ -38,35 +41,35 @@ dcl-ds workstn likeds(workstn_t);
 dcl-ds peek_01_ds likeds(infds_t);
 
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,ShortCmd_D
-/copy QCOPYLE,SDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,D_INFDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/shortcmd_d.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK17
+/copy 'qcopyle/ppeek17.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,SET0002
-/copy QCOPYLE,SET0003
-/copy QCOPYLE,SET0008
+/copy 'qcopyle/set0002.rpgleinc'
+/copy 'qcopyle/set0003.rpgleinc'
+/copy 'qcopyle/set0008.rpgleinc'
 
-/copy QCOPYLE,USR8100
-/copy QCOPYLE,USR8108
-/copy QCOPYLE,USR8124
-/copy QCOPYLE,USR8126
-/copy QCOPYLE,USR8129
-/copy QCOPYLE,USR8134
-/copy QCOPYLE,USR8135
-/copy QCOPYLE,USR8136
-/copy QCOPYLE,USR8138
-/copy QCOPYLE,USR8140
-/copy QCOPYLE,USR8141
-/copy QCOPYLE,USR8142
-/copy QCOPYLE,USR8192
+/copy 'qcopyle/usr8100.rpgleinc'
+/copy 'qcopyle/usr8108.rpgleinc'
+/copy 'qcopyle/usr8124.rpgleinc'
+/copy 'qcopyle/usr8126.rpgleinc'
+/copy 'qcopyle/usr8129.rpgleinc'
+/copy 'qcopyle/usr8134.rpgleinc'
+/copy 'qcopyle/usr8135.rpgleinc'
+/copy 'qcopyle/usr8136.rpgleinc'
+/copy 'qcopyle/usr8138.rpgleinc'
+/copy 'qcopyle/usr8140.rpgleinc'
+/copy 'qcopyle/usr8141.rpgleinc'
+/copy 'qcopyle/usr8142.rpgleinc'
+/copy 'qcopyle/usr8192.rpgleinc'
 
 dcl-ds set0002 likeds(set0002_t) inz;
 dcl-ds set0003 likeds(set0003_t) inz;
@@ -104,14 +107,14 @@ dcl-s peek21_name like(pgmCallN_t) inz;
 dcl-s peek23_name like(pgmCallN_t) inz;
 dcl-s peek37_name like(pgmCallN_t) inz;
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
-/copy QCOPYLE,PPEEK37
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
+/copy 'qcopyle/ppeek37.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve User Information (QSYRUSRI) API                *
+      //%EMETADATA                                                     *
 /if not defined(QSYRUSRI)
 /define QSYRUSRI
 

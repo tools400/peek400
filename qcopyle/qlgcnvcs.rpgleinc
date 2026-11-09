@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Convert Case (QLGCNVCS, QlgConvertCase) API             *
+      //%EMETADATA                                                     *
 /if not defined(QLGCNVCS)
 /define QLGCNVCS
 

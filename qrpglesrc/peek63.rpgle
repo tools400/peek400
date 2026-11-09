@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Dateizugriffsroutinen            SrvPgm      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -26,18 +29,18 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_CLib
-/copy QCOPYLE,D_CLib2
-/copy QCOPYLE,USR9994
-/copy QCOPYLE,SDS
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_clib.rpgleinc'
+/copy 'qcopyle/d_clib2.rpgleinc'
+/copy 'qcopyle/usr9994.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK63
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek63.rpgleinc'
 
 dcl-c OPER_OPEN '*OPEN';
 dcl-c OPER_CHAIN_RRN '*CHAIN_RRN';
@@ -381,7 +384,7 @@ dcl-proc CIO_getErrorMsg export;
     o_msgDta like(msgDta_t);
   end-pi;
 
-/copy QCOPYLE,USR0012 // ?
+/copy 'qcopyle/usr0012.rpgleinc' // ?
   // ------------------------------------------------------------------------
 
   if (i_hFile.msgID <> '');

@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Display Database Relations                  */
+      /*%EMETADATA                                                    */
              CMD        PROMPT(PMT0101)                               /* RADD */
 
     /* Datei                                  */

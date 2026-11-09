@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Prüfen Datensatz PEEKFLD                     *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,24 +27,24 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,SDS
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,WRK0001
+/copy 'qcopyle/wrk0001.rpgleinc'
 
-/copy QCOPYLE,USR8168
-/copy QCOPYLE,USR8169
-/copy QCOPYLE,USR8170
-/copy QCOPYLE,USR8243
+/copy 'qcopyle/usr8168.rpgleinc'
+/copy 'qcopyle/usr8169.rpgleinc'
+/copy 'qcopyle/usr8170.rpgleinc'
+/copy 'qcopyle/usr8243.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK35
+/copy 'qcopyle/ppeek35.rpgleinc'
 /undefine internal_prototype
 
 dcl-ds wrk0001 likeds(wrk0001_t) inz(*likeds);

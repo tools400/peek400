@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve Commitment Information (QTNRCMTI) API          *
+      //%EMETADATA                                                     *
 /if not defined(QTNRCMTI)
 /define QTNRCMTI
 

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Aufwand für Pgm-Generieren         *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek60 extpgm('PEEK60');

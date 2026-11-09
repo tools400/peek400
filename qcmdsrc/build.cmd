@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Erstellen PEEK Distributions-Bibliothek     */
+      /*%EMETADATA                                                    */
       /*===============================================================*/
       /* >>PRE-COMPILER<<                                              */
       /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    */

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Lizenzdaten konnten nicht gesichert werden.        *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8159
 //  Lizenzdaten konnten nicht gesichert werden.

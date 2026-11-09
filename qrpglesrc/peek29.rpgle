@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Berechnen interner Werte                     *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,15 +27,15 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK29
+/copy 'qcopyle/ppeek29.rpgleinc'
 /undefine internal_prototype
 
 dcl-s value char(1) dim(256);

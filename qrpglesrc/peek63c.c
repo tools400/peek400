@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Dateizugriffsroutinen  C-Helper  SrvPgm     */
+      /*%EMETADATA                                                    */
      /*===============================================================*/
      /*                                                               */
      /*  (c) Thomas Raddatz                                           */

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve Database File Description (QDBRTVFD) API       *
+      //%EMETADATA                                                     *
 /if NOT defined(QDBRTVFD)
 /define QDBRTVFD
 

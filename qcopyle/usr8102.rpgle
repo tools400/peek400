@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Bitte mit dem Cursor auf den Datensatz zeigen      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8102
 //  Bitte mit dem Cursor auf den Datensatz zeigen und die Anfor

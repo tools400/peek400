@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Eingabe der Schlüsselfelder auf Grossbuchstab      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8224
 //  Eingabe der Schlüsselfelder auf Grossbuchstaben geschaltet.

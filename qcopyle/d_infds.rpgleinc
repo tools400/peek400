@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Deklarationen der Dateiinformationsdatenstruktur        *
+      //%EMETADATA                                                     *
 /if NOT defined(D_INFDS)
 /define D_INFDS
 

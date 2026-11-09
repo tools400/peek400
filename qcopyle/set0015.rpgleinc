@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Speichern der Arbeitsumgebung                           *
+      //%EMETADATA                                                     *
 //---------------------------------------------------------------
 // Datenstruktur für Speichern der Arbeitsumgebung
 // SET0015   *ENVFILE

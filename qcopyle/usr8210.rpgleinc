@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: SQL-Fehler &1 aufgetreten. &2                      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8210
 //  SQL-Fehler &1 aufgetreten. &2

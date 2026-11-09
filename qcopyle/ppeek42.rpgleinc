@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Aufbereiten Kurzauswahl                      *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek42 extpgm('PEEK42');

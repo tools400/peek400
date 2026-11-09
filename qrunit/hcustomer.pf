@@ -1,3 +1,6 @@
+      *%METADATA                                                       *
+      * %TEXT PEEK400 - Customer (History)                             *
+      *%EMETADATA                                                      *
       * =================================================================== *
       *   >>PRE-COMPILER<<                                                  *
       *     >>CRTCMD<<  CRTPF         FILE(&LI/&OB) +                       *

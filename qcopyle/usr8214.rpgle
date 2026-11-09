@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: 1=Kleinbuchstaben erlaubt; 0=nur Großbuchstab      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8214
 //  1=Kleinbuchstaben erlaubt; 0=nur Großbuchstaben

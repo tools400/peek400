@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Systemwerte                        *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek28 extpgm('PEEK28');

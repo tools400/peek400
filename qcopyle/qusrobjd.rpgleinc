@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve Object Description (QUSROBJD) API              *
+      //%EMETADATA                                                     *
 /if not defined(QUSROBJD)
 /define QUSROBJD
 

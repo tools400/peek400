@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Netzwerkattribute                  *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek07 extpgm('PEEK07');

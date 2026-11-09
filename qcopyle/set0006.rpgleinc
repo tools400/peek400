@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Zeichenkonvertierung                                    *
+      //%EMETADATA                                                     *
 //---------------------------------------------------------------
 // Datenstruktur für Zeichenkonvertierung
 // SET0006   *CVTCHR

@@ -1,3 +1,6 @@
+      *%METADATA                                                       *
+      * %TEXT PEEK400 - Orders                                         *
+      *%EMETADATA                                                      *
       * =================================================================== *
       *   >>PRE-COMPILER<<                                                  *
       *     >>CRTCMD<<  CRTPF         FILE(&LI/&OB) +                       *

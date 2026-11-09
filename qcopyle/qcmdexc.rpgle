@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Execute Command (QCMDEXC) API                           *
+      //%EMETADATA                                                     *
 /if not defined(QCMDEXC)
 /define QCMDEXC
 

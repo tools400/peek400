@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Generieren RPG-LE Programm                   *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -33,8 +36,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f qpeekgen extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen: foutput) block(*no);
 
@@ -89,7 +92,7 @@ dcl-ds *n;
   scn#a char(3) overlay(scn#: 1);
 end-ds;
 
-/copy QCOPYLE,SDS
+/copy 'qcopyle/sds.rpgleinc'
 
 dcl-s tag char(4) inz;
 dcl-s indent varchar(100) inz;
@@ -110,11 +113,11 @@ dcl-s curField zoned(2) inz;
 
 dcl-s nullDft char(4) inz;
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK16
+/copy 'qcopyle/ppeek16.rpgleinc'
 /undefine internal_prototype
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
@@ -138,11 +141,11 @@ end-pr;
 //  Steuerleiste
 //====================================================*
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK61
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek61.rpgleinc'
 
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 dcl-pi peek16;
   i_prodLib   like(lib_t) const;
   i_fileName  likeds(qObj_t) const;

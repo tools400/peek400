@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Aktualisierung beim Versionswechsel          *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,24 +27,24 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,SET0001 // Benutzervoreinstellungen
-/copy QCOPYLE,SET0007 // Versionsnummer
-/copy QCOPYLE,SET0012 // Generieren Programme *CRTPGM
-/copy QCOPYLE,SET0016 // SQL: Limit zum Anzeigen der Anzahl Datensät
+/copy 'qcopyle/set0001.rpgleinc' // Benutzervoreinstellungen
+/copy 'qcopyle/set0007.rpgleinc' // Versionsnummer
+/copy 'qcopyle/set0012.rpgleinc' // Generieren Programme *CRTPGM
+/copy 'qcopyle/set0016.rpgleinc' // SQL: Limit zum Anzeigen der Anzahl Datensät
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK33
+/copy 'qcopyle/ppeek33.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
+/copy 'qcopyle/ppeek53.rpgleinc'
 
 dcl-ds set0007 likeds(set0007_t) inz;
 dcl-ds set0012 likeds(set0012_t) inz;

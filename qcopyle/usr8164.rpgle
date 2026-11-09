@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Felder mit nicht darstellbaren Zeichen wurden      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8164
 //  Felder mit nicht darstellbaren Zeichen wurden ausgeblendet.

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - EXIT-Programm: Spaltenüberschriften          *
+      //%EMETADATA                                                     *
 /if defined(internal_prototype)
 dcl-pr exit06 extpgm('EXIT06');
 /else

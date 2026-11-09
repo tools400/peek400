@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT SQL: Limit zum Anzeigen der Anzahl Datensätze           *
+      //%EMETADATA                                                     *
 //---------------------------------------------------------------
 // Datenstruktur für SQL: Limit zum Anzeigen der Anzahl Datensätze
 // SET0016   *SQLLMTCNT

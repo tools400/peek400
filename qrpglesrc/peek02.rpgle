@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Satzaufbau                         *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -66,22 +69,22 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt main(peek02);
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,GENHEADER
-/copy QCOPYLE,QUSCRTUS
-/copy QCOPYLE,QUSPTRUS
-/copy QCOPYLE,QUSLFLD
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/genheader.rpgleinc'
+/copy 'qcopyle/quscrtus.rpgleinc'
+/copy 'qcopyle/qusptrus.rpgleinc'
+/copy 'qcopyle/quslfld.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK02
+/copy 'qcopyle/ppeek02.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-ds qUsrSpc likeds(qObj_t) inz;
 dcl-s pSpcPtr pointer;

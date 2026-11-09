@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Feld &1 ist nicht NULL-fähig.                      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8191
 //  Feld &1 ist nicht NULL-fähig.

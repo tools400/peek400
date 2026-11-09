@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Einlesen der Subfile-Auswahlen               *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek27 extpgm('PEEK27');

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve Pointer to User Space (QUSPTRUS) API           *
+      //%EMETADATA                                                     *
 /if not defined(QUSPTRUS)
 /define QUSPTRUS
 

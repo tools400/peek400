@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Konvertieren intern <==> extern              *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -38,29 +41,29 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peekFld keyed usropn prefix(f_);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK18
+/copy 'qcopyle/ppeek18.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,SET0003
+/copy 'qcopyle/set0003.rpgleinc'
 
-/copy QCOPYLE,USR8138
+/copy 'qcopyle/usr8138.rpgleinc'
 
-/copy QCOPYLE,PPEEK36
+/copy 'qcopyle/ppeek36.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK71
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
 
 dcl-ds set0003 likeds(set0003_t) inz;
 

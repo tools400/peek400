@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Generieren RPG-LE Displayfile                *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,8 +28,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f qpeekgen extdesc('QPEEKGEN') usage(*output) usropn rename(qpeekgen: foutput) block(*no);
 
@@ -198,7 +201,7 @@ dcl-pr cvtEditCode extpgm(exit03);
   gio_edtCde char(1);
 end-pr;
 
-/copy QCOPYLE,SDS
+/copy 'qcopyle/sds.rpgleinc'
 
 dcl-s dotLine char(40) inz(*all'.');
 
@@ -285,19 +288,19 @@ dcl-ds chkPos qualified dim(8000) inz;
   col like(int4_t);
 end-ds;
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,USR8188
+/copy 'qcopyle/usr8188.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK15
+/copy 'qcopyle/ppeek15.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK61
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek61.rpgleinc'
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Peek/400 kann nicht rekursiv aufgerufen werde      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8173
 //  Peek/400 kann nicht rekursiv aufgerufen werden.

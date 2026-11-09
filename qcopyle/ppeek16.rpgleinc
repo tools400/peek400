@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Generieren RPG-LE Programm                   *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek16 extpgm('PEEK16');

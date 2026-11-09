@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Character Translation Services                         */
+      /*%EMETADATA                                                    */
 /* =================================================================== */
 /* >>PRE-COMPILER<<                                                    */
 /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */

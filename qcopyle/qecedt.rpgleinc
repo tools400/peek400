@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Edit (QECEDT) API                                       *
+      //%EMETADATA                                                     *
 /if not defined(QECEDT)
 /define QECEDT
 

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Startposition darf nicht kleiner/gleich Null       *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8178
 //  Startposition darf nicht kleiner/gleich Null sein.

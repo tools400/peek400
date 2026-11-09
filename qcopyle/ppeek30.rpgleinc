@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Prüfen der Lizenzdaten                       *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek30 extpgm('PEEK30');

@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - File Editor                                 */
+      /*%EMETADATA                                                    */
       /*===============================================================*/
       /* >>PRE-COMPILER<<                                              */
       /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    */

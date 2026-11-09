@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Datensatz gefunden. 'SUCHEN'=Weitersuchen/'EN      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8130
 //  Datensatz gefunden. 'SUCHEN'=Weitersuchen/'ENTER'=Ende.

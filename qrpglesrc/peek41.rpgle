@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Dateiinformationen                 *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -69,24 +72,24 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,QDBRTVFD
-/copy QCOPYLE,KEYL0100
-/copy QCOPYLE,FILD0100
-/copy QCOPYLE,SELL0100
-/copy QCOPYLE,BSPF0100
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/qdbrtvfd.rpgleinc'
+/copy 'qcopyle/keyl0100.rpgleinc'
+/copy 'qcopyle/fild0100.rpgleinc'
+/copy 'qcopyle/sell0100.rpgleinc'
+/copy 'qcopyle/bspf0100.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK41
+/copy 'qcopyle/ppeek41.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 //----------------------------------------------------*
 //  API - DATENSTRUKTUREN                             *

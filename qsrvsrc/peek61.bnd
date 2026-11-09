@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Progress Meter                              */
+      /*%EMETADATA                                                    */
 /* =================================================================== */
 /* >>PRE-COMPILER<<                                                    */
 /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Feldeditor                                   *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek64 extpgm('PEEK64');

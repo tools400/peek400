@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Prototypes for C-Library   Record IO     (include)      *
+      //%EMETADATA                                                     *
 /if NOT defined(CLIB2)
 /define CLIB2
 

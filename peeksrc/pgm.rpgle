@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - RPG-LE Programm, Template v3.5.0             *
+      //%EMETADATA                                                     *
 //===============================================================*
 //  (C) Thomas Raddatz                                           *
 //  Bereich  : PEEK Version 3.5.0                                *

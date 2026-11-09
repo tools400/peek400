@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - EXIT-Programm: Benutzerauswahl               *
+      //%EMETADATA                                                     *
 /if defined(internal_prototype)
 dcl-pr exit05 extpgm('EXIT05');
 /else

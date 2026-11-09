@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Prüfen Datum-, Zeit, Zeitstempelfelder       *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek36 extpgm('PEEK36');

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Operand &1 ist bei Datentyp &2 nicht erlaubt.      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8135
 //  Operand &1 ist bei Datentyp &2 nicht erlaubt.

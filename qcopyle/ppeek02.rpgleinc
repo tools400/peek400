@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Satzaufbau                         *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek02 extpgm('PEEK02');

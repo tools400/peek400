@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Auswahl Datei                                *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek69 extpgm('PEEK69');

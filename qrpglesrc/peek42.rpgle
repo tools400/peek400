@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Aufbereiten Kurzauswahl                      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -34,8 +37,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 // Aufbau des Satzformats
 dcl-f peekFld keyed usropn prefix(f_);
@@ -46,23 +49,23 @@ end-ds;
 
 dcl-s io_nullMap like(nullMap_t) dim(NULL_MAP_SIZE);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,ShortCmd_d
-/copy QCOPYLE,D_CLIB
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/shortcmd_d.rpgleinc'
+/copy 'qcopyle/d_clib.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK42
+/copy 'qcopyle/ppeek42.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK06
-/copy QCOPYLE,PPEEK66
+/copy 'qcopyle/ppeek06.rpgleinc'
+/copy 'qcopyle/ppeek66.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK63
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek63.rpgleinc'
 
 dcl-pr lf_rtvFldName varchar(10);
   i_buffer   like(r_shortCmd) const;
@@ -509,9 +512,9 @@ dcl-proc lf_rtvFldFormat;
   dcl-ds fldl0100_tmp likeds(fldl0100_t) inz;
 
   //  Nachrichten
-/copy QCOPYLE,USR8228
-/copy QCOPYLE,USR8229
-/copy QCOPYLE,USR8230
+/copy 'qcopyle/usr8228.rpgleinc'
+/copy 'qcopyle/usr8229.rpgleinc'
+/copy 'qcopyle/usr8230.rpgleinc'
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   clear o_fldl0100;

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Prototypes for C-Library                 (include)      *
+      //%EMETADATA                                                     *
 /if NOT defined(CLIB)
 /define CLIB
 

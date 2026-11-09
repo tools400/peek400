@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Create User Space (QUSCRTUS) API                        *
+      //%EMETADATA                                                     *
 /if not defined(QUSCRTUS)
 /define QUSCRTUS
 

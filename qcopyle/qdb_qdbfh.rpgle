@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT File Definition Header:  Qdb_Qdbfh                      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  File Definition Header: Qdb_Qdbfh                            *

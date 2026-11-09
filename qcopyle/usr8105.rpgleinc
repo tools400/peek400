@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Abrufen der Satzformate für Datei &1 in Bibli      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8105
 //  Abrufen der Satzformate für Datei &1 in Bibliothek &2.

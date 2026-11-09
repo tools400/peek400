@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Feld '&1' in Datei &2 in Bibliothek &3 nicht       *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8108
 //  Feld '&1' in Datei &2 in Bibliothek &3 nicht gefunden.

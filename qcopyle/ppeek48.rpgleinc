@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - SQL-Select/Order by                          *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek48 extpgm('PEEK48');

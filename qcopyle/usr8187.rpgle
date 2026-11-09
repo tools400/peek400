@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Feldlänge ist größer als Dateipuffer.              *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8187
 //  Feldlänge ist größer als Dateipuffer.

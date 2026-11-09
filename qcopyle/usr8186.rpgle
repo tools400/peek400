@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Warnung: Zeichenkette zu kurz.                     *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8186
 //  Warnung: Zeichenkette zu kurz.

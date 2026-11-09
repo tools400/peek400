@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Warnung: Es können nicht mehr als &1 Spalten       *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8205
 //  Warnung: Es können nicht mehr als &1 Spalten gepinnt werden

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Vergleichsoperand '&1' nicht zulässig.             *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8124
 //  Vergleichsoperand '&1' nicht zulässig.

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Generische Abfrage-Window                    *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek59 extpgm('PEEK59');

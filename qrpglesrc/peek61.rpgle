@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Progress Meter                               *
+      //%EMETADATA                                                     *
 //**************************************************************************************
 // PRGMTRR1: Progress meter
 // Copyright (C) 2001  Martin Rowe   <martin@dbg400.net>           Original  Version
@@ -34,11 +37,11 @@ ctl-opt expropts(*resdecpos);
 ctl-opt extbinint(*yes);
 //**************************************************************************************
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,QUSRJOBI
-/copy QCOPYLE,QMHSNDPM
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/qusrjobi.rpgleinc'
+/copy 'qcopyle/qmhsndpm.rpgleinc'
 
-/copy QCOPYLE,PPEEK61
+/copy 'qcopyle/ppeek61.rpgleinc'
 
 //  Global fields
 dcl-s g_text varchar(21);

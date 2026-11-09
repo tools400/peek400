@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Auswählen "Arbeitsumgebung"                  *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,8 +27,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek56fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbSfl: sflRec);
 
@@ -36,37 +39,37 @@ dcl-ds workstn likeds(workstn_t);
 dcl-s g_envFile char(21);
 dcl-s g_envMbr char(10);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,ShortCmd_D
-/copy QCOPYLE,SDS
-/copy QCOPYLE,MBRL0200
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/shortcmd_d.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/mbrl0200.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,SET0015
+/copy 'qcopyle/set0015.rpgleinc'
 
-/copy QCOPYLE,USR8100
-/copy QCOPYLE,USR8110
-/copy QCOPYLE,USR8180
-/copy QCOPYLE,USR8181
-/copy QCOPYLE,USR8182
-/copy QCOPYLE,USR8184
-/copy QCOPYLE,USR8209
-/copy QCOPYLE,USR8233
+/copy 'qcopyle/usr8100.rpgleinc'
+/copy 'qcopyle/usr8110.rpgleinc'
+/copy 'qcopyle/usr8180.rpgleinc'
+/copy 'qcopyle/usr8181.rpgleinc'
+/copy 'qcopyle/usr8182.rpgleinc'
+/copy 'qcopyle/usr8184.rpgleinc'
+/copy 'qcopyle/usr8209.rpgleinc'
+/copy 'qcopyle/usr8233.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK56
+/copy 'qcopyle/ppeek56.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
-/copy QCOPYLE,PPEEK27
-/copy QCOPYLE,PPEEK46
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
+/copy 'qcopyle/ppeek27.rpgleinc'
+/copy 'qcopyle/ppeek46.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s yFKeys char(18) dim(32) inz(*blanks);
 dcl-s yNbrOfKeys like(int4_t) inz;

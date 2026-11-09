@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve Job Information (QUSRJOBI) API                 *
+      //%EMETADATA                                                     *
 /if NOT defined(QUSRJOBI)
 /define QUSRJOBI
 

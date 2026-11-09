@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Convert Edit Code (QECCVTEC) API                        *
+      //%EMETADATA                                                     *
 /if not defined(QECCVTEC)
 /define QECCVTEC
 

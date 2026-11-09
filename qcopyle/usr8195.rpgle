@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Unzulässige Anforderung. Feld ist für Änderun      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8195
 //  Unzulässige Anforderung. Feld ist für Änderungen gesperrt.

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Übertragen Satzformat in DB2/400-Format      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,27 +28,27 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peekFmt usage(*update: *delete: *output) usropn prefix(f_);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,RCDL0200
-/copy QCOPYLE,CEECNDHDLR
-/copy QCOPYLE,SDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/rcdl0200.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
-/copy QCOPYLE,USR0002
-/copy QCOPYLE,USR8105
+/copy 'qcopyle/usr0002.rpgleinc'
+/copy 'qcopyle/usr8105.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK10
+/copy 'qcopyle/ppeek10.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK11
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek11.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-ds rcdl0200 likeds(rcdl0200_t) inz;
 

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Übertragen Satzaufbau in DB2/400-Format      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,30 +28,30 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peekFld usage(*update: *delete: *output) usropn prefix(f_);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,CEECNDHDLR
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,SET0001
-/copy QCOPYLE,SDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/set0001.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
-/copy QCOPYLE,USR0001
-/copy QCOPYLE,USR8104
+/copy 'qcopyle/usr0001.rpgleinc'
+/copy 'qcopyle/usr8104.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK01
+/copy 'qcopyle/ppeek01.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK02
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK71
-/copy QCOPYLE,PEXIT06
+/copy 'qcopyle/ppeek02.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
+/copy 'qcopyle/pexit06.rpgleinc'
 
 dcl-ds set0001 likeds(set0001_t);
 dcl-ds fldl0100 likeds(fldl0100_t);

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Prototyp für CPYNV MI Funktion                          *
+      //%EMETADATA                                                     *
 
 //  Templates  (micptcom.h)
 dcl-s num_descr_t int(10) template;

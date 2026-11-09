@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Deklarationen von Variablengrundtypen                   *
+      //%EMETADATA                                                     *
 /if NOT defined(D_VARDEF)
 /define D_VARDEF
 //===============================================================*

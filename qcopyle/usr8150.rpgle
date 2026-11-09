@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Tabellierpapier ist bereits ausgeschaltet.         *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8150
 //  Tabellierpapier ist bereits ausgeschaltet.

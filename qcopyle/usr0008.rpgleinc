@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Die Datei &2/&1 konnte nicht gefunden werden.      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR0008
 //  Die Datei &2/&1 konnte nicht gefunden werden.

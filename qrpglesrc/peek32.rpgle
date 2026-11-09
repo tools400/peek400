@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Konvertieren nicht darstellb. Zeichen        *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,22 +28,22 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,SET0006
+/copy 'qcopyle/set0006.rpgleinc'
 
-/copy QCOPYLE,USR8163
+/copy 'qcopyle/usr8163.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK32
+/copy 'qcopyle/ppeek32.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
+/copy 'qcopyle/ppeek53.rpgleinc'
 
 dcl-ds set0006 likeds(set0006_t) inz;
 

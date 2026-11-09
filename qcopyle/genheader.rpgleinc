@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Generic List API Header                                 *
+      //%EMETADATA                                                     *
 /if defined(genHeader_t)
 /eof
 /endif

@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Dateizugriffsroutinen                       */
+      /*%EMETADATA                                                    */
 /* =================================================================== */
 /* >>PRE-COMPILER<<                                                    */
 /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */

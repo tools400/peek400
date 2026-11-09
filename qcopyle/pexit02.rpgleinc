@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - EXIT-Programm: Ermitteln Settings Datei      *
+      //%EMETADATA                                                     *
 /if defined(internal_prototype)
 dcl-pr exit02 extpgm('EXIT02');
 /else

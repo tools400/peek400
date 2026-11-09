@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Character Translation Services         (Prototype)      *
+      //%EMETADATA                                                     *
 /if NOT defined(PPEEK71)
 /define PPEEK71
 

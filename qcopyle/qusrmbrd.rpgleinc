@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve Member Description (QUSRMBRD) API              *
+      //%EMETADATA                                                     *
 /if not defined(QUSRMBRD)
 /define QUSRMBRD
 

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Berechnen interner Werte                     *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek29 extpgm('PEEK29');

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MI Prototypes                                           *
+      //%EMETADATA                                                     *
 /if NOT defined(D_MI)
 /define D_MI
 

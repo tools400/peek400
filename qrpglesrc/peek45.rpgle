@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Hex-Feldeditierung                           *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,8 +28,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek45fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
@@ -36,22 +39,22 @@ dcl-ds workstn likeds(workstn_t);
 
 dcl-ds peek_01_ds likeds(infds_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,SDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK45
+/copy 'qcopyle/ppeek45.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,SET0006
+/copy 'qcopyle/set0006.rpgleinc'
 
-/copy QCOPYLE,USR8100
-/copy QCOPYLE,USR8136
+/copy 'qcopyle/usr8100.rpgleinc'
+/copy 'qcopyle/usr8136.rpgleinc'
 
 dcl-ds fldl0100 likeds(fldl0100_t) inz;
 dcl-ds set0006 likeds(set0006_t) inz;
@@ -101,13 +104,13 @@ dcl-s pTmpHexBin like(#hexString) inz;
 dcl-s warning_1 like(bool_t) inz(bFalse);
 dcl-s warning_2 like(bool_t) inz(bFalse);
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
-/copy QCOPYLE,PPEEK32
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
+/copy 'qcopyle/ppeek32.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK71
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
 
 dcl-s $ofsVal zoned(4) dim(8) inz;
 

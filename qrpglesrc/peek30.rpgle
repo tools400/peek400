@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Prüfen der Lizenzdaten                       *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,35 +27,35 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek30fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,SDS
-/copy QCOPYLE,QUSCRTUS
-/copy QCOPYLE,QUSPTRUS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/quscrtus.rpgleinc'
+/copy 'qcopyle/qusptrus.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK30
+/copy 'qcopyle/ppeek30.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,USR8158
-/copy QCOPYLE,USR9997
+/copy 'qcopyle/usr8158.rpgleinc'
+/copy 'qcopyle/usr9997.rpgleinc'
 
-/copy QCOPYLE,PPEEK07
-/copy QCOPYLE,PPEEK28
-/copy QCOPYLE,PPEEK29
+/copy 'qcopyle/ppeek07.rpgleinc'
+/copy 'qcopyle/ppeek28.rpgleinc'
+/copy 'qcopyle/ppeek29.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s usrSpcDta char(64) based(pSpcPtr);
 dcl-s ySrlNbrExt like(r_srlNbr);

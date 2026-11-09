@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Hex-Feldeditierung                           *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek45 extpgm('PEEK45');

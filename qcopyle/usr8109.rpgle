@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Abrufen der Teildateibeschreibung für Teildat      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8109
 //  Abrufen der Teildateibeschreibung für Teildatei &3 in Datei

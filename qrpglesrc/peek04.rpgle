@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Schlüsselfelder                    *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,24 +28,24 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,KEYL0100
-/copy QCOPYLE,CEECNDHDLR
-/copy QCOPYLE,SDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/keyl0100.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
-/copy QCOPYLE,USR0006
+/copy 'qcopyle/usr0006.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK04
+/copy 'qcopyle/ppeek04.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK41
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek41.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s peek41_name like(pgmCallN_t) inz;
 

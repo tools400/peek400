@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Retrieve System Values (QWCRSVAL) API                   *
+      //%EMETADATA                                                     *
 /if not defined(QWCRSVAL)
 /define QWCRSVAL
 

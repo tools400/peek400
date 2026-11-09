@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Hauptprogramm                                *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -26,8 +29,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 // Bildschirm
 dcl-f peek05fm workstn(*ext) usage(*input: *output) usropn infds(workstn) sfile(pbsfl132: sflRec132)
@@ -59,120 +62,120 @@ dcl-ds hFile03 likeds(hFile_t);
 // Für Einzelsatzzugriff zum reinen Lesen von Datensätzen
 dcl-ds hFile04 likeds(hFile_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,ShortCmd_D
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,SDS
-/copy QCOPYLE,OBJD0400
-/copy QCOPYLE,RCDL0200
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,MBRD0200
-/copy QCOPYLE,FILD0100
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/shortcmd_d.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/objd0400.rpgleinc'
+/copy 'qcopyle/rcdl0200.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/mbrd0200.rpgleinc'
+/copy 'qcopyle/fild0100.rpgleinc'
 
-/copy QCOPYLE,SET0001
-/copy QCOPYLE,SET0002
-/copy QCOPYLE,SET0003
-/copy QCOPYLE,SET0005
-/copy QCOPYLE,SET0006
-/copy QCOPYLE,SET0007
-/copy QCOPYLE,SET0008
-/copy QCOPYLE,SET0009
-/copy QCOPYLE,SET0010
-/copy QCOPYLE,SET0011
-/copy QCOPYLE,SET0013
-/copy QCOPYLE,SET0014
-/copy QCOPYLE,SET0015
-/copy QCOPYLE,SET0016
+/copy 'qcopyle/set0001.rpgleinc'
+/copy 'qcopyle/set0002.rpgleinc'
+/copy 'qcopyle/set0003.rpgleinc'
+/copy 'qcopyle/set0005.rpgleinc'
+/copy 'qcopyle/set0006.rpgleinc'
+/copy 'qcopyle/set0007.rpgleinc'
+/copy 'qcopyle/set0008.rpgleinc'
+/copy 'qcopyle/set0009.rpgleinc'
+/copy 'qcopyle/set0010.rpgleinc'
+/copy 'qcopyle/set0011.rpgleinc'
+/copy 'qcopyle/set0013.rpgleinc'
+/copy 'qcopyle/set0014.rpgleinc'
+/copy 'qcopyle/set0015.rpgleinc'
+/copy 'qcopyle/set0016.rpgleinc'
 
-/copy QCOPYLE,USR0007
-/copy QCOPYLE,USR0008
-/copy QCOPYLE,USR0009
-/copy QCOPYLE,USR0010
-/copy QCOPYLE,USR0013
-/copy QCOPYLE,USR0014
-/copy QCOPYLE,USR8100
-/copy QCOPYLE,USR8108
-/copy QCOPYLE,USR8110
-/copy QCOPYLE,USR8128
-/copy QCOPYLE,USR8144
-/copy QCOPYLE,USR8147
-/copy QCOPYLE,USR8148
-/copy QCOPYLE,USR8190
-/copy QCOPYLE,USR8196
-/copy QCOPYLE,USR8200
-/copy QCOPYLE,USR8201
-/copy QCOPYLE,USR8202
-/copy QCOPYLE,USR8203
-/copy QCOPYLE,USR8206
-/copy QCOPYLE,USR8207
-/copy QCOPYLE,USR8212
-/copy QCOPYLE,USR8217
-/copy QCOPYLE,USR8218
-/copy QCOPYLE,USR8223
-/copy QCOPYLE,USR8224
-/copy QCOPYLE,USR8235
-/copy QCOPYLE,USR9993
-/copy QCOPYLE,USR9996
-/copy QCOPYLE,USR9998
-/copy QCOPYLE,USR9999
+/copy 'qcopyle/usr0007.rpgleinc'
+/copy 'qcopyle/usr0008.rpgleinc'
+/copy 'qcopyle/usr0009.rpgleinc'
+/copy 'qcopyle/usr0010.rpgleinc'
+/copy 'qcopyle/usr0013.rpgleinc'
+/copy 'qcopyle/usr0014.rpgleinc'
+/copy 'qcopyle/usr8100.rpgleinc'
+/copy 'qcopyle/usr8108.rpgleinc'
+/copy 'qcopyle/usr8110.rpgleinc'
+/copy 'qcopyle/usr8128.rpgleinc'
+/copy 'qcopyle/usr8144.rpgleinc'
+/copy 'qcopyle/usr8147.rpgleinc'
+/copy 'qcopyle/usr8148.rpgleinc'
+/copy 'qcopyle/usr8190.rpgleinc'
+/copy 'qcopyle/usr8196.rpgleinc'
+/copy 'qcopyle/usr8200.rpgleinc'
+/copy 'qcopyle/usr8201.rpgleinc'
+/copy 'qcopyle/usr8202.rpgleinc'
+/copy 'qcopyle/usr8203.rpgleinc'
+/copy 'qcopyle/usr8206.rpgleinc'
+/copy 'qcopyle/usr8207.rpgleinc'
+/copy 'qcopyle/usr8212.rpgleinc'
+/copy 'qcopyle/usr8217.rpgleinc'
+/copy 'qcopyle/usr8218.rpgleinc'
+/copy 'qcopyle/usr8223.rpgleinc'
+/copy 'qcopyle/usr8224.rpgleinc'
+/copy 'qcopyle/usr8235.rpgleinc'
+/copy 'qcopyle/usr9993.rpgleinc'
+/copy 'qcopyle/usr9996.rpgleinc'
+/copy 'qcopyle/usr9998.rpgleinc'
+/copy 'qcopyle/usr9999.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK05
+/copy 'qcopyle/ppeek05.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PUPDPGM
-/copy QCOPYLE,PPEEK01
-/copy QCOPYLE,PPEEK03
-/copy QCOPYLE,PPEEK04
-/copy QCOPYLE,PPEEK06
-/copy QCOPYLE,PPEEK07
-/copy QCOPYLE,PPEEK08
-/copy QCOPYLE,PPEEK09
-/copy QCOPYLE,PPEEK10
-/copy QCOPYLE,PPEEK12
-/copy QCOPYLE,PPEEK13
-/copy QCOPYLE,PPEEK14
-/copy QCOPYLE,PPEEK17
-/copy QCOPYLE,PPEEK18
-/copy QCOPYLE,PPEEK19
-/copy QCOPYLE,PPEEK20
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
-/copy QCOPYLE,PPEEK24
-/copy QCOPYLE,PPEEK26
-/copy QCOPYLE,PPEEK27
-/copy QCOPYLE,PPEEK30
-/copy QCOPYLE,PPEEK32
-/copy QCOPYLE,PPEEK33
-/copy QCOPYLE,PPEEK34
-/copy QCOPYLE,PPEEK37
-/copy QCOPYLE,PPEEK38
-/copy QCOPYLE,PPEEK40
-/copy QCOPYLE,PPEEK41
-/copy QCOPYLE,PPEEK42
-/copy QCOPYLE,PPEEK47
-/copy QCOPYLE,PPEEK48
-/copy QCOPYLE,PPEEK49
-/copy QCOPYLE,PPEEK50
-/copy QCOPYLE,PPEEK52
-/copy QCOPYLE,PPEEK54
-/copy QCOPYLE,PPEEK55
-/copy QCOPYLE,PPEEK56
-/copy QCOPYLE,PPEEK57
-/copy QCOPYLE,PPEEK59
-/copy QCOPYLE,PPEEK65
-/copy QCOPYLE,PPEEK68
-/copy QCOPYLE,PPEEK69
-/copy QCOPYLE,PPEEK51
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK71
-/copy QCOPYLE,PPEEK63
+/copy 'qcopyle/pupdpgm.rpgleinc'
+/copy 'qcopyle/ppeek01.rpgleinc'
+/copy 'qcopyle/ppeek03.rpgleinc'
+/copy 'qcopyle/ppeek04.rpgleinc'
+/copy 'qcopyle/ppeek06.rpgleinc'
+/copy 'qcopyle/ppeek07.rpgleinc'
+/copy 'qcopyle/ppeek08.rpgleinc'
+/copy 'qcopyle/ppeek09.rpgleinc'
+/copy 'qcopyle/ppeek10.rpgleinc'
+/copy 'qcopyle/ppeek12.rpgleinc'
+/copy 'qcopyle/ppeek13.rpgleinc'
+/copy 'qcopyle/ppeek14.rpgleinc'
+/copy 'qcopyle/ppeek17.rpgleinc'
+/copy 'qcopyle/ppeek18.rpgleinc'
+/copy 'qcopyle/ppeek19.rpgleinc'
+/copy 'qcopyle/ppeek20.rpgleinc'
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
+/copy 'qcopyle/ppeek24.rpgleinc'
+/copy 'qcopyle/ppeek26.rpgleinc'
+/copy 'qcopyle/ppeek27.rpgleinc'
+/copy 'qcopyle/ppeek30.rpgleinc'
+/copy 'qcopyle/ppeek32.rpgleinc'
+/copy 'qcopyle/ppeek33.rpgleinc'
+/copy 'qcopyle/ppeek34.rpgleinc'
+/copy 'qcopyle/ppeek37.rpgleinc'
+/copy 'qcopyle/ppeek38.rpgleinc'
+/copy 'qcopyle/ppeek40.rpgleinc'
+/copy 'qcopyle/ppeek41.rpgleinc'
+/copy 'qcopyle/ppeek42.rpgleinc'
+/copy 'qcopyle/ppeek47.rpgleinc'
+/copy 'qcopyle/ppeek48.rpgleinc'
+/copy 'qcopyle/ppeek49.rpgleinc'
+/copy 'qcopyle/ppeek50.rpgleinc'
+/copy 'qcopyle/ppeek52.rpgleinc'
+/copy 'qcopyle/ppeek54.rpgleinc'
+/copy 'qcopyle/ppeek55.rpgleinc'
+/copy 'qcopyle/ppeek56.rpgleinc'
+/copy 'qcopyle/ppeek57.rpgleinc'
+/copy 'qcopyle/ppeek59.rpgleinc'
+/copy 'qcopyle/ppeek65.rpgleinc'
+/copy 'qcopyle/ppeek68.rpgleinc'
+/copy 'qcopyle/ppeek69.rpgleinc'
+/copy 'qcopyle/ppeek51.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
+/copy 'qcopyle/ppeek63.rpgleinc'
 
-/copy QCOPYLE,PEXIT01
-/copy QCOPYLE,PEXIT04
+/copy 'qcopyle/pexit01.rpgleinc'
+/copy 'qcopyle/pexit04.rpgleinc'
 
 dcl-ds set0001 likeds(set0001_t) inz;
 dcl-ds set0002 likeds(set0002_t) inz;
@@ -613,7 +616,7 @@ dcl-ds b4 qualified;
   strPage like(##strPage);
 end-ds;
 
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 dcl-s isInzSr like(bool_t) inz(bFalse);
 
@@ -884,7 +887,7 @@ begsr doScreenCmd;
   //  Verarbeiten Bildschirmereignis
   r#PgmCmd = yPgmCmd;
   //   exsr doPgmCmd;
-/copy QCOPYLE,DOPGMCMD
+/copy 'qcopyle/dopgmcmd.rpgleinc'
   r#PgmCmd = '';
 
 endsr;
@@ -902,7 +905,7 @@ begsr doSflCmd;
     p_sndPgmMg('USR8144': usr8144: sds.pgmName);
   else;
   //      exsr doPgmCmd;
-/copy QCOPYLE,DOPGMCMD
+/copy 'qcopyle/dopgmcmd.rpgleinc'
   endif;
 
 endsr;

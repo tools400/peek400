@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Compile Peek/400 Object                                */
+      /*%EMETADATA                                                    */
 /* =================================================================== */
 /* >>PRE-COMPILER<<                                                    */
 /*   >>CRTCMD<< CRTCMD       CMD(&LI/CRTPEEKOBJ) +                     */

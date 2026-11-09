@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Create PEEK/400 Test Database                          */
+      /*%EMETADATA                                                    */
      /* =================================================================== */
      /*   >>PRE-COMPILER<<                                                  */
      /*     >>CRTCMD<<  CRTBNDCL      PGM(&LI/&OB) +                        */

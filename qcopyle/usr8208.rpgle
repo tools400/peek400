@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Nur INPUT-Felder können nicht geändert werden      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8208
 //  Nur INPUT-Felder können nicht geändert werden.

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Register Call Stack Entry Termination User Exit Pr      *
+      //%EMETADATA                                                     *
 /if not defined(CEERTX)
 /define CEERTX
 

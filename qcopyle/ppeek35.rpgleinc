@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Prüfen Datensatz PEEKFLD                     *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek35 extpgm('PEEK35');

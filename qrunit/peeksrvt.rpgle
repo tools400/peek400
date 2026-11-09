@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Unit-Tests der Service-Programme             *
+      //%EMETADATA                                                     *
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Service-Programme PEEK51, PEEK53, PEEK58,
 //  PEEK63 und PEEK71 (iRPGUnit).
@@ -21,20 +24,20 @@
 //    >>END-PRE-COMPILER<<
 // ==========================================================================
 ctl-opt nomain;
-/copy QCOPYLE,H_SPEC
+/copy 'qcopyle/h_spec.rpgleinc'
 
-/copy QCOPYLE,D_CLIB
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,OBJD0100
-/copy QCOPYLE,QUSROBJD
+/copy 'qcopyle/d_clib.rpgleinc'
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/objd0100.rpgleinc'
+/copy 'qcopyle/qusrobjd.rpgleinc'
 
-/copy QCOPYLE,PPEEK51
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK63
-/copy QCOPYLE,PPEEK71
+/copy 'qcopyle/ppeek51.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek63.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
 
 // --------------------------------------------------------------------------
 //  iRPGUnit API. Nicht per QINCLUDE,TESTCASE, weil dessen TEMPLATES

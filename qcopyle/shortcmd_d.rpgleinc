@@ -1,6 +1,9 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Kurzbefehl - Initialisierung                            *
+      //%EMETADATA                                                     *
 
-/copy QCOPYLE,D_VARDEF
+/copy 'qcopyle/d_vardef.rpgleinc'
 
 dcl-ds shortCmd_t qualified template;
   sc_action char(10) inz(*blanks);

@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Befehl zur Initialisierung                  */
+      /*%EMETADATA                                                    */
              CMD        PROMPT('Initialize Peek/400')                 /* RADD */
 
              PARM       KWD(LANGUAGE) +

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Suche läuft. &1 von max. &2 Datensätzen durch      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8128
 //  Suche läuft. &1 von max. &2 Datensätzen durchsucht ...

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Kopieren Datensatz in externe Datei          *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,38 +27,38 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek26fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,ShortCmd_D
-/copy QCOPYLE,SDS
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/shortcmd_d.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK26
+/copy 'qcopyle/ppeek26.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,USR8100
-/copy QCOPYLE,USR8151
-/copy QCOPYLE,USR8152
-/copy QCOPYLE,USR8153
-/copy QCOPYLE,USR8154
-/copy QCOPYLE,USR8155
+/copy 'qcopyle/usr8100.rpgleinc'
+/copy 'qcopyle/usr8151.rpgleinc'
+/copy 'qcopyle/usr8152.rpgleinc'
+/copy 'qcopyle/usr8153.rpgleinc'
+/copy 'qcopyle/usr8154.rpgleinc'
+/copy 'qcopyle/usr8155.rpgleinc'
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s yFKeys char(18) dim(32);
 dcl-s yNbrOfKeys like(int4_t);

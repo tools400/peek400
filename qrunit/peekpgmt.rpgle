@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Unit-Tests der Programme                     *
+      //%EMETADATA                                                     *
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
 //  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
@@ -26,56 +29,56 @@
 //    >>END-PRE-COMPILER<<
 // ==========================================================================
 ctl-opt nomain;
-/copy QCOPYLE,H_SPEC
+/copy 'qcopyle/h_spec.rpgleinc'
 
-/copy QCOPYLE,D_CLIB
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,OBJL0200
-/copy QCOPYLE,RCDL0200
-/copy QCOPYLE,MBRD0200
-/copy QCOPYLE,OBJD0100
-/copy QCOPYLE,QUSROBJD
-/copy QCOPYLE,QUSRJOBI
-/copy QCOPYLE,SET0003
-/copy QCOPYLE,SET0004
-/copy QCOPYLE,SET0007
+/copy 'qcopyle/d_clib.rpgleinc'
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/objl0200.rpgleinc'
+/copy 'qcopyle/rcdl0200.rpgleinc'
+/copy 'qcopyle/mbrd0200.rpgleinc'
+/copy 'qcopyle/objd0100.rpgleinc'
+/copy 'qcopyle/qusrobjd.rpgleinc'
+/copy 'qcopyle/qusrjobi.rpgleinc'
+/copy 'qcopyle/set0003.rpgleinc'
+/copy 'qcopyle/set0004.rpgleinc'
+/copy 'qcopyle/set0007.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK01
-/copy QCOPYLE,PPEEK02
-/copy QCOPYLE,PPEEK03
-/copy QCOPYLE,PPEEK04
-/copy QCOPYLE,PPEEK06
-/copy QCOPYLE,PPEEK07
-/copy QCOPYLE,PPEEK10
-/copy QCOPYLE,PPEEK11
-/copy QCOPYLE,PPEEK13
-/copy QCOPYLE,PPEEK15
-/copy QCOPYLE,PPEEK18
-/copy QCOPYLE,PPEEK19
-/copy QCOPYLE,PPEEK20
-/copy QCOPYLE,PPEEK22
-/copy QCOPYLE,PPEEK23
-/copy QCOPYLE,PPEEK27
-/copy QCOPYLE,PPEEK31
-/copy QCOPYLE,PPEEK32
-/copy QCOPYLE,PPEEK33
-/copy QCOPYLE,PPEEK36
-/copy QCOPYLE,PPEEK38
-/copy QCOPYLE,PPEEK54
-/copy QCOPYLE,PPEEK55
-/copy QCOPYLE,PPEEK62
-/copy QCOPYLE,PPEEK65
-/copy QCOPYLE,PPEEK66
-/copy QCOPYLE,PPEEK70
+/copy 'qcopyle/ppeek01.rpgleinc'
+/copy 'qcopyle/ppeek02.rpgleinc'
+/copy 'qcopyle/ppeek03.rpgleinc'
+/copy 'qcopyle/ppeek04.rpgleinc'
+/copy 'qcopyle/ppeek06.rpgleinc'
+/copy 'qcopyle/ppeek07.rpgleinc'
+/copy 'qcopyle/ppeek10.rpgleinc'
+/copy 'qcopyle/ppeek11.rpgleinc'
+/copy 'qcopyle/ppeek13.rpgleinc'
+/copy 'qcopyle/ppeek15.rpgleinc'
+/copy 'qcopyle/ppeek18.rpgleinc'
+/copy 'qcopyle/ppeek19.rpgleinc'
+/copy 'qcopyle/ppeek20.rpgleinc'
+/copy 'qcopyle/ppeek22.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
+/copy 'qcopyle/ppeek27.rpgleinc'
+/copy 'qcopyle/ppeek31.rpgleinc'
+/copy 'qcopyle/ppeek32.rpgleinc'
+/copy 'qcopyle/ppeek33.rpgleinc'
+/copy 'qcopyle/ppeek36.rpgleinc'
+/copy 'qcopyle/ppeek38.rpgleinc'
+/copy 'qcopyle/ppeek54.rpgleinc'
+/copy 'qcopyle/ppeek55.rpgleinc'
+/copy 'qcopyle/ppeek62.rpgleinc'
+/copy 'qcopyle/ppeek65.rpgleinc'
+/copy 'qcopyle/ppeek66.rpgleinc'
+/copy 'qcopyle/ppeek70.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK71
-/copy QCOPYLE,PPEEK61
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
+/copy 'qcopyle/ppeek61.rpgleinc'
 
 dcl-f peekFld disk keyed usropn extfile('QTEMP/PEEKFLD') prefix(k_) rename(fpeekfld: rpeekfld);
 

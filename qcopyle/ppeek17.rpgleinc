@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Erfassen der Suchkriterien                   *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek17 extpgm('PEEK17');

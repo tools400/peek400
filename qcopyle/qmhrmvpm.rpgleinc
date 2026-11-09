@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Remove Program Messages (QMHRMVPM) API                  *
+      //%EMETADATA                                                     *
 /if not defined(QMHRMVPM)
 /define QMHRMVPM
 

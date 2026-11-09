@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Erstellen internen Aufsetzschlüssel          *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -29,8 +32,8 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peekfldl2 keyed usropn rename(fpeekfld: fpeekfldl2) prefix(f2) infds(peek_l2_ds);
 
@@ -39,21 +42,21 @@ dcl-f peekfldl0 keyed usropn rename(fpeekfld: fpeekfldl0) prefix(f2) infds(peek_
 dcl-ds peek_l0_ds likeds(infds_t);
 dcl-ds peek_l2_ds likeds(infds_t);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,CEECNDHDLR
-/copy QCOPYLE,SDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK20
+/copy 'qcopyle/ppeek20.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,SET0003
+/copy 'qcopyle/set0003.rpgleinc'
 
-/copy QCOPYLE,PPEEK18
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek18.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 //----------------------------------------------------*
 //  F E L D - D E F I N I T I O N E N                 *

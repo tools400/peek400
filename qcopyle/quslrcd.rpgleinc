@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT List Record Formats (QUSLRCD)                           *
+      //%EMETADATA                                                     *
 /if not defined(QUSLRCD)
 /define QUSLRCD
 

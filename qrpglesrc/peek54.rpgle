@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Sichern Arbeitsumgebung                      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,25 +27,25 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peekEnv usage(*update: *delete: *output) keyed usropn prefix(en_);
 dcl-f peekFld keyed usropn prefix(p_);
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,FILD0100
-/copy QCOPYLE,ENV0001
-/copy QCOPYLE,SDS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/fild0100.rpgleinc'
+/copy 'qcopyle/env0001.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK54
+/copy 'qcopyle/ppeek54.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-pr main;
   i_file       like(gi_file) value;
@@ -158,7 +161,7 @@ dcl-proc main;
   dcl-s pMsgDta like(msgDta_t);
 
   //  Nachrichten
-/copy QCOPYLE,USR9992
+/copy 'qcopyle/usr9992.rpgleinc'
   //---------------------------------------------------*
 
   if (i_envMbr = '*FILE');
@@ -529,7 +532,7 @@ dcl-proc checkAutoSave;
   end-ds;
 
   //  Nachrichten
-/copy QCOPYLE,USR9992
+/copy 'qcopyle/usr9992.rpgleinc'
   //---------------------------------------------------*
 
   en_key1.user    = *loval;

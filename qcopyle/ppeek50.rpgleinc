@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Erweiterte PIN-Funktion                      *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek50 extpgm('PEEK50');

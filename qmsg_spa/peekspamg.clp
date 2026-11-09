@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT MSG: AID00BA - USR9999                                 */
+      /*%EMETADATA                                                    */
      /*-----------------------------------------------------------------------*/
      /* Hinweis: Dieses CL muss in einem Job mit der Sprache der              */
      /*          Zielnachrichtendatei kompiliert und ausgeführt werden.       */

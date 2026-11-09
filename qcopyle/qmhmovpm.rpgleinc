@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Move Program Messages (QMHMOVPM) API                    *
+      //%EMETADATA                                                     *
 /if not defined(QMHMOVPM)
 /define QMHMOVPM
 

@@ -1,3 +1,6 @@
+      *%METADATA                                                       *
+      * %TEXT PEEK400 - Multi-member join logical file                 *
+      *%EMETADATA                                                      *
       * =================================================================== *
       *   >>PRE-COMPILER<<                                                  *
       *     >>CRTCMD<<  CRTLF         FILE(&LI/&OB) +                       *

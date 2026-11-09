@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Datenbereich 0002 für PEEKWRK                           *
+      //%EMETADATA                                                     *
 //---------------------------------------------------------------
 // Datenstruktur für Benutzervoreinstellungen:  WRK0002
 

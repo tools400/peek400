@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Kopieren Datensatz in externe Datei          *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek26 extpgm('PEEK26');

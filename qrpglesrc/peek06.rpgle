@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Konvertieren intern ==> extern m. Edit       *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -50,18 +53,18 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_MI
-/copy QCOPYLE,QECEDT
-/copy QCOPYLE,QECCVTEW
-/copy QCOPYLE,QECCVTEC
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_mi.rpgleinc'
+/copy 'qcopyle/qecedt.rpgleinc'
+/copy 'qcopyle/qeccvtew.rpgleinc'
+/copy 'qcopyle/qeccvtec.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK06
+/copy 'qcopyle/ppeek06.rpgleinc'
 /undefine internal_prototype
 
 //  declarations for Convert Edit Code: QECCVTEC
@@ -121,9 +124,9 @@ dcl-c spcval_nan '*NaN';
 dcl-c spcval_inf '*Inf';
 dcl-c spcval_neginf '-*Inf';
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK71
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek71.rpgleinc'
 //*******************************************************************
 //           Main  Control block                                    *
 //*******************************************************************

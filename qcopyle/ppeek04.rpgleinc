@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Ermitteln Schlüsselfelder                    *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek04 extpgm('PEEK04');

@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Character Translation Services   SrvPgm      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -26,8 +29,8 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 // ------------------------------------
 //  Constants
@@ -39,8 +42,8 @@ dcl-c class_transcoder '*CLASS:ccsid.TRANSCODER';
 // ------------------------------------
 //  Type Definitions
 // ------------------------------------
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
 
 //  Transcoder handle
 dcl-ds transcoder_t qualified template;
@@ -58,13 +61,13 @@ end-ds;
 
 dcl-s className_t varchar(62) template;
 
-/copy QCOPYLE,PPEEK71
+/copy 'qcopyle/ppeek71.rpgleinc'
 
-/copy QCOPYLE,D_CLIB // C-Runtime Library
-/copy QCOPYLE,PPEEK53 // Zugriff auf Benutzerdaten
-/copy QCOPYLE,PPEEK58 // Allgemeine Routinen
-/copy QCOPYLE,QUSRJOBI // Retrieve Job Information (QUSRJOBI) API
-/copy QCOPYLE,QMHSNDPM // Send Program Message (QMHSNDPM) API
+/copy 'qcopyle/d_clib.rpgleinc' // C-Runtime Library
+/copy 'qcopyle/ppeek53.rpgleinc' // Zugriff auf Benutzerdaten
+/copy 'qcopyle/ppeek58.rpgleinc' // Allgemeine Routinen
+/copy 'qcopyle/qusrjobi.rpgleinc' // Retrieve Job Information (QUSRJOBI) API
+/copy 'qcopyle/qmhsndpm.rpgleinc' // Send Program Message (QMHSNDPM) API
 
 // ------------------------------------
 //  Internal prototypes

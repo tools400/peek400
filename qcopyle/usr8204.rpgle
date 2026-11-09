@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Keine gültige Satzauswahl getroffen.               *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8204
 //  Keine gültige Satzauswahl getroffen.

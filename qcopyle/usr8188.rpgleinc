@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Generieren Bildschirmdatei. Lauf: &1, Feld: &      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8188
 //  Generieren Bildschirmdatei. Lauf: &1, Feld: &2

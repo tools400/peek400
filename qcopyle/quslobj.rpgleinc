@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT List Objects (QUSLOBJ) API                              *
+      //%EMETADATA                                                     *
 /if not defined(QUSLOBJ)
 /define QUSLOBJ
 

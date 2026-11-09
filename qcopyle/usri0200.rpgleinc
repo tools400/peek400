@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT API: retrieve user information USRI0200                 *
+      //%EMETADATA                                                     *
 
 dcl-ds usri0200_t qualified template;
   bytRet       int(10);

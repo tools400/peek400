@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - SQL-Komponente                   SrvPgm      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -25,18 +28,18 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_CLIB
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,D_INFDS
-/copy QCOPYLE,FLDL0100
+/copy 'qcopyle/d_clib.rpgleinc'
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/d_infds.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
 
-/copy QCOPYLE,PPEEK51
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK63
+/copy 'qcopyle/ppeek51.rpgleinc'
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek63.rpgleinc'
 
 dcl-pr f_isSqlErr like(bool_t);
   o_msgID  like(msgId_t);
@@ -701,9 +704,9 @@ dcl-proc p_cvtSqlMg;
     io_msgDta like(msgDta_t);
   end-pi;
 
-/copy QCOPYLE,RTVM0100
+/copy 'qcopyle/rtvm0100.rpgleinc'
 
-/copy QCOPYLE,USR8210
+/copy 'qcopyle/usr8210.rpgleinc'
   // ------------------------------------------------------------------------
 
   clear usr8210;

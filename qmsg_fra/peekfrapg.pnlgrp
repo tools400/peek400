@@ -1,3 +1,6 @@
+.*%METADATA                                                            *
+.* %TEXT Peek/400 - File Editor, Francais                              *
+.*%EMETADATA                                                           *
 .*=====================================================================*
 .* Hinweis: Dieses CL muss in einem Job mit der Sprache der            *.
 .*          Zielnachrichtendatei kompiliert und ausgeführt werden.     *.

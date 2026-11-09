@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Ungerade Anzahl Zeichen nicht zulässig.            *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8175
 //  Ungerade Anzahl Zeichen nicht zulässig.

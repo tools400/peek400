@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT MSG: Maximale Anzahl Datensätze durchsucht. 'SUCHE      *
+      //%EMETADATA                                                     *
 // ---------------------------------------------------------------
 //  Data structure for message ID: USR8132
 //  Maximale Anzahl Datensätze durchsucht. 'SUCHEN'=Weitersuche

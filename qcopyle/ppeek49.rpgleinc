@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - "About"                                      *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek49 extpgm('PEEK49');

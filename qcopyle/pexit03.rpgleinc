@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - EXIT-Programm: Ermitteln EDIT CODE           *
+      //%EMETADATA                                                     *
 /if defined(internal_prototype)
 dcl-pr exit03 extpgm('EXIT03');
 /else

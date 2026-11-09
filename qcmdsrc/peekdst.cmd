@@ -1,3 +1,6 @@
+      /*%METADATA                                                     */
+      /* %TEXT Peek/400 - Distribuieren PEEK/400 Library              */
+      /*%EMETADATA                                                    */
       /*===============================================================*/
       /* >>PRE-COMPILER<<                                              */
       /*   >>CRTCMD<<  CRTCMD CMD(&LI/&OB) PGM(&LI/&OB) +              */

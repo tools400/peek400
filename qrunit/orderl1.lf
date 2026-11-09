@@ -1,3 +1,6 @@
+      *%METADATA                                                       *
+      * %TEXT PEEK400 - Orders by Customer Number                      *
+      *%EMETADATA                                                      *
       * =================================================================== *
       *   >>PRE-COMPILER<<                                                  *
       *     >>CRTCMD<<  CRTLF         FILE(&LI/&OB) +                       *

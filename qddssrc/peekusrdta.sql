@@ -1,3 +1,6 @@
+      --%METADATA                                                      *
+      -- %TEXT Initialwerte für PEEKUSR 3.5.4                          *
+      --%EMETADATA                                                     *
 
 INSERT INTO PEEKUSR (USER,SECTION,KEY,DATA)
   VALUES ('*NONE', '*CMD', 'DM', 'DSPMSG'),

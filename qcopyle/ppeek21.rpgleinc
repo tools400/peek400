@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Mappen TASTE/BEFEHL                          *
+      //%EMETADATA                                                     *
 
 /if defined(internal_prototype)
 dcl-pr peek21 extpgm('PEEK21');

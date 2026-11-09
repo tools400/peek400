@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Änderung der Farbeinstellung                 *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -24,37 +27,37 @@
 //   >>EXECUTE<<                                                 *
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
 dcl-f peek24fm workstn(*ext) usage(*input: *output) usropn infds(workstn);
 
 dcl-ds workstn likeds(workstn_t);
 dcl-ds cursorPosition likeds(cursorPosition_t) inz;
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,D_COLORATR
-/copy QCOPYLE,ShortCmd_D
-/copy QCOPYLE,SDS
-/copy QCOPYLE,SCRNFKEYS
-/copy QCOPYLE,CEECNDHDLR
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/d_coloratr.rpgleinc'
+/copy 'qcopyle/shortcmd_d.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
+/copy 'qcopyle/scrnfkeys.rpgleinc'
+/copy 'qcopyle/ceecndhdlr.rpgleinc'
 
-/copy QCOPYLE,SET0001
+/copy 'qcopyle/set0001.rpgleinc'
 
 /define internal_prototype
-/copy QCOPYLE,PPEEK24
+/copy 'qcopyle/ppeek24.rpgleinc'
 /undefine internal_prototype
 
-/copy QCOPYLE,USR8100
+/copy 'qcopyle/usr8100.rpgleinc'
 
-/copy QCOPYLE,PPEEK21
-/copy QCOPYLE,PPEEK23
-/copy QCOPYLE,PPEEK25
+/copy 'qcopyle/ppeek21.rpgleinc'
+/copy 'qcopyle/ppeek23.rpgleinc'
+/copy 'qcopyle/ppeek25.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
 
 dcl-s yMsgID char(7) inz(*blanks);
 dcl-s yMsgDta char(512) inz(*blanks);

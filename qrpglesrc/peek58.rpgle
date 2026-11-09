@@ -1,4 +1,7 @@
 **free
+      //%METADATA                                                      *
+      // %TEXT Peek/400 - Allgemeine Routinen              SrvPgm      *
+      //%EMETADATA                                                     *
 //===============================================================*
 //                                                               *
 //  (c) Thomas Raddatz                                           *
@@ -26,36 +29,36 @@
 // >>END-PRE-COMPILER<<                                          *
 //===============================================================*
 ctl-opt nomain;
-/copy QCOPYLE,H_SPEC
-/copy QCOPYLE,COPYRIGHT
+/copy 'qcopyle/h_spec.rpgleinc'
+/copy 'qcopyle/copyright.rpgleinc'
 
-/copy QCOPYLE,D_VARDEF
-/copy QCOPYLE,FILD0100
-/copy QCOPYLE,FLDL0100
-/copy QCOPYLE,MBRD0100
-/copy QCOPYLE,MBRD0300
-/copy QCOPYLE,BSPF0100
-/copy QCOPYLE,OBJD0100
-/copy QCOPYLE,USRI0200
-/copy QCOPYLE,D_CLib
-/copy QCOPYLE,D_WORKSTN
-/copy QCOPYLE,D_MI
-/copy QCOPYLE,QDBRTVFD
-/copy QCOPYLE,QUSRJOBI
-/copy QCOPYLE,QUSROBJD
-/copy QCOPYLE,QUSRMBRD
-/copy QCOPYLE,QCAPCMD
-/copy QCOPYLE,QSYRUSRI
-/copy QCOPYLE,QMHRMVPM
-/copy QCOPYLE,QMHSNDPM
-/copy QCOPYLE,QMHRTVM
-/copy QCOPYLE,QMHMOVPM
-/copy QCOPYLE,QLGCNVCS
-/copy QCOPYLE,SDS
+/copy 'qcopyle/d_vardef.rpgleinc'
+/copy 'qcopyle/fild0100.rpgleinc'
+/copy 'qcopyle/fldl0100.rpgleinc'
+/copy 'qcopyle/mbrd0100.rpgleinc'
+/copy 'qcopyle/mbrd0300.rpgleinc'
+/copy 'qcopyle/bspf0100.rpgleinc'
+/copy 'qcopyle/objd0100.rpgleinc'
+/copy 'qcopyle/usri0200.rpgleinc'
+/copy 'qcopyle/d_clib.rpgleinc'
+/copy 'qcopyle/d_workstn.rpgleinc'
+/copy 'qcopyle/d_mi.rpgleinc'
+/copy 'qcopyle/qdbrtvfd.rpgleinc'
+/copy 'qcopyle/qusrjobi.rpgleinc'
+/copy 'qcopyle/qusrobjd.rpgleinc'
+/copy 'qcopyle/qusrmbrd.rpgleinc'
+/copy 'qcopyle/qcapcmd.rpgleinc'
+/copy 'qcopyle/qsyrusri.rpgleinc'
+/copy 'qcopyle/qmhrmvpm.rpgleinc'
+/copy 'qcopyle/qmhsndpm.rpgleinc'
+/copy 'qcopyle/qmhrtvm.rpgleinc'
+/copy 'qcopyle/qmhmovpm.rpgleinc'
+/copy 'qcopyle/qlgcnvcs.rpgleinc'
+/copy 'qcopyle/sds.rpgleinc'
 
-/copy QCOPYLE,PPEEK53
-/copy QCOPYLE,PPEEK58
-/copy QCOPYLE,PPEEK41
+/copy 'qcopyle/ppeek53.rpgleinc'
+/copy 'qcopyle/ppeek58.rpgleinc'
+/copy 'qcopyle/ppeek41.rpgleinc'
 
 dcl-s peek41_name like(pgmCallN_t);
 
@@ -452,7 +455,7 @@ dcl-proc f_vldName export;
   dcl-c VALID_FIRST_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   dcl-c VALID_CHAR '§$#ABCDEFGHIJKLMNOPQRSTUVWXYZ_.1234567890';
 
-/copy QCOPYLE,USR8182
+/copy 'qcopyle/usr8182.rpgleinc'
   //-------------------------------------------------------------------*
 
   isValid = bTrue;
@@ -1834,7 +1837,7 @@ dcl-proc f_rtvMsgD export;
   end-pi;
 
   //  Funktionswert
-/copy QCOPYLE,RTVM0100
+/copy 'qcopyle/rtvm0100.rpgleinc'
 
   //  Parameter für QMHSNDPM
   dcl-s msgDLen int(10) inz;
@@ -1916,7 +1919,7 @@ dcl-proc f_msgText export;
   //  Funktionswert
   dcl-s msgText char(512) inz;
 
-/copy QCOPYLE,RTVM0100
+/copy 'qcopyle/rtvm0100.rpgleinc'
   //------------------------------------------------------------*
 
   select;
@@ -2534,8 +2537,8 @@ dcl-proc f_exist export;
   dcl-ds qObj likeds(qObj_t) inz;
   dcl-ds errCode likeds(errCode_t) inz;
 
-/include QCOPYLE,CPF9801
-/include QCOPYLE,CPF9815
+/include 'qcopyle/cpf9801.rpgleinc'
+/include 'qcopyle/cpf9815.rpgleinc'
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   // Process optional parameter values ...
