@@ -2,14 +2,6 @@
       /* %TEXT Peek/400 - Allgemeine Routinen              SrvPgm     */
       /*%EMETADATA                                                    */
 /* =================================================================== */
-/* >>PRE-COMPILER<<                                                    */
-/*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */
-/*                           OBJLIB(&LI) DEVLIB(&LI) +                 */
-/*                           SBMJOB(*NO) BNDDIR(PEEK) +                */
-/*                           INSTALL(*NO);                             */
-/*   >>EXECUTE<<                                                       */
-/* >>END-PRE-COMPILER<<                                                */
-/* =================================================================== */
 
       STRPGMEXP PGMLVL(*CURRENT) SIGNATURE('Fix_Signature')
         EXPORT SYMBOL(f_buffLn)

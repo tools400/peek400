@@ -19,14 +19,6 @@
 //  Prüfen Datensatz PEEKWRK für WRK0001 auf Plausibilität       *
 //                                                               *
 // ============================================================= *
-// >>PRE-COMPILER<<                                              *
-//   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-//                           OBJLIB(&LI) DEVLIB(&LI) +           *
-//                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-//                           INSTALL(*NO);                       *
-//   >>EXECUTE<<                                                 *
-// >>END-PRE-COMPILER<<                                          *
-//===============================================================*
 /copy 'qcopyle/h_spec.rpgleinc'
 /copy 'qcopyle/copyright.rpgleinc'
 

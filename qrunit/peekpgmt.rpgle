@@ -569,7 +569,7 @@ end-proc;
 
 // ==========================================================================
 //  PEEKFMT: PEEK10 leert PEEKFMT bei jedem Aufruf und schreibt die
-//  Satzformate neu. Mit REUSEDLT(*YES) (CRTPEEKOBJ) sammeln sich dabei
+//  Satzformate neu. Mit REUSEDLT(*YES) (qddssrc/Rules.mk) sammeln sich dabei
 //  keine gelöschten Sätze an.
 // ==========================================================================
 

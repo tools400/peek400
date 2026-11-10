@@ -2,14 +2,6 @@
       /* %TEXT Peek/400 - Progress Meter                              */
       /*%EMETADATA                                                    */
 /* =================================================================== */
-/* >>PRE-COMPILER<<                                                    */
-/*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */
-/*                           OBJLIB(&LI) DEVLIB(&LI) +                 */
-/*                           SBMJOB(*NO) BNDDIR(PEEK) +                */
-/*                           INSTALL(*NO);                             */
-/*   >>EXECUTE<<                                                       */
-/* >>END-PRE-COMPILER<<                                                */
-/* =================================================================== */
 
       STRPGMEXP PGMLVL(*CURRENT)
         EXPORT SYMBOL(P_INZPROGRESSMETER)

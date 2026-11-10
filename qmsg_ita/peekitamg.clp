@@ -5,18 +5,6 @@
      /* Hinweis: Dieses CL muss in einem Job mit der Sprache der              */
      /*          Zielnachrichtendatei kompiliert und ausgeführt werden.       */
      /*-----------------------------------------------------------------------*/
-     /* STRPREPRC Compile Options:                                            */
-     /* >>PRE-COMPILER<<                                                      */
-     /*   >>CRTCMD<<  CALL       PGM(QTEMP/&OB) PARM(&LI);                    */
-     /*   >>CMD<<     CHGJOB  LANGID(ITA) CNTRYID(IT) CCSID(1144);            */
-     /*   >>CMD<<     CRTCLPGM   PGM(QTEMP/&OB) +                             */
-     /*                          SRCFILE(&SL/&SF) SRCMBR(&SM) +               */
-     /*               TEXT('Peek/400 - Italiano');                            */
-     /*   >>EXECUTE<<                                                         */
-     /*   >>CMD<<     DLTPGM PGM(QTEMP/&OB);                                  */
-     /*   >>CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);             */
-     /* >>END-PRE-COMPILER<<                                                  */
-     /*-----------------------------------------------------------------------*/
              PGM        PARM(&I_LIB)
 
              DCL        VAR(&I_LIB     ) TYPE(*CHAR) LEN(10)

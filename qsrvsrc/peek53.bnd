@@ -2,14 +2,6 @@
       /* %TEXT Peek/400 - Zugriff auf Benutzerdaten        SrvPgm     */
       /*%EMETADATA                                                    */
 /* =================================================================== */
-/* >>PRE-COMPILER<<                                                    */
-/*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/QRPGLESRC) SRCMBR(&SM) +    */
-/*                           OBJLIB(&LI) DEVLIB(&LI) +                 */
-/*                           SBMJOB(*NO) BNDDIR(PEEK) +                */
-/*                           INSTALL(*NO);                             */
-/*   >>EXECUTE<<                                                       */
-/* >>END-PRE-COMPILER<<                                                */
-/* =================================================================== */
 
 STRPGMEXP PGMLVL(*CURRENT) SIGNATURE('PEEK_3.4.4_2013.07.02')
   EXPORT SYMBOL("P_CRTUSRSG")

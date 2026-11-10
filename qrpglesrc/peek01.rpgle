@@ -20,14 +20,6 @@
 //  Erstellen einer Satzformatbeschreibung in der Datei PEEKFLD  *
 //                                                               *
 //===============================================================*
-// >>PRE-COMPILER<<                                              *
-//   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-//                           OBJLIB(&LI) DEVLIB(&LI) +           *
-//                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-//                           INSTALL(*NO);                       *
-//   >>EXECUTE<<                                                 *
-// >>END-PRE-COMPILER<<                                          *
-//===============================================================*
 /copy 'qcopyle/h_spec.rpgleinc'
 /copy 'qcopyle/copyright.rpgleinc'
 

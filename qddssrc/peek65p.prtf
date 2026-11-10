@@ -18,31 +18,6 @@
       *  Peek/400 - Drucken Datensatz                                 *
       *                                                               *
       *===============================================================*
-      *   >>PRE-COMPILER<<                                            *
-      *                                                               *
-      *     >>CRTCMD<<  CRTPRTF       FILE(&LI/&OB) +                 *
-      *                               SRCFILE(&SL/&SF)  +             *
-      *                               SRCMBR(&SM);                    *
-      *                                                               *
-      *     >>COMPILE<<                                               *
-      *       >>PARM<< PAGESIZE(93 100);                              *
-      *       >>PARM<< LPI(8);                                        *
-      *       >>PARM<< CPI(12);                                       *
-      *       >>PARM<< OVRFLW(88);                                    *
-      *     >>END-COMPILE<<                                           *
-      *                                                               *
-      *     >>EXECUTE<<                                               *
-      *                                                               *
-      *   >>END-PRE-COMPILER<<                                        *
-      *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
       *
       *----------------------------------------------------*
      A          R NEWPAGE

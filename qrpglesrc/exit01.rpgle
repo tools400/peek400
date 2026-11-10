@@ -107,14 +107,6 @@
 //  TGTRLS(V4R5M0) DETAIL(*BASIC) ACTGRP(PEEK)                   *
 //                                                               *
 // ============================================================= *
-// >>PRE-COMPILER<<                                              *
-//   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-//                           OBJLIB(&LI) DEVLIB(&LI) +           *
-//                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-//                           INSTALL(*NO);                       *
-//   >>EXECUTE<<                                                 *
-// >>END-PRE-COMPILER<<                                          *
-//===============================================================*
 /include QCOPYLE,H_SPEC
 /include QCOPYLE,COPYRIGHT
 

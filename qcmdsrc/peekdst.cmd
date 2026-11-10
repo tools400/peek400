@@ -2,12 +2,6 @@
       /* %TEXT Peek/400 - Distribuieren PEEK/400 Library              */
       /*%EMETADATA                                                    */
       /*===============================================================*/
-      /* >>PRE-COMPILER<<                                              */
-      /*   >>CRTCMD<<  CRTCMD CMD(&LI/&OB) PGM(&LI/&OB) +              */
-      /*                      SRCFILE(&SL/&SF) SRCMBR(*CMD);           */
-      /*   >>EXECUTE<<                                                 */
-      /* >>END-PRE-COMPILER<<                                          */
-      /*===============================================================*/
              CMD        PROMPT('Distribute PEEK/400 library')
 
              PARM       KWD(RMTUSER)             +

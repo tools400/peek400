@@ -55,14 +55,6 @@
 //      PEEK39 - Funktion (4)       delete list (user space)     *
 //                                                               *
 // ============================================================= *
-// >>PRE-COMPILER<<                                              *
-//   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-//                           OBJLIB(&LI) DEVLIB(&LI) +           *
-//                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-//                           INSTALL(*NO);                       *
-//   >>EXECUTE<<                                                 *
-// >>END-PRE-COMPILER<<                                          *
-//===============================================================*
 ctl-opt main(peek39);
 /copy 'qcopyle/h_spec.rpgleinc'
 /copy 'qcopyle/copyright.rpgleinc'

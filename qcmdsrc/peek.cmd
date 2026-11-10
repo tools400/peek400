@@ -2,14 +2,6 @@
       /* %TEXT Peek/400 - File Editor                                 */
       /*%EMETADATA                                                    */
       /*===============================================================*/
-      /* >>PRE-COMPILER<<                                              */
-      /*   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    */
-      /*                           OBJLIB(&LI) DEVLIB(&LI) +           */
-      /*                           SBMJOB(*NO) BNDDIR(PEEK) +          */
-      /*                           INSTALL(*NO);                       */
-      /*   >>EXECUTE<<                                                 */
-      /* >>END-PRE-COMPILER<<                                          */
-      /*===============================================================*/
              CMD        PROMPT(PMT0100)
 
     /* Datei                                  */

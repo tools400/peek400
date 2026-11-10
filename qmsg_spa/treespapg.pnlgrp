@@ -32,15 +32,6 @@
 .*  ----------  ------------  ---------------------------------------  *
 .*                                                                     *
 .*=====================================================================*
-.* >>PRE-COMPILER<<                                                    *
-.*   >>CRTCMD<<  CRTPNLGRP PNLGRP(&LI/TREESPA) +                       *
-.*                         SRCFILE(&SL/&SF) SRCMBR(&SM) +              *
-.*                         TEXT('PEEK/400 - Espanol');                 *
-.*   --CMD<<     CHGJOB  LANGID(ESP) CNTRYID(ES) CCSID(1145);          *
-.*   >>EXECUTE<<                                                       *
-.*   --CMD<<     CHGJOB  LANGID(DEU) CNTRYID(DE) CCSID(273);           *
-.* >>END-PRE-COMPILER<<                                                *
-.*=====================================================================*
 :PNLGRP.
 .*--------------------------------------------------------------------
 .* Hilfetext für den Befehl

@@ -11,18 +11,6 @@
       *  Erstellt : 04.05.1999   Raddatz                              *
       *                                                               *
       *===============================================================*
-      * >>PRE-COMPILER<<                                              *
-      *   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-      *                           OBJLIB(&LI) DEVLIB(&LI) +           *
-      *                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-      *                           INSTALL(*NO);                       *
-      *   >>CMD<<     DLTF FILE(&LI/&OB);                             *
-      *   >>MONMSG<<                                                  *
-      *     >>MSGID<<   CPF2105; // Object not found                  *
-      *   >>END-MONMSG<<                                              *
-      *   >>EXECUTE<<                                                 *
-      * >>END-PRE-COMPILER<<                                          *
-      *===============================================================*
       *
      A                                      UNIQUE
       *

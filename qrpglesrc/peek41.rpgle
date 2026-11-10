@@ -64,14 +64,6 @@
 //                (must be splitted using a data structure)      *
 //                                                               *
 // ============================================================= *
-// >>PRE-COMPILER<<                                              *
-//   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-//                           OBJLIB(&LI) DEVLIB(&LI) +           *
-//                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-//                           INSTALL(*NO);                       *
-//   >>EXECUTE<<                                                 *
-// >>END-PRE-COMPILER<<                                          *
-//===============================================================*
 /copy 'qcopyle/h_spec.rpgleinc'
 /copy 'qcopyle/copyright.rpgleinc'
 

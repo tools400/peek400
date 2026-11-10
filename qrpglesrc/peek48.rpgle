@@ -20,14 +20,6 @@
 //  Peek/400 - SQL-Select/Order by                               *
 //                                                               *
 //===============================================================*
-// >>PRE-COMPILER<<                                              *
-//   >>CRTCMD<< &LI/CRTPEEKOBJ SRCFILE(&SL/&SF) SRCMBR(&SM) +    *
-//                           OBJLIB(&LI) DEVLIB(&LI) +           *
-//                           SBMJOB(*NO) BNDDIR(PEEK) +          *
-//                           INSTALL(*NO);                       *
-//   >>EXECUTE<<                                                 *
-// >>END-PRE-COMPILER<<                                          *
-//===============================================================*
 /copy 'qcopyle/h_spec.rpgleinc'
 /copy 'qcopyle/copyright.rpgleinc'
 
