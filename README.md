@@ -126,5 +126,6 @@ Wie Peek/400 gebaut und getestet und wie ein Release erstellt wird, beschreibt
 
 ## Haftung
 
-Peek/400 ist Freeware und wird ohne Gewähr bereitgestellt. Testen Sie das Programm mit unkritischen
-Daten. Für Schäden an Daten wird keine Haftung übernommen.
+Diese Software ist kostenlos und wird ohne Gewähr bereitgestellt. Die Verwendung erfolgt auf
+eigenes Risiko: Testen Sie sie zuerst mit unkritischen Daten und sichern Sie Ihre Daten, bevor Sie
+sie einsetzen. Ergänzend gilt die [Lizenz](LICENSE).
