@@ -1,4 +1,4 @@
-# Regeln von TOBi (makei) für Peek/400, Verzeichnis qsrvsrc. Siehe README, Abschnitt "Bauen".
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis qsrvsrc. Siehe DEVELOPMENT.md, Abschnitt "Bauen".
 
 %.SRVPGM: private ACTGRP := PEEK
 %.SRVPGM: private SRVPGM_ACTGRP := PEEK

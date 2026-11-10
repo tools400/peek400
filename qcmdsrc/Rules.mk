@@ -1,4 +1,4 @@
-# Regeln von TOBi (makei) für Peek/400, Verzeichnis qcmdsrc. Siehe README, Abschnitt "Bauen".
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis qcmdsrc. Siehe DEVELOPMENT.md, Abschnitt "Bauen".
 
 # PEEK, TREE und PEEKDST setzen ihre Bibliothek als Produktbibliothek und finden ihr Programm
 # über die Bibliotheksliste. PEEKCLONE und PEEKINIT laufen ohne Peek in der Bibliotheksliste:

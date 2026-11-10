@@ -1,4 +1,4 @@
-# Regeln von TOBi (makei) für Peek/400, Verzeichnis qmsg_eng. Siehe README, Abschnitt "Bauen".
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis qmsg_eng. Siehe DEVELOPMENT.md, Abschnitt "Bauen".
 
 PEEKENG.MSGF: peekengmg.clp
 	@echo "=== Creating message file [PEEKENG] in $(OBJLIB) with CCSID $(TGTCCSID)"

@@ -1,4 +1,4 @@
-# Regeln von TOBi (makei) für Peek/400, Verzeichnis peeksrc. Siehe README, Abschnitt "Bauen".
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis peeksrc. Siehe DEVELOPMENT.md, Abschnitt "Bauen".
 
 # Vorlagen der Update-Programme, zur Laufzeit gelesen. PEEK15/16 brauchen die Dateien beim Übersetzen.
 PEEKSRC.FILE: peeksrc/pgm.rpgle peeksrc/dspf.dspf

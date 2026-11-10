@@ -1,4 +1,4 @@
-# Regeln von TOBi (makei) für Peek/400, Verzeichnis qmsg_spa. Siehe README, Abschnitt "Bauen".
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis qmsg_spa. Siehe DEVELOPMENT.md, Abschnitt "Bauen".
 
 PEEKSPA.MSGF: peekspamg.clp
 	@echo "=== Creating message file [PEEKSPA] in $(OBJLIB) with CCSID $(TGTCCSID)"

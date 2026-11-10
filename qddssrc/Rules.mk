@@ -1,4 +1,4 @@
-# Regeln von TOBi (makei) für Peek/400, Verzeichnis qddssrc. Siehe README, Abschnitt "Bauen".
+# Regeln von TOBi (makei) für Peek/400, Verzeichnis qddssrc. Siehe DEVELOPMENT.md, Abschnitt "Bauen".
 
 %.FILE: private RSTDSP := *YES
 
