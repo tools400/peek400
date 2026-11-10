@@ -29,7 +29,7 @@ kopieren, löschen und drucken.
 
 1. Bibliothek und Sicherungsdatei für die Installation anlegen:
 
-   ```
+   ```clle
    CRTLIB  LIB(PEEKINST)
    CRTSAVF FILE(PEEKINST/PEEK)
    ```
@@ -38,14 +38,14 @@ kopieren, löschen und drucken.
    [aktuellen Release](https://github.com/tools400/peek400/releases/latest) herunterladen und per FTP
    **im Binärmodus** übertragen:
 
-   ```
+   ```ftp
    binary
    put PEEK408.SAVF peekinst/peek
    ```
 
 3. Programmbibliothek anlegen und die Objekte zurückspeichern:
 
-   ```
+   ```clle
    CRTLIB LIB(PEEK)
    RSTOBJ OBJ(*ALL) SAVLIB(PEEK) DEV(*SAVF) OBJTYPE(*ALL) SAVF(PEEKINST/PEEK) OUTPUT(*PRINT)
    ```
@@ -53,7 +53,7 @@ kopieren, löschen und drucken.
 4. Danach können Sie die Bibliothek `PEEKINST` löschen. Bei Bedarf kopieren Sie den Befehl `PEEK`
    nach `QGPL`:
 
-   ```
+   ```clle
    CRTDUPOBJ OBJ(PEEK) FROMLIB(PEEK) OBJTYPE(*CMD) TOLIB(QGPL)
    ```
 
@@ -65,7 +65,7 @@ in der gewählten Sprache neu.
 
 ## Schnellstart
 
-```
+```clle
 PEEK FILE(MYLIB/MYFILE)
 ```
 
@@ -146,7 +146,7 @@ Die Regressionstests in `qrunit/` (iRPGUnit) baut TOBi nicht mit. Sie werden im 
 übersetzt, weil die Copybooks relativ dazu eingebunden werden, mit der Peek-Bibliothek in der
 Bibliotheksliste. Jede Testsuite läuft in einem eigenen Job:
 
-```
+```clle
 RUCRTRPG TSTPGM(PEEK412P/PEEKSRVT) SRCSTMF('qrunit/peeksrvt.rpgle') BNDDIR(PEEK) DBGVIEW(*LIST) TGTCCSID(273)
 RUCALLTST TSTPGM(PEEK412P/PEEKSRVT)
 ```
