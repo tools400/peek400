@@ -1,7 +1,7 @@
 # Peek/400 – Hinweise für Entwickler
 
 Wie Peek/400 gebaut und getestet und wie ein Release erstellt wird. Zur Benutzung siehe
-[README.md](README.md).
+[USAGE.md](USAGE.md), zur Installation [README.md](README.md).
 
 ## Bauen
 
