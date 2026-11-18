@@ -46,7 +46,6 @@ RUCALLTST TSTPGM(PEEK412P/PEEKSRVT)
   aktualisiert, und `qrunit/peekpgmt.rpgle`: die Version in `test32_peek33_versionRaised`
 - `qddssrc/peekusrdta.sql`: den Eintrag `*VERSION`
 - `doc/whats_new.txt`: den Abschnitt der neuen Version
-- `.project`: die Version im Namen des Projekts
 
 **Produkt bauen** auf dem IBM i, im Projektverzeichnis:
 

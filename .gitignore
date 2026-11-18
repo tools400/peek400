@@ -11,3 +11,7 @@
 .deps/
 .Rules.mk.build
 .env
+
+# Projektdateien von RDi (Import als lokales IFS-Projekt).
+.project
+.settings/
