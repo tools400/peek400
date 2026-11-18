@@ -12,6 +12,5 @@
 .Rules.mk.build
 .env
 
-# Projektdateien von RDi (Import als lokales IFS-Projekt).
+# Projektdatei von RDi (Import als lokales IFS-Projekt). .settings mit der Codierung ist versioniert.
 .project
-.settings/
