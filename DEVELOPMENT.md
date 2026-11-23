@@ -44,8 +44,12 @@ RUCALLTST TSTPGM(PEEK412P/PEEKSRVT)
 - `qrpglesrc/peek05.rpgle`: die Konstanten `COPYRIGHT`, `RELEASE` und `Version`
 - `qrpglesrc/peek33.rpgle`: einen Schritt für die neue Version, der die Benutzereinstellungen
   aktualisiert, und `qrunit/peekpgmt.rpgle`: die Version in `test32_peek33_versionRaised`
-- `qddssrc/peekusrdta.sql`: den Eintrag `*VERSION`
 - `doc/whats_new.txt`: den Abschnitt der neuen Version
+
+Die Voreinstellungen in `qddssrc/peekusrdta.sql` bleiben, solange der Schritt in `peek33.rpgle`
+die Benutzereinstellungen nicht ändert. Ändert er sie, erhalten die Voreinstellungen dieselbe
+Änderung und ihr Eintrag `*VERSION` die neue Version. Ein neuer Benutzer übernimmt beim ersten
+Start die Voreinstellungen, danach führt PEEK33 die Schritte nach deren `*VERSION` aus.
 
 **Produkt bauen** auf dem IBM i, im Projektverzeichnis:
 
