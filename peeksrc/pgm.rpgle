@@ -11,7 +11,7 @@
 //  Peek/400 - RPG-LE Programm, Template v3.5.0                  *
 //                                                               *
 //  Marken für PEEK16:                                           *
-//    //@TAG        PEEK16 fügt hier generierten Code ein, mit   *
+//    //:TAG        PEEK16 fügt hier generierten Code ein, mit   *
 //                  der Einrückung der Marke.                    *
 //    X_TAG_X       Platzhalter, den PEEK16 ersetzt.             *
 //    LIBRARY_NAME  Produktbibliothek der /include-Anweisungen.  *
@@ -266,10 +266,10 @@ dcl-ds dbNullDs likeds(nullSaveDs) inz;
 dcl-ds wrkNullDs likeds(nullSaveDs) inz;
 
 //  ... Feldefinitionen zur Bildschirmsteuerung
-//@DEF1
+//:DEF1
 
 //  ... Konstanten für "Felder zu lang" (> 512 Byte)
-//@DEF2
+//:DEF2
 
 //  Before-Image für Prüfung auf Datensatzänderung
 //  bei optimistischer Satzsperre
@@ -284,7 +284,7 @@ dcl-ds wrkImage likeds(RCD_DS) inz;
 //  Datenpuffer für Hex-Editor ...
 //  ... umbenennen der Feldnamen (Länge: X_RNM1_X)
 dcl-ds RCD_DS extname('FILE00') len(X_RNM1_X);
-  //@RNM1
+  //:RNM1
 end-ds;
 
 dcl-s pRCD_BUFFER pointer inz(%addr(RCD_DS));
@@ -311,7 +311,7 @@ end-pi;
 
 //  ... umbenennen der externen Feldnamen
 //  (Eingabebestimmungen in einer generierten /include-Teildatei)
-//@RNM2
+//:RNM2
 
 //----------------------------------------------------*
 
@@ -433,7 +433,7 @@ dow ('1');
   // - Prüfen ...
   select;
   //  ... Bildschirmfelder auf nicht darstellbare Zeichen
-  //@CHKS
+  //:CHKS
   other;
     scnNbr = 1;
     exsr chkChar001;
@@ -484,11 +484,11 @@ dow ('1');
   // - Blättern ...
   select;
   //  ... generieren Auswahl der anzuzeigenden Bildschirmseite
-  //@SCRN
+  //:SCRN
   other;
     exsr chkChar001;
     //  ... 1. Bildschirmseite
-    //@SCN1
+    //:SCN1
     scnNbr = 1;
   endsl;
 
@@ -692,7 +692,7 @@ begsr clearRecord;
 
   clear FFILE00;
 
-  //@CLR
+  //:CLR
 
 endsr;
 
@@ -712,10 +712,10 @@ begsr dataToScn;
   //  Übertragen Dateifelder
   //  in die Bildschirmfelder ...
   //  ... generieren MOVEL extField => intField (ToScreen)
-  //@TSCN
+  //:TSCN
 
   //  ... prüfen auf ISO-Felder
-  //@ISO
+  //:ISO
 
 endsr;
 
@@ -935,12 +935,12 @@ begsr updateFile;
   endif;
 
   //  ... prüfen auf ISO-Felder
-  //@ISO
+  //:ISO
 
   //  Übertragen Felder vom Bildschirm
   //  in die Dateifelder ...
   //  ... generieren MOVEL intField => extField (FromScreen)
-  //@FSCN
+  //:FSCN
 
   //  Abschließen der Verarbeitung ...
   select;
@@ -1077,11 +1077,11 @@ endsr;
 //============================================================*
 
 begsr saveNull;
-  //@NSAV
+  //:NSAV
 endsr;
 
 begsr rstNull;
-  //@NRST
+  //:NRST
 endsr;
 
 //============================================================*
@@ -1498,7 +1498,7 @@ endsr;
 //  Ab hier folgen die Unterroutinen für die          *
 //  Prüfung auf ungültige Feldinhalte                 *
 //====================================================*
-//@CHKC
+//:CHKC
 
 //====================================================*
 //  Ab hier folgen die Unterroutinen für das          *
@@ -1510,7 +1510,7 @@ begsr c_tgNullInd;
   xScnCsrRow = wScnCsrRow - WndTopRow;
 
   select;
-  //@NULL
+  //:NULL
   other;
     pgmMsgID  = 'USR8211';
     pgmMsgDta = ' ';
@@ -1523,13 +1523,13 @@ endsr;
 //  Ab hier folgen die Unterroutinen für den          *
 //  Hex-Editor                                        *
 //====================================================*
-//@HEX
+//:HEX
 
 //====================================================*
 //  Ab hier folgen die Unterroutinen für den          *
 //  String-Editor                                     *
 //====================================================*
-//@TXT
+//:TXT
 
 //====================================================*
 //  Ab hier folgen die Unterroutinen für              *
@@ -1537,7 +1537,7 @@ endsr;
 //  des Bildschirms.                                  *
 //  File --> Screen                                   *
 //====================================================*
-//@TOS
+//:TOS
 
 //====================================================*
 //  Ab hier folgen die Unterroutinen für              *
@@ -1545,7 +1545,7 @@ endsr;
 //  der Datei.                                        *
 //  Screen --> File                                   *
 //====================================================*
-//@TOF
+//:TOF
 
 //============================================================*
 //  isFldUnchanged  Feldinhalt nach dem Editor unverändert?   *

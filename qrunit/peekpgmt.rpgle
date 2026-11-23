@@ -4,10 +4,10 @@
       //%EMETADATA                                                     *
 // ==========================================================================
 //  Peek/400 - Unit-Tests der Programme PEEK01, PEEK02, PEEK03, PEEK04,
-//  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK18, PEEK19, PEEK20, PEEK22,
-//  PEEK23, PEEK27, PEEK31, PEEK32, PEEK33, PEEK36, PEEK38, PEEK54, PEEK55,
-//  PEEK62, PEEK65, PEEK66 und PEEK70, der Serviceprogramme PEEK61 und
-//  PEEK71 und der Datei PEEKFMT (iRPGUnit).
+//  PEEK06, PEEK07, PEEK10, PEEK11, PEEK15, PEEK16, PEEK18, PEEK19, PEEK20,
+//  PEEK22, PEEK23, PEEK27, PEEK31, PEEK32, PEEK33, PEEK36, PEEK38, PEEK54,
+//  PEEK55, PEEK62, PEEK65, PEEK66 und PEEK70, der Serviceprogramme PEEK61
+//  und PEEK71 und der Datei PEEKFMT (iRPGUnit).
 //
 //  Zum Erstellen und Ausführen muss die Peek-Bibliothek (QCOPYLE,
 //  Bindeverzeichnis PEEK, PEEKUSR, PEEKFLD, PEEKFMT, Nachrichtendatei
@@ -56,6 +56,7 @@ ctl-opt nomain;
 /copy 'qcopyle/ppeek11.rpgleinc'
 /copy 'qcopyle/ppeek13.rpgleinc'
 /copy 'qcopyle/ppeek15.rpgleinc'
+/copy 'qcopyle/ppeek16.rpgleinc'
 /copy 'qcopyle/ppeek18.rpgleinc'
 /copy 'qcopyle/ppeek19.rpgleinc'
 /copy 'qcopyle/ppeek20.rpgleinc'
@@ -147,6 +148,12 @@ dcl-c TST_LST 'PEEKLST'; // PEEKLST1..3 für die Dateiliste (PEEK70)
 dcl-c PEEKUSR_LEN 286; // Satzlänge von PEEKUSR
 dcl-c TST_USRF 'PEEKTSTUSR'; // Kopie von PEEKUSR
 dcl-c TST_USER 'TESTUSER';
+dcl-c GEN_FILE 'QTEMP/QPEEKGEN'; // Quelldatei für PEEK15, PEEK16 (CCSID 37)
+dcl-c GEN_MBR 'CCSID37'; // Teildateien F, A-E, G, I und P + GEN_MBR
+
+//  Von PEEK16 erzeugte Quelle eines Update-Programms
+dcl-f genSrc disk(112) usropn extfile(GEN_FILE) extmbr(g_genMbr);
+dcl-s g_genMbr char(10);
 
 dcl-pr qcmdexc extpgm('QCMDEXC');
   i_cmd    char(32702) options(*varsize) const;
@@ -1879,6 +1886,83 @@ dcl-proc test60_peek32_ucs2Text export;
 end-proc;
 
 // ==========================================================================
+//  PEEK16: In einem Job mit CCSID 37 fügt PEEK16 den Code an den Marken der
+//  Vorlage PEEKSRC/PGM (CCSID 273) ein, und das Update-Programm lässt sich
+//  übersetzen. Bisher erkannte PEEK16 die Marken "//@TAG" nicht, weil @ in
+//  CCSID 37 anders codiert ist, und es fehlten u.a. die Unterroutinen
+//  chkChar001, c_fldHexEd, c_fldStrEd, EnableEdit und chkValues.
+// ==========================================================================
+
+dcl-proc test61_peek16_jobCcsid37 export;
+  dcl-ds qFile likeds(qObj_t) inz;
+  dcl-ds jobi0400 likeds(jobi0400_t) inz;
+  dcl-s peekLib like(lib_t);
+  dcl-s scnNbrs like(int2_t);
+  dcl-s stage like(int4_t);
+  dcl-s oldCcsid int(10);
+  dcl-s step varchar(10) inz;
+  dcl-s errMsg varchar(300) inz;
+  dcl-s nbrChkChar int(10) inz(-1);
+
+  qFile.name = TST_FILE;
+  qFile.lib = TST_LIB;
+  loadFields(qFile);
+  peekLib = getPeekLib();
+
+  qusrjobi(jobi0400: %size(jobi0400): 'JOBI0400': '*': '');
+  oldCcsid = jobi0400.ccsid;
+
+  //  Wie beim Kunden: PEEK05 setzt beim Start den Umsetzer zurück, PEEK08
+  //  legt QTEMP/QPEEKGEN mit der Job-CCSID an.
+  runCmd('CHGJOB CCSID(37)');
+  Transcoder_reset();
+  monitor;
+    step = 'CRTSRCPF';
+    prpGenSrc();
+
+    step = 'PEEK15';
+    ovrGen('F': peekLib: 'DSPF');
+    peek15(qFile: scnNbrs: bFalse: stage: 10);
+    dltOvrGen();
+
+    step = 'PEEK16';
+    ovrGen('P': peekLib: 'PGM');
+    peek16(peekLib: qFile: TST_FILE: scnNbrs: bFalse: bFalse: bFalse
+           : bFalse: bFalse: stage: 10);
+    dltOvrGen();
+    nbrChkChar = countGenLines('P': 'begsr chkChar001;');
+
+    step = 'CRTDSPF';
+    runCmd('CRTDSPF FILE(QTEMP/F' + GEN_MBR + ') SRCFILE(' + GEN_FILE + ') +
+            SRCMBR(F' + GEN_MBR + ') REPLACE(*YES)');
+
+    //  Übersetzen wie PEEK08
+    step = 'CRTRPGMOD';
+    runCmd('OVRDSPF FILE(DSPF) TOFILE(QTEMP/F' + GEN_MBR + ') +
+            OVRSCOPE(*JOB)');
+    runCmd('OVRDBF FILE(FILE00) TOFILE(' + TST_LIB + '/' + TST_FILE + ') +
+            OVRSCOPE(*JOB)');
+    runCmd('CRTRPGMOD MODULE(QTEMP/P' + GEN_MBR + ') SRCFILE(' + GEN_FILE + ') +
+            SRCMBR(P' + GEN_MBR + ') CVTOPT(*DATETIME) REPLACE(*YES) +
+            TRUNCNBR(*NO) TGTRLS(*CURRENT) DBGVIEW(*NONE) OUTPUT(*NONE)');
+    step = '';
+  on-error;
+    errMsg = lastMsg();
+  endmon;
+  dltOvrGen();
+  runCmd('CHGJOB CCSID(' + %char(oldCcsid) + ')');
+  Transcoder_reset();
+
+  if (step = 'CRTSRCPF' or step = 'PEEK15' or step = 'PEEK16');
+    fail(step + ' scheitert in Job-CCSID 37: ' + errMsg);
+  endif;
+  iEqual(1: nbrChkChar: 'Zeilen "begsr chkChar001;" im Programm');
+  if (step <> '');
+    fail(step + ' scheitert in Job-CCSID 37: ' + errMsg);
+  endif;
+end-proc;
+
+// ==========================================================================
 //  Hilfsprozeduren
 // ==========================================================================
 
@@ -2153,6 +2237,99 @@ dcl-proc dltOvrPeek15;
             QCOPYLE5 QCOPYLE6 PEEKSRC) LVL(*JOB)');
   on-error;
   endmon;
+end-proc;
+
+//  Creates the source file GEN_FILE anew with CCSID 37 and the members of
+//  PEEK08: F = display file, A-E and G = QCOPYLE1-6, I = QCOPYLE7,
+//  P = program. PEEK15 and PEEK16 need the record format QPEEKGEN, i.e.
+//  a source file of that name.
+dcl-proc prpGenSrc;
+  dcl-s prefixes char(9) inz('FABCDEGIP');
+  dcl-s i int(10);
+
+  monitor;
+    runCmd('DLTF FILE(' + GEN_FILE + ')');
+  on-error;
+  endmon;
+  runCmd('CRTSRCPF FILE(' + GEN_FILE + ') RCDLEN(112) CCSID(37) +
+          MBR(*NONE)');
+
+  for i = 1 to %len(prefixes);
+    runCmd('ADDPFM FILE(' + GEN_FILE + ') +
+            MBR(' + %subst(prefixes: i: 1) + GEN_MBR + ')');
+  endfor;
+end-proc;
+
+//  Overrides the files of PEEK15 and PEEK16 like PEEK08: QPEEKGEN with
+//  member i_prefix + GEN_MBR, QCOPYLE1-7 with the members A-E, G and I and
+//  PEEKSRC with the template i_tmplMbr of the Peek library.
+dcl-proc ovrGen;
+  dcl-pi *n;
+    i_prefix  char(1) const;
+    i_peekLib like(lib_t) const;
+    i_tmplMbr varchar(10) const;
+  end-pi;
+
+  dcl-s prefixes char(7) inz('ABCDEGI');
+  dcl-s i int(10);
+
+  runCmd('OVRDBF FILE(QPEEKGEN) TOFILE(' + GEN_FILE + ') +
+          MBR(' + i_prefix + GEN_MBR + ') OVRSCOPE(*JOB) SHARE(*NO)');
+  for i = 1 to %len(prefixes);
+    runCmd('OVRDBF FILE(QCOPYLE' + %char(i) + ') TOFILE(' + GEN_FILE + ') +
+            MBR(' + %subst(prefixes: i: 1) + GEN_MBR + ') +
+            OVRSCOPE(*JOB) SHARE(*NO)');
+  endfor;
+  runCmd('OVRDBF FILE(PEEKSRC) TOFILE(' + %trim(i_peekLib) + '/PEEKSRC) +
+          MBR(' + i_tmplMbr + ') OVRSCOPE(*JOB) SHARE(*NO)');
+end-proc;
+
+//  Deletes the overrides of ovrGen() and of the compilation in test61.
+dcl-proc dltOvrGen;
+  dcl-s files varchar(10) dim(11);
+  dcl-s i int(10);
+
+  files(1) = 'QPEEKGEN';
+  for i = 1 to 7;
+    files(i + 1) = 'QCOPYLE' + %char(i);
+  endfor;
+  files(9) = 'PEEKSRC';
+  files(10) = 'DSPF';
+  files(11) = 'FILE00';
+
+  for i = 1 to %elem(files);
+    monitor;
+      runCmd('DLTOVR FILE(' + files(i) + ') LVL(*JOB)');
+    on-error;
+    endmon;
+  endfor;
+end-proc;
+
+//  Returns the number of lines of member i_prefix + GEN_MBR that contain
+//  i_text.
+dcl-proc countGenLines;
+  dcl-pi *n int(10);
+    i_prefix char(1) const;
+    i_text   varchar(100) const;
+  end-pi;
+
+  dcl-ds genRcd len(112) qualified;
+    srcDta char(100) pos(13);
+  end-ds;
+  dcl-s count int(10) inz;
+
+  g_genMbr = i_prefix + GEN_MBR;
+  open genSrc;
+  read genSrc genRcd;
+  dow (not %eof(genSrc));
+    if (%scan(i_text: genRcd.srcDta) > 0);
+      count += 1;
+    endif;
+    read genSrc genRcd;
+  enddo;
+  close genSrc;
+
+  return count;
 end-proc;
 
 //  Returns the first candidate CCSID that cannot be converted to the job

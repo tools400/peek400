@@ -19,7 +19,7 @@
 //  Generieren RPG-LE Programm                                   *
 //                                                               *
 //  Die Vorlage PEEKSRC/PGM ist ein **FREE-Quelltext mit Marken: *
-//    //@TAG     Kommentarzeile, hinter der PEEK16 den Code des  *
+//    //:TAG     Kommentarzeile, hinter der PEEK16 den Code des  *
 //               Tags einfügt, eingerückt wie die Marke.         *
 //    X_TAG_X    Platzhalter, den PEEK16 in jeder Zeile ersetzt. *
 //    LIBRARY_NAME  Produktbibliothek in /include-Anweisungen.   *
@@ -85,6 +85,13 @@ dcl-ds *n;
 end-ds;
 
 /copy 'qcopyle/sds.rpgleinc'
+
+//  Zeichen hinter '//' einer Marke '//:TAG'. PEEK16 liest die Vorlage
+//  (CCSID 273) umgesetzt in die Job-CCSID und vergleicht sie mit seinen
+//  Literalen aus CCSID 273. Das Zeichen muss deshalb in allen EBCDIC-CCSIDs
+//  gleich codiert sein: ':' ist überall X'7A', '@' dagegen z.B. in
+//  CCSID 273 X'B5' und in CCSID 37 X'7C'.
+dcl-c TAG_CHAR ':';
 
 dcl-s tag char(4) inz;
 dcl-s indent varchar(100) inz;
@@ -273,7 +280,7 @@ close peekSrc;
 *inlr = *on;
 
 //============================================================*
-//    getMarker     Erkennen einer Marke '//@TAG'             *
+//    getMarker     Erkennen einer Marke '//:TAG'             *
 //                  Liefert tag (leer: keine Marke) und       *
 //                  indent (Einrückung der Marke).            *
 //============================================================*
@@ -301,7 +308,7 @@ begsr getMarker;
     leavesr;
   endif;
 
-  if (%subst(srcDta: q: 1) <> '@');
+  if (%subst(srcDta: q: 1) <> TAG_CHAR);
     leavesr;
   endif;
 

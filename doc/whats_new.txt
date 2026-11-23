@@ -1160,3 +1160,14 @@
          Schlüsselfelder in Kleinbuchstaben (Auswahl K).
        - Die Auswahl 9 (Kopieren in externe Datei) meldet ohne Änderungs-
          recht USR0007 wie die Auswahlen 2, 3 und 4. Bisher geschah nichts.
+
+  Version 4.1.3
+  =============
+  *  Update-Programme (Ändern, Kopieren, Einfügen)
+       - Update-Programme lassen sich auch in Jobs erstellen, deren CCSID
+         das Zeichen @ anders codiert als die CCSID 273 der Vorlage (z.B.
+         CCSID 37). Bisher brach dort die Übersetzung ab ("The operand
+         CHKCHAR001 of EXSR is not a subroutine name."), weil PEEK16 die
+         Marken "//@TAG" der Vorlage nicht erkannte. Die Marken heißen
+         jetzt "//:TAG". Eigene Änderungen an der Vorlage PEEKSRC/PGM
+         müssen die neuen Marken verwenden.
