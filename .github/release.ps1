@@ -131,26 +131,42 @@ function ConvertTo-CurlString {
 function Invoke-Curl {
     # Startet curl und übergibt ihm die Konfiguration über die Standardeingabe. So steht das
     # Kennwort weder auf der Befehlszeile noch in einer Datei.
-    # .NET schreibt die Standardeingabe mit [Console]::InputEncoding und stellt bei UTF-8 ein
-    # BOM voran, das curl nicht versteht. Deshalb gilt für den Start ISO-8859-1. Das hat kein
-    # BOM und erhält Umlaute im Kennwort.
+    # Die Konfiguration geht als ISO-8859-1-Bytes direkt in die Standardeingabe, so bleiben
+    # Umlaute im Kennwort erhalten. Beim Start legt .NET für die Standardeingabe einen
+    # StreamWriter mit [Console]::InputEncoding an und schreibt sofort deren BOM, bei UTF-8 eines,
+    # das curl nicht versteht. In einem Konsolenfenster gilt deshalb für den Start ISO-8859-1,
+    # das kein BOM hat. Ohne Konsolenfenster, z.B. in der PowerShell ISE, lässt sich die
+    # Codierung nicht setzen ("Das Handle ist ungültig"); .NET nimmt dort Windows-1252, ebenfalls
+    # ohne BOM, und curl bekommt kein eigenes Fenster.
     param([string] $Config, [string[]] $ArgumentList)
+    $latin1 = [Text.Encoding]::GetEncoding('iso-8859-1')
     $startInfo = New-Object Diagnostics.ProcessStartInfo
     $startInfo.FileName = (Get-Command curl.exe -CommandType Application | Select-Object -First 1).Source
     $startInfo.Arguments = ($ArgumentList | ForEach-Object { '"{0}"' -f $_ }) -join ' '
     $startInfo.UseShellExecute = $false
     $startInfo.RedirectStandardInput = $true
-    $savedEncoding = [Console]::InputEncoding
-    [Console]::InputEncoding = [Text.Encoding]::GetEncoding('iso-8859-1')
+    $savedEncoding = $null
+    try {
+        $savedEncoding = [Console]::InputEncoding
+        [Console]::InputEncoding = $latin1
+    }
+    catch {
+        $savedEncoding = $null
+        $startInfo.CreateNoWindow = $true
+    }
     try {
         $process = [Diagnostics.Process]::Start($startInfo)
     }
     finally {
-        [Console]::InputEncoding = $savedEncoding
+        if ($savedEncoding) {
+            [Console]::InputEncoding = $savedEncoding
+        }
     }
     try {
-        $process.StandardInput.Write($Config + "`n")
-        $process.StandardInput.Close()
+        $bytes = $latin1.GetBytes($Config + "`n")
+        $stdin = $process.StandardInput.BaseStream
+        $stdin.Write($bytes, 0, $bytes.Length)
+        $stdin.Close()
         $process.WaitForExit()
         $process.ExitCode
     }
